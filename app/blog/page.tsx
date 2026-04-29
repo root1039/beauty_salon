@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, ExternalLink } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 
 export const metadata = {
   title: "ブログ | Root1039",
@@ -62,28 +63,12 @@ export default function BlogPage() {
   return (
     <div className="page-content" style={{ background: "var(--cream)" }}>
       {/* ── Header ── */}
-      <header
-        className="px-6 pt-14 pb-12 relative overflow-hidden"
-        style={{ background: "linear-gradient(160deg, #1C1C1C 0%, #3D2530 60%, #9E4A5A 100%)" }}
-      >
-        <p className="text-[11px] tracking-[0.25em] mb-3 anim-fade-in" style={{ color: "var(--rose-muted)" }}>
-          BLOG
-        </p>
-        <h1
-          className="text-3xl leading-snug mb-4 anim-fade-up delay-1"
-          style={{ fontFamily: "var(--font-shippori), serif", color: "#FAF8F5" }}
-        >
-          ブログ
-        </h1>
-        <p
-          className="text-sm leading-relaxed anim-fade-up delay-2"
-          style={{ color: "rgba(250,248,245,0.65)" }}
-        >
-          美容・健康・習慣について、<br />
-          ゆーみんが日々発信中。
-        </p>
-        <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full opacity-10" style={{ background: "var(--rose)" }} />
-      </header>
+      <PageHeader
+        en="BLOG"
+        title="ブログ"
+        ballColor="124, 90, 214"
+        compact
+      />
 
       {/* ── note.com Banner ── */}
       <div className="px-4 pt-6">
