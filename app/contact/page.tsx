@@ -1,0 +1,193 @@
+import { MessageCircle, Clock, MapPin, Camera, BookOpen } from "lucide-react";
+
+export const metadata = {
+  title: "ご予約 | Root1039",
+  description: "Root1039へのご予約・お問い合わせはLINE公式アカウントから。仙台・泉中央の根本改善型インナービューティーサロン。",
+};
+
+// TODO: Replace with actual LINE official account URL
+const LINE_URL = "https://line.me/R/ti/p/@root1039";
+const INSTAGRAM_URL = "https://www.instagram.com/yuumin_root1039/";
+const NOTE_URL = "https://note.com/yuumin_root1039";
+
+const faqs = [
+  {
+    q: "初めてでも大丈夫ですか？",
+    a: "はい、もちろんです。まずはLINEでお気軽にご相談ください。お悩みをお聞きした上で、最適なご提案をします。",
+  },
+  {
+    q: "どこから始めればいいかわかりません",
+    a: "「何から変えたらいいかわからない」という方こそ、Root1039の得意とするところです。一緒に土台から整えていきましょう。",
+  },
+  {
+    q: "施術だけでも大丈夫ですか？",
+    a: "はい。施術単体でのご利用も可能です。ただ、より根本的な変化を求める方には生活習慣の見直しもご提案しています。",
+  },
+];
+
+export default function ContactPage() {
+  return (
+    <div className="page-content" style={{ background: "var(--cream)" }}>
+      {/* ── Header ── */}
+      <header
+        className="px-6 pt-14 pb-12 relative overflow-hidden"
+        style={{ background: "linear-gradient(160deg, #1C1C1C 0%, #3D2530 60%, #9E4A5A 100%)" }}
+      >
+        <p className="text-[11px] tracking-[0.25em] mb-3 anim-fade-in" style={{ color: "var(--rose-muted)" }}>
+          RESERVATION
+        </p>
+        <h1
+          className="text-3xl leading-snug mb-4 anim-fade-up delay-1"
+          style={{ fontFamily: "var(--font-shippori), serif", color: "#FAF8F5" }}
+        >
+          ご予約・お問い合わせ
+        </h1>
+        <p
+          className="text-sm leading-relaxed anim-fade-up delay-2"
+          style={{ color: "rgba(250,248,245,0.65)" }}
+        >
+          まずは、話してみてください。<br />
+          あなたの根っこを、一緒に見ます。
+        </p>
+        <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full opacity-10" style={{ background: "var(--rose)" }} />
+      </header>
+
+      {/* ── LINE CTA ── */}
+      <section className="px-4 pt-8 pb-6">
+        <div
+          className="rounded-2xl overflow-hidden"
+          style={{ border: "1px solid var(--border)" }}
+        >
+          <div
+            className="px-6 pt-8 pb-6 text-center"
+            style={{ background: "linear-gradient(135deg, #06C755 0%, #059640 100%)" }}
+          >
+            <div
+              className="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center"
+              style={{ background: "rgba(255,255,255,0.2)" }}
+            >
+              <MessageCircle size={32} color="white" />
+            </div>
+            <h2
+              className="text-xl mb-2 text-white"
+              style={{ fontFamily: "var(--font-shippori), serif" }}
+            >
+              LINE公式アカウント
+            </h2>
+            <p className="text-sm mb-6" style={{ color: "rgba(255,255,255,0.8)" }}>
+              ご予約・ご相談はLINEから<br />お気軽にどうぞ
+            </p>
+            <a
+              href={LINE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-8 h-14 rounded-xl text-base font-bold transition-opacity active:opacity-80"
+              style={{ background: "white", color: "#06C755" }}
+            >
+              <MessageCircle size={20} />
+              LINEで予約する
+            </a>
+          </div>
+          <div className="px-6 py-4" style={{ background: "white" }}>
+            <p className="text-xs text-center leading-5" style={{ color: "var(--muted)" }}>
+              24時間メッセージ受付中<br />
+              返信は営業時間内に順次対応します
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Salon Info ── */}
+      <section
+        className="mx-4 mb-6 rounded-2xl p-6"
+        style={{ background: "white", border: "1px solid var(--border)" }}
+      >
+        <p className="text-[11px] tracking-[0.2em] mb-4" style={{ color: "var(--rose)" }}>SALON INFO</p>
+        <ul className="space-y-4">
+          <li className="flex items-start gap-3">
+            <MapPin size={16} className="mt-0.5 shrink-0" style={{ color: "var(--rose)" }} />
+            <div>
+              <p className="text-sm font-medium mb-0.5" style={{ color: "var(--charcoal)" }}>所在地</p>
+              <p className="text-sm" style={{ color: "var(--muted)" }}>
+                宮城県仙台市泉区<br />
+                <span className="text-xs">（詳細はご予約後にご案内します）</span>
+              </p>
+            </div>
+          </li>
+          <div className="h-px" style={{ background: "var(--border)" }} />
+          <li className="flex items-start gap-3">
+            <Clock size={16} className="mt-0.5 shrink-0" style={{ color: "var(--rose)" }} />
+            <div>
+              <p className="text-sm font-medium mb-0.5" style={{ color: "var(--charcoal)" }}>営業時間</p>
+              <p className="text-sm" style={{ color: "var(--muted)" }}>
+                完全予約制<br />
+                <span className="text-xs">LINEにてご相談ください</span>
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section className="px-4 mb-6">
+        <p className="text-[11px] tracking-[0.2em] mb-4 px-1" style={{ color: "var(--rose)" }}>FAQ</p>
+        <div className="space-y-3">
+          {faqs.map((faq, i) => (
+            <div
+              key={i}
+              className="rounded-2xl p-5 anim-fade-up"
+              style={{
+                background: "white",
+                border: "1px solid var(--border)",
+                animationDelay: `${i * 0.1}s`,
+              }}
+            >
+              <p
+                className="text-sm font-medium mb-2"
+                style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}
+              >
+                Q. {faq.q}
+              </p>
+              <p className="text-xs leading-5" style={{ color: "var(--muted)" }}>
+                {faq.a}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── SNS Links ── */}
+      <section className="px-4 mb-6">
+        <p className="text-[11px] tracking-[0.2em] mb-4 px-1" style={{ color: "var(--rose)" }}>FOLLOW US</p>
+        <div className="grid grid-cols-2 gap-3">
+          <a
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 p-4 rounded-xl transition-opacity active:opacity-70"
+            style={{ background: "white", border: "1px solid var(--border)" }}
+          >
+            <Camera size={20} style={{ color: "#E1306C" }} />
+            <div>
+              <p className="text-xs font-medium" style={{ color: "var(--charcoal)" }}>Instagram</p>
+              <p className="text-[10px]" style={{ color: "var(--muted)" }}>@yuumin_root1039</p>
+            </div>
+          </a>
+          <a
+            href={NOTE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 p-4 rounded-xl transition-opacity active:opacity-70"
+            style={{ background: "white", border: "1px solid var(--border)" }}
+          >
+            <BookOpen size={20} style={{ color: "var(--charcoal)" }} />
+            <div>
+              <p className="text-xs font-medium" style={{ color: "var(--charcoal)" }}>note</p>
+              <p className="text-[10px]" style={{ color: "var(--muted)" }}>記事を読む</p>
+            </div>
+          </a>
+        </div>
+      </section>
+    </div>
+  );
+}
