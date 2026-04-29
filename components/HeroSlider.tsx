@@ -13,18 +13,25 @@ const slides = [
 
 export default function HeroSlider() {
   const [current, setCurrent] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
 
   useEffect(() => {
+    if (!isPlaying) return;
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
     }, 3000); // 3秒ごと
     return () => clearInterval(timer);
-  }, []);
+  }, [isPlaying]);
 
   return (
     <div
       className="relative h-full w-full overflow-hidden"
-      style={{ borderRadius: "10px", background: "#F5F0EE" }}
+      style={{
+        borderRadius: "10px",
+        background: "#F5F0EE",
+        border: "1.5px solid rgba(201,169,110,0.9)",
+      }}
+      onClick={() => setIsPlaying((p) => !p)}
     >
       {/* スライドトラック: 右→左にスライド */}
       <div
@@ -58,6 +65,24 @@ export default function HeroSlider() {
           </div>
         ))}
       </div>
+
+      {/* 一時停止インジケーター */}
+      {!isPlaying && (
+        <div
+          style={{
+            position: "absolute",
+            top: "8px",
+            right: "10px",
+            zIndex: 10,
+            display: "flex",
+            gap: "3px",
+            alignItems: "center",
+          }}
+        >
+          <span style={{ width: "3px", height: "12px", background: "rgba(255,255,255,0.85)", borderRadius: "2px", display: "block" }} />
+          <span style={{ width: "3px", height: "12px", background: "rgba(255,255,255,0.85)", borderRadius: "2px", display: "block" }} />
+        </div>
+      )}
 
       {/* ドットインジケーター */}
       <div

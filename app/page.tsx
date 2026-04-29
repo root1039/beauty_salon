@@ -67,8 +67,6 @@ export default function HomePage() {
             style={{
               borderRadius: "8px",
               border: `1.5px solid ${GOLD_BORDER}`,
-              boxShadow:
-                "inset 0 1px 0 rgba(255,235,190,0.35), 0 3px 10px rgba(42,28,32,0.12), 0 1px 2px rgba(42,28,32,0.08)",
               minHeight: 0,
             }}
           >
