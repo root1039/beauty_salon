@@ -5,6 +5,7 @@ import HeroSlider from "@/components/HeroSlider";
 
 const RESERVATION_URL = "/contact";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+const GOLD_BORDER = "rgba(201,169,110,0.9)";
 
 const cards = [
   {
@@ -65,8 +66,9 @@ export default function HomePage() {
             className="relative overflow-hidden active:scale-[0.97] transition-transform"
             style={{
               borderRadius: "8px",
-              border: "1px solid rgba(220,200,205,0.5)",
-              boxShadow: "0 2px 8px rgba(42,28,32,0.08), 0 1px 2px rgba(42,28,32,0.04)",
+              border: `1.5px solid ${GOLD_BORDER}`,
+              boxShadow:
+                "inset 0 1px 0 rgba(255,235,190,0.35), 0 3px 10px rgba(42,28,32,0.12), 0 1px 2px rgba(42,28,32,0.08)",
               minHeight: 0,
             }}
           >
@@ -144,14 +146,14 @@ export default function HomePage() {
       >
         <Link
           href={RESERVATION_URL}
-          className="flex items-center justify-center w-full text-sm font-medium active:opacity-80 transition-opacity"
+          className="flex items-center justify-center w-full text-sm font-medium active:opacity-80 active:translate-y-[1px] transition-all"
           style={{
             background: "linear-gradient(135deg, #E47C97 0%, #C4687A 100%)",
             color: "white",
             height: "48px",
             borderRadius: "8px",
             boxShadow:
-              "inset 0 1px 0 rgba(255,255,255,0.2), 0 2px 10px rgba(196,104,122,0.28)",
+              "inset 0 1px 0 rgba(255,255,255,0.28), 0 5px 14px rgba(196,104,122,0.36), 0 1px 2px rgba(42,28,32,0.22)",
             letterSpacing: "0.06em",
             fontFamily: "var(--font-noto), sans-serif",
           }}
