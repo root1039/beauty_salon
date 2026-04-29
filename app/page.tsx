@@ -4,34 +4,35 @@ import { ChevronRight } from "lucide-react";
 import HeroSlider from "@/components/HeroSlider";
 
 const RESERVATION_URL = "/contact";
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const cards = [
   {
     href: "/about",
     en: "ABOUT",
     ja: "サロンについて",
-    img: "/images/card-about.png",
+    img: `${BASE_PATH}/images/card-about.png`,
     accent: "#F7EDF0",
   },
   {
     href: "/menu",
     en: "MENU",
     ja: "メニュー・商品",
-    img: "/images/card-menu.png",
+    img: `${BASE_PATH}/images/card-menu.png`,
     accent: "#F7EDF0",
   },
   {
     href: "/blog",
     en: "BLOG",
     ja: "ブログ",
-    img: "/images/card-blog.png",
+    img: `${BASE_PATH}/images/card-blog.png`,
     accent: "#F0EDED",
   },
   {
     href: "/contact",
     en: "FIRST VISIT",
     ja: "初めての方へ",
-    img: "/images/card-first-visit.png",
+    img: `${BASE_PATH}/images/card-first-visit.png`,
     accent: "#F7EDF0",
   },
 ];

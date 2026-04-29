@@ -3,10 +3,12 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 const slides = [
-  { src: "/images/header-1.png", fit: "cover"   },
-  { src: "/images/header-2.png", fit: "contain" }, // 2枚目は全体が見えるよう contain
-  { src: "/images/header-3.png", fit: "cover"   },
+  { src: `${BASE_PATH}/images/header-1.png`, fit: "cover"   },
+  { src: `${BASE_PATH}/images/header-2.png`, fit: "contain" }, // 2枚目は全体が見えるよう contain
+  { src: `${BASE_PATH}/images/header-3.png`, fit: "cover"   },
 ];
 
 export default function HeroSlider() {
