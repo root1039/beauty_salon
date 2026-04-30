@@ -46,6 +46,9 @@ export default function RootLayout({
         style={{ fontFamily: "var(--font-noto), sans-serif" }}
         className="antialiased"
       >
+        <div className="bg-rings" aria-hidden="true">
+          <span className="ring" />
+        </div>
         <div className="app-frame">
           <main>{children}</main>
         </div>

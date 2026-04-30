@@ -38,6 +38,73 @@ body {
   color: var(--text-dark);
   -webkit-font-smoothing: antialiased;
   overscroll-behavior-y: none;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── 背景演出: 動くゴールドの円リング ── */
+.bg-rings {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-rings::before,
+.bg-rings::after,
+.bg-rings .ring {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 169, 110, 0.55);
+  box-shadow:
+    inset 0 0 18px rgba(201, 169, 110, 0.10),
+    0 0 22px rgba(201, 169, 110, 0.10);
+  pointer-events: none;
+}
+
+.bg-rings::before {
+  width: 720px;
+  height: 720px;
+  top: -180px;
+  left: -260px;
+  border-color: rgba(201, 169, 110, 0.45);
+  animation: ringDriftA 28s linear infinite;
+}
+
+.bg-rings::after {
+  width: 520px;
+  height: 520px;
+  bottom: -160px;
+  right: -180px;
+  border-color: rgba(228, 195, 130, 0.55);
+  animation: ringDriftB 32s linear infinite;
+}
+
+.bg-rings .ring {
+  width: 880px;
+  height: 880px;
+  top: 22%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-color: rgba(201, 169, 110, 0.30);
+  animation: ringDriftC 40s linear infinite;
+}
+
+@keyframes ringDriftA {
+  0%   { transform: translate(0, 0)        rotate(0deg);   }
+  50%  { transform: translate(40px, 60px)  rotate(180deg); }
+  100% { transform: translate(0, 0)        rotate(360deg); }
+}
+@keyframes ringDriftB {
+  0%   { transform: translate(0, 0)         rotate(0deg);    }
+  50%  { transform: translate(-50px, -40px) rotate(-180deg); }
+  100% { transform: translate(0, 0)         rotate(-360deg); }
+}
+@keyframes ringDriftC {
+  0%   { transform: translate(-50%, -50%) rotate(0deg);   }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 /* ── App Frame ── */
@@ -46,6 +113,7 @@ body {
   min-height: 100dvh;
   margin: 0 auto;
   position: relative;
+  z-index: 1;
   background: var(--white);
   /* 枠線: ピンク-グレーの細線 */
   border-left:  1px solid rgba(217,168,181,0.5);
@@ -169,6 +237,32 @@ body {
 .ball-float-1 { animation: ballFloat1 7s   ease-in-out infinite; }
 .ball-float-2 { animation: ballFloat2 5.5s ease-in-out infinite; }
 .ball-float-3 { animation: ballFloat3 4s   ease-in-out infinite; }
+
+/* ── Header ticker (right to left, seamless loop) ── */
+@keyframes tickerMove {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.header-ticker__track {
+  display: inline-flex;
+  width: max-content;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  color: #2a1c20;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  font-family: var(--font-noto), sans-serif;
+  animation: tickerMove 22s linear infinite;
+  will-change: transform;
+}
+
+.header-ticker__track span {
+  display: inline-block;
+  padding-right: 2.5rem;
+  flex-shrink: 0;
+}
 
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 3px; }
