@@ -6,7 +6,8 @@ import HeroSlider from "@/components/HeroSlider";
 const RESERVATION_URL = "/contact";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const GOLD_BORDER = "rgba(201,169,110,0.9)";
-const headerSubtitle = "根本改善エステ・仙台市泉区・泉中央駅から徒歩5分";
+const headerLine1 = "根本改善エステ「Root1039」";
+const headerLine2 = "仙台市泉区 泉中央駅から徒歩5分";
 const tickerText =
   "WINBACK BACK4導入店・根本改善・あなたにあわせた施術・ブログで美容や健康についてまとめてます・いいねでクーポンGET";
 
@@ -45,21 +46,37 @@ export default function HomePage() {
         background: "#F0EDED",
       }}
     >
-      {/* ── Header top: 上段テキスト + 流れるテロップ ── */}
-      <div className="shrink-0 px-3 pt-2" style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-        <p
+      {/* ── Header top: 2行テキスト + 流れるテロップ ── */}
+      <div className="shrink-0 px-3 pt-1" style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
+        <div
           style={{
-            margin: 0,
             textAlign: "center",
-            fontSize: "11px",
-            letterSpacing: "0.08em",
-            fontWeight: 600,
-            color: "#2A1C20",
             fontFamily: "var(--font-noto), sans-serif",
+            color: "#2A1C20",
+            lineHeight: 1.3,
           }}
         >
-          {headerSubtitle}
-        </p>
+          <p
+            style={{
+              margin: 0,
+              fontSize: "12px",
+              letterSpacing: "0.06em",
+              fontWeight: 700,
+            }}
+          >
+            {headerLine1}
+          </p>
+          <p
+            style={{
+              margin: 0,
+              fontSize: "10.5px",
+              letterSpacing: "0.06em",
+              fontWeight: 500,
+            }}
+          >
+            {headerLine2}
+          </p>
+        </div>
         <div
           className="header-ticker"
           style={{
@@ -83,7 +100,7 @@ export default function HomePage() {
 
       {/* ── Hero Slider (告知画像 16:9) ── */}
       <section
-        className="shrink-0 px-3 pt-2 pb-1"
+        className="shrink-0 px-3 pt-1 pb-1"
         style={{ display: "flex", justifyContent: "center" }}
       >
         <div style={{ width: "100%", aspectRatio: "16 / 9" }}>
@@ -123,8 +140,8 @@ export default function HomePage() {
             {/* 画像枠: サイズ固定 (見切れない) */}
             <div
               style={{
-                width: "120px",
-                height: "60px",
+                width: "150px",
+                height: "78px",
                 position: "relative",
                 flexShrink: 0,
                 borderRadius: "6px",
@@ -137,7 +154,7 @@ export default function HomePage() {
                 src={banner.img}
                 alt={banner.ja}
                 fill
-                sizes="120px"
+                sizes="150px"
                 style={{ objectFit: "contain" }}
               />
             </div>
