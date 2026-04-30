@@ -10,6 +10,7 @@ const slides = [
   { src: `${BASE_PATH}/images/header-2.png`, fit: "cover" },
   { src: `${BASE_PATH}/images/header-3.png`, fit: "cover" },
   { src: `${BASE_PATH}/images/header-4.png`, fit: "cover" },
+  { src: `${BASE_PATH}/images/header-5.png`, fit: "cover" },
 ];
 
 export default function HeroSlider() {
