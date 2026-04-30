@@ -10,34 +10,27 @@ const headerSubtitle = "根本改善エステ・仙台市泉区・泉中央駅�
 const tickerText =
   "WINBACK BACK4導入店・根本改善・あなたにあわせた施術・ブログで美容や健康についてまとめてます・いいねでクーポンGET";
 
-const cards = [
+const banners = [
   {
     href: "/about",
     en: "ABOUT",
     ja: "サロンについて",
-    img: `${BASE_PATH}/images/card-about.png`,
-    accent: "#F7EDF0",
+    sub: "代表挨拶 / Root1039",
+    img: `${BASE_PATH}/images/banner-about.png`,
   },
   {
     href: "/menu",
     en: "MENU",
     ja: "メニュー・商品",
-    img: `${BASE_PATH}/images/card-menu.png`,
-    accent: "#F7EDF0",
+    sub: "最新機器 / 生活改善",
+    img: `${BASE_PATH}/images/banner-menu.png`,
   },
   {
     href: "/blog",
     en: "BLOG",
     ja: "ブログ",
-    img: `${BASE_PATH}/images/card-blog.png`,
-    accent: "#F0EDED",
-  },
-  {
-    href: "/contact",
-    en: "FIRST VISIT",
-    ja: "初めての方へ",
-    img: `${BASE_PATH}/images/card-first-visit.png`,
-    accent: "#F7EDF0",
+    sub: "美容と健康のヒントを発信中",
+    img: `${BASE_PATH}/images/banner-blog.png`,
   },
 ];
 
@@ -98,76 +91,99 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Card Grid ── */}
+      {/* ── Banner List (3つの横長バナー) ── */}
       <div
-        className="flex-1 min-h-0 grid grid-cols-2 gap-x-3 gap-y-3 px-8 pt-3 pb-3"
+        className="flex-1 min-h-0 flex flex-col gap-2 px-4 pt-2 pb-2"
         style={{ background: "#F0EDED" }}
       >
-        {cards.map((card) => (
+        {banners.map((banner) => (
           <Link
-            key={card.en}
-            href={card.href}
-            className="relative overflow-hidden active:scale-[0.97] transition-transform"
+            key={banner.en}
+            href={banner.href}
+            className="relative w-full active:translate-y-[1px] transition-transform"
             style={{
-              borderRadius: "8px",
-              border: `1.5px solid ${GOLD_BORDER}`,
+              flex: 1,
               minHeight: 0,
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "8px 12px",
+              borderRadius: "10px",
+              background:
+                "linear-gradient(180deg, #FFFFFF 0%, #FBF7F2 100%)",
+              border: `1.5px solid ${GOLD_BORDER}`,
+              boxShadow: [
+                "inset 0 1px 0 rgba(255,255,255,0.95)",
+                "inset 0 -2px 0 rgba(201,169,110,0.18)",
+                "0 2px 6px rgba(42,28,32,0.08)",
+                "0 1px 2px rgba(42,28,32,0.06)",
+              ].join(", "),
             }}
           >
-            {/* 画像: カード全体を覆う */}
-            <Image
-              src={card.img}
-              alt={card.ja}
-              fill
-              sizes="200px"
-              style={{ objectFit: "cover" }}
-            />
-
-            {/* テキスト: 画像上部に重ねる */}
+            {/* 画像枠: サイズ固定 (見切れない) */}
             <div
               style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                padding: "5px 7px 4px",
-                background:
-                  "linear-gradient(to bottom, rgba(30,15,20,0.30) 0%, rgba(30,15,20,0.08) 60%, rgba(30,15,20,0) 100%)",
+                width: "120px",
+                height: "60px",
+                position: "relative",
+                flexShrink: 0,
+                borderRadius: "6px",
+                overflow: "hidden",
+                background: "#F5EFE7",
+                border: "1px solid rgba(201,169,110,0.35)",
               }}
             >
+              <Image
+                src={banner.img}
+                alt={banner.ja}
+                fill
+                sizes="120px"
+                style={{ objectFit: "contain" }}
+              />
+            </div>
+
+            {/* テキスト */}
+            <div style={{ flex: 1, minWidth: 0 }}>
               <p
                 style={{
-                  color: "rgba(255,255,255,0.80)",
-                  fontSize: "6.5px",
-                  letterSpacing: "0.18em",
+                  color: "#C4687A",
+                  fontSize: "9px",
+                  letterSpacing: "0.22em",
                   fontFamily: "var(--font-noto), sans-serif",
-                  marginBottom: "1px",
+                  marginBottom: "2px",
+                  fontWeight: 600,
                 }}
               >
-                {card.en}
+                {banner.en}
               </p>
               <h2
                 style={{
-                  color: "#FFFFFF",
-                  fontSize: "10px",
-                  lineHeight: 1.2,
+                  color: "#2A1C20",
+                  fontSize: "14px",
+                  lineHeight: 1.25,
                   fontFamily: "var(--font-shippori), serif",
-                  letterSpacing: "0.03em",
+                  letterSpacing: "0.04em",
+                  marginBottom: "2px",
                 }}
               >
-                {card.ja}
+                {banner.ja}
               </h2>
+              <p
+                style={{
+                  color: "#7A6065",
+                  fontSize: "10px",
+                  lineHeight: 1.3,
+                  fontFamily: "var(--font-noto), sans-serif",
+                }}
+              >
+                {banner.sub}
+              </p>
             </div>
 
             {/* 矢印 */}
             <ChevronRight
-              size={10}
-              style={{
-                position: "absolute",
-                top: "6px",
-                right: "5px",
-                color: "rgba(255,255,255,0.78)",
-              }}
+              size={16}
+              style={{ color: "rgba(201,169,110,0.95)", flexShrink: 0 }}
             />
           </Link>
         ))}
