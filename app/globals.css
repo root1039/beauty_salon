@@ -3,8 +3,10 @@
 :root {
   /* ── 3色パレット ── */
   --white:      #FFFFFF;
-  --gray-light: #F0EDED;       /* 薄グレー */
-  --gray-mid:   #E6E2E2;       /* やや濃いグレー(ボーダー用) */
+  /* 高級感のあるニュートラルグレー（クール寄り）— 一段濃め */
+  --gray-light: #D8DCE2;
+  --gray-mid:   #C2C7CF;
+  --gray-deep:  #A8AEB8;
   --pink-pale:  #F7EDF0;       /* 淡ピンク */
   --pink-mid:   #EDD8DF;       /* やや濃い淡ピンク(ボーダー用) */
   --pink-deep:  #D9A8B5;       /* ピンクアクセント */
@@ -12,15 +14,15 @@
   --text-mid:   #7A6065;       /* ミッドトーン */
 
   /* 旧変数(他ページ互換) */
-  --cream:      #FFFFFF;
-  --cream-dark: #F0EDED;
+  --cream:      #E0E3E8;
+  --cream-dark: linear-gradient(160deg, #DEE1E7 0%, #D2D6DE 45%, #C5CAD3 100%);
   --rose:       #C4687A;
   --rose-light: #F7EDF0;
   --rose-dark:  #9E4A5A;
   --rose-muted: #D9A8B5;
   --charcoal:   #2A1C20;
   --muted:      #7A6065;
-  --border:     #E6E2E2;
+  --border:     #C2C7CF;
 }
 
 * {
@@ -33,8 +35,8 @@ html {
 }
 
 body {
-  /* フレーム外: 深みのある紫黒でフレームを際立たせる */
-  background: linear-gradient(135deg, #12080F 0%, #1E0F18 50%, #100810 100%);
+  /* フレーム外: クールなダークグレーで中央のグレーUIを引き立てる */
+  background: linear-gradient(145deg, #080a0d 0%, #12161c 45%, #07090b 100%);
   color: var(--text-dark);
   -webkit-font-smoothing: antialiased;
   overscroll-behavior-y: none;
@@ -114,7 +116,7 @@ body {
   margin: 0 auto;
   position: relative;
   z-index: 1;
-  background: var(--white);
+  background: var(--cream-dark);
   /* 枠線: ピンク-グレーの細線 */
   border-left:  1px solid rgba(217,168,181,0.5);
   border-right: 1px solid rgba(217,168,181,0.5);
@@ -135,7 +137,7 @@ body {
 .glass {
   backdrop-filter: blur(16px) saturate(160%);
   -webkit-backdrop-filter: blur(16px) saturate(160%);
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(228, 232, 238, 0.93);
 }
 
 /* ── Shimmer sweep ── */

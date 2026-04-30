@@ -43,7 +43,7 @@ export default function HomePage() {
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
-        background: "#F0EDED",
+        background: "var(--gray-light)",
       }}
     >
       {/* ── Header top: 2行テキスト + 流れるテロップ ── */}
@@ -111,7 +111,7 @@ export default function HomePage() {
       {/* ── Banner List (3つの横長バナー) ── */}
       <div
         className="flex-1 min-h-0 flex flex-col gap-2 px-4 pt-2 pb-2"
-        style={{ background: "#F0EDED" }}
+        style={{ background: "var(--gray-light)" }}
       >
         {banners.map((banner) => (
           <Link
@@ -210,7 +210,7 @@ export default function HomePage() {
       <div
         className="shrink-0 pt-1 pb-3"
         style={{
-          background: "#F0EDED",
+          background: "var(--gray-light)",
           display: "flex",
           justifyContent: "center",
         }}

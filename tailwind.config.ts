@@ -9,8 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        cream: "#FAF8F5",
-        "cream-dark": "#F0EBE5",
+        cream: "#D8DCE2",
+        "cream-dark": "#C5CAD3",
         rose: {
           DEFAULT: "#C4687A",
           light: "#F2D4DA",
@@ -19,7 +19,7 @@ const config: Config = {
         },
         charcoal: "#1C1C1C",
         muted: "#8B7580",
-        border: "#EDE8E5",
+        border: "#C2C7CF",
       },
       fontFamily: {
         serif: ["var(--font-shippori)", "Shippori Mincho", "serif"],

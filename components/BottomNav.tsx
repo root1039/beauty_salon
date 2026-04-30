@@ -29,7 +29,7 @@ export default function BottomNav() {
         width: "100%",
         maxWidth: "430px",
         background:
-          "linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(248,242,238,0.96) 100%)",
+          "linear-gradient(180deg, rgba(232,236,242,0.97) 0%, rgba(218,222,230,0.96) 100%)",
         borderTop: "1px solid rgba(201,169,110,0.55)",
         boxShadow: [
           "inset 0 1px 0 rgba(255,255,255,0.95)",

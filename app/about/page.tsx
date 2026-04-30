@@ -16,7 +16,7 @@ export default function AboutPage() {
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
-        background: "#F0EDED",
+        background: "var(--gray-light)",
       }}
     >
       {/* ── Page Header ── */}
