@@ -238,6 +238,40 @@ body {
 .ball-float-2 { animation: ballFloat2 5.5s ease-in-out infinite; }
 .ball-float-3 { animation: ballFloat3 4s   ease-in-out infinite; }
 
+/* ── Hero neon glow ── */
+@keyframes heroNeonPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.18),
+      0 0 8px rgba(228, 124, 151, 0.32),
+      0 0 18px rgba(201, 169, 110, 0.30),
+      0 0 28px rgba(196, 104, 122, 0.18);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.30),
+      0 0 14px rgba(228, 124, 151, 0.55),
+      0 0 28px rgba(201, 169, 110, 0.50),
+      0 0 44px rgba(196, 104, 122, 0.30);
+  }
+}
+
+.hero-neon {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  animation: heroNeonPulse 3.6s ease-in-out infinite;
+}
+
+/* 上品な内側ハイライト */
+.hero-neon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.10);
+}
+
 /* ── Header ticker (right to left, seamless loop) ── */
 @keyframes tickerMove {
   0%   { transform: translateX(0); }

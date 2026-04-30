@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Shippori_Mincho, Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 import BottomNav from "@/components/BottomNav";
+import SplashScreen from "@/components/SplashScreen";
 
 const shippori = Shippori_Mincho({
   variable: "--font-shippori",
@@ -46,6 +47,7 @@ export default function RootLayout({
         style={{ fontFamily: "var(--font-noto), sans-serif" }}
         className="antialiased"
       >
+        <SplashScreen />
         <div className="bg-rings" aria-hidden="true">
           <span className="ring" />
         </div>

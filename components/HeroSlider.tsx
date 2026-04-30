@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const slides = [
-  { src: `${BASE_PATH}/images/header-1.png`, fit: "contain" },
-  { src: `${BASE_PATH}/images/header-2.png`, fit: "contain" },
-  { src: `${BASE_PATH}/images/header-3.png`, fit: "contain" },
+  { src: `${BASE_PATH}/images/header-1.png`, fit: "cover" },
+  { src: `${BASE_PATH}/images/header-2.png`, fit: "cover" },
+  { src: `${BASE_PATH}/images/header-3.png`, fit: "cover" },
 ];
 
 export default function HeroSlider() {
@@ -23,11 +23,10 @@ export default function HeroSlider() {
 
   return (
     <div
-      className="relative h-full w-full overflow-hidden"
+      className="hero-neon relative h-full w-full overflow-hidden"
       style={{
-        borderRadius: "10px",
-        background: "#F5F0EE",
-        border: "1.5px solid rgba(201,169,110,0.9)",
+        borderRadius: "12px",
+        background: "#0E0712",
       }}
     >
       {/* 定点フェード切替 */}

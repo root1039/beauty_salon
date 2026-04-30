@@ -6,9 +6,9 @@ import HeroSlider from "@/components/HeroSlider";
 const RESERVATION_URL = "/contact";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const GOLD_BORDER = "rgba(201,169,110,0.9)";
-const HEADER_ICON = `${BASE_PATH}/images/header-icon.png`;
+const headerSubtitle = "根本改善エステ・仙台市泉区・泉中央駅から徒歩5分";
 const tickerText =
-  "仙台・泉中央・駅から徒歩5分・根本改善エステ・WINBACK BACK4導入店・ブログを読んでクーポンGET";
+  "WINBACK BACK4導入店・根本改善・あなたにあわせた施術・ブログで美容や健康についてまとめてます・いいねでクーポンGET";
 
 const cards = [
   {
@@ -52,29 +52,26 @@ export default function HomePage() {
         background: "#F0EDED",
       }}
     >
-      {/* ── Header top: アイコン(独立) + 流れるテキスト ── */}
-      <div
-        className="shrink-0 px-3 pt-2"
-        style={{ display: "flex", alignItems: "center", gap: "10px" }}
-      >
-        <Image
-          src={HEADER_ICON}
-          alt="Root1039 アイコン"
-          width={42}
-          height={42}
+      {/* ── Header top: 上段テキスト + 流れるテロップ ── */}
+      <div className="shrink-0 px-3 pt-2" style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+        <p
           style={{
-            borderRadius: "50%",
-            flexShrink: 0,
-            border: "1.5px solid rgba(201,169,110,0.95)",
-            background: "#FFFFFF",
-            boxShadow: "0 1px 4px rgba(42,28,32,0.12)",
+            margin: 0,
+            textAlign: "center",
+            fontSize: "11px",
+            letterSpacing: "0.08em",
+            fontWeight: 600,
+            color: "#2A1C20",
+            fontFamily: "var(--font-noto), sans-serif",
           }}
-        />
+        >
+          {headerSubtitle}
+        </p>
         <div
           className="header-ticker"
           style={{
-            flex: 1,
-            height: "30px",
+            width: "100%",
+            height: "26px",
             borderRadius: "999px",
             background: "rgba(255,255,255,0.85)",
             border: "1px solid rgba(201,169,110,0.7)",
@@ -91,14 +88,19 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* ── Hero Slider ── */}
-      <section className="shrink-0 px-3 pt-1.5" style={{ height: "40%" }}>
-        <HeroSlider />
+      {/* ── Hero Slider (告知画像 16:9) ── */}
+      <section
+        className="shrink-0 px-3 pt-2 pb-1"
+        style={{ display: "flex", justifyContent: "center" }}
+      >
+        <div style={{ width: "100%", aspectRatio: "16 / 9" }}>
+          <HeroSlider />
+        </div>
       </section>
 
       {/* ── Card Grid ── */}
       <div
-        className="flex-1 min-h-0 grid grid-cols-2 gap-1.5 px-3 pt-1.5 pb-2"
+        className="flex-1 min-h-0 grid grid-cols-2 gap-x-3 gap-y-3 px-8 pt-3 pb-3"
         style={{ background: "#F0EDED" }}
       >
         {cards.map((card) => (
@@ -128,18 +130,18 @@ export default function HomePage() {
                 top: 0,
                 left: 0,
                 right: 0,
-                padding: "10px 10px 8px",
+                padding: "5px 7px 4px",
                 background:
-                  "linear-gradient(to bottom, rgba(30,15,20,0.35) 0%, rgba(30,15,20,0.10) 65%, rgba(30,15,20,0) 100%)",
+                  "linear-gradient(to bottom, rgba(30,15,20,0.30) 0%, rgba(30,15,20,0.08) 60%, rgba(30,15,20,0) 100%)",
               }}
             >
               <p
                 style={{
                   color: "rgba(255,255,255,0.80)",
-                  fontSize: "8px",
+                  fontSize: "6.5px",
                   letterSpacing: "0.18em",
                   fontFamily: "var(--font-noto), sans-serif",
-                  marginBottom: "2px",
+                  marginBottom: "1px",
                 }}
               >
                 {card.en}
@@ -147,8 +149,8 @@ export default function HomePage() {
               <h2
                 style={{
                   color: "#FFFFFF",
-                  fontSize: "13px",
-                  lineHeight: 1.3,
+                  fontSize: "10px",
+                  lineHeight: 1.2,
                   fontFamily: "var(--font-shippori), serif",
                   letterSpacing: "0.03em",
                 }}
@@ -159,12 +161,12 @@ export default function HomePage() {
 
             {/* 矢印 */}
             <ChevronRight
-              size={13}
+              size={10}
               style={{
                 position: "absolute",
-                top: "12px",
-                right: "8px",
-                color: "rgba(255,255,255,0.75)",
+                top: "6px",
+                right: "5px",
+                color: "rgba(255,255,255,0.78)",
               }}
             />
           </Link>
@@ -173,28 +175,34 @@ export default function HomePage() {
 
       {/* ── 予約ボタン ── */}
       <div
-        className="shrink-0 px-6 pb-2"
-        style={{ background: "#F0EDED" }}
+        className="shrink-0 pt-1 pb-3"
+        style={{
+          background: "#F0EDED",
+          display: "flex",
+          justifyContent: "center",
+        }}
       >
         <Link
           href={RESERVATION_URL}
-          className="flex items-center justify-center w-full text-sm font-semibold active:translate-y-[2px] transition-all"
+          className="flex items-center justify-center text-[13px] font-semibold active:translate-y-[2px] transition-all"
           style={{
             background:
               "linear-gradient(180deg, #F099B3 0%, #E47C97 45%, #C4687A 100%)",
             color: "white",
-            height: "46px",
-            borderRadius: "10px",
+            width: "52%",
+            maxWidth: "200px",
+            height: "38px",
+            borderRadius: "9px",
             border: "1px solid rgba(158,74,90,0.55)",
             boxShadow: [
               "inset 0 1px 0 rgba(255,255,255,0.55)",
               "inset 0 -2px 0 rgba(158,74,90,0.55)",
               "0 1px 0 rgba(255,255,255,0.5)",
-              "0 4px 0 rgba(120,55,70,0.55)",
-              "0 8px 18px rgba(158,74,90,0.45)",
-              "0 1px 2px rgba(42,28,32,0.25)",
+              "0 3px 0 rgba(120,55,70,0.5)",
+              "0 6px 14px rgba(158,74,90,0.40)",
+              "0 1px 2px rgba(42,28,32,0.22)",
             ].join(", "),
-            letterSpacing: "0.10em",
+            letterSpacing: "0.12em",
             fontFamily: "var(--font-noto), sans-serif",
             textShadow: "0 1px 1px rgba(120,55,70,0.55)",
           }}
