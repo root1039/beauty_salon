@@ -13,7 +13,7 @@ export default function AboutPage() {
     <div
       className="page-scroll-frame"
       style={{
-        height: "calc(100dvh - 68px)",
+        height: "calc(100dvh - 74px)",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",

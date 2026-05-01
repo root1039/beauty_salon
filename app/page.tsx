@@ -2,14 +2,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import HeroSlider from "@/components/HeroSlider";
+import InstagramFab from "@/components/InstagramFab";
 
 const RESERVATION_URL = "/contact";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-const GOLD_BORDER = "rgba(201,169,110,0.9)";
+const GOLD_BORDER = "rgba(201,169,110,0.65)";
 const headerLine1 = "根本改善エステ「Root1039」";
 const headerLine2 = "仙台市泉区 泉中央駅から徒歩5分";
-const tickerText =
-  "高周波施術取り扱い・根本改善・あなたにあわせたケア・ブログで美容や健康についてまとめてます・いいねでクーポンGET";
 
 const banners = [
   {
@@ -38,69 +37,64 @@ const banners = [
 export default function HomePage() {
   return (
     <div
+      className="home-page-root relative"
       style={{
-        height: "calc(100dvh - 68px)",
+        height: "calc(100dvh - 74px)",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
-        background: "var(--gray-light)",
       }}
     >
-      {/* ── Header top: 2行テキスト + 流れるテロップ ── */}
-      <div className="shrink-0 px-3 pt-1" style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
-        <div
-          style={{
-            textAlign: "center",
-            fontFamily: "var(--font-noto), sans-serif",
-            color: "#2A1C20",
-            lineHeight: 1.3,
-          }}
-        >
-          <p
+      {/* やわらかな装飾（キラ・小花モチーフ） */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden z-0 home-page-decor" aria-hidden />
+
+      {/* ── 上部：余白＋見出し＋Instagram ── */}
+      <div
+        className="relative z-[1] shrink-0 px-3 pt-4"
+        style={{
+          paddingTop: "max(14px, env(safe-area-inset-top, 0px))",
+        }}
+      >
+        <div className="flex items-start justify-between gap-2 pl-1">
+          <div className="w-10 shrink-0" aria-hidden />
+          <div
+            className="flex-1 min-w-0 text-center"
             style={{
-              margin: 0,
-              fontSize: "12px",
-              letterSpacing: "0.06em",
-              fontWeight: 700,
+              fontFamily: "var(--font-noto), sans-serif",
+              color: "#2A1C20",
             }}
           >
-            {headerLine1}
-          </p>
-          <p
-            style={{
-              margin: 0,
-              fontSize: "10.5px",
-              letterSpacing: "0.06em",
-              fontWeight: 500,
-            }}
-          >
-            {headerLine2}
-          </p>
-        </div>
-        <div
-          className="header-ticker"
-          style={{
-            width: "100%",
-            height: "26px",
-            borderRadius: "999px",
-            background: "rgba(255,255,255,0.85)",
-            border: "1px solid rgba(201,169,110,0.7)",
-            display: "flex",
-            alignItems: "center",
-            overflow: "hidden",
-            padding: "0 12px",
-          }}
-        >
-          <div className="header-ticker__track">
-            <span>{tickerText}</span>
-            <span aria-hidden="true">{tickerText}</span>
+            <p
+              className="mb-0.5"
+              style={{
+                margin: 0,
+                fontSize: "11px",
+                letterSpacing: "0.14em",
+                fontWeight: 700,
+                opacity: 0.92,
+              }}
+            >
+              {headerLine1}
+            </p>
+            <p
+              style={{
+                margin: 0,
+                fontSize: "9.5px",
+                letterSpacing: "0.12em",
+                fontWeight: 500,
+                color: "#7A6065",
+              }}
+            >
+              {headerLine2}
+            </p>
           </div>
+          <InstagramFab className="mt-0.5" />
         </div>
       </div>
 
-      {/* ── Hero Slider (告知画像 16:9) ── */}
+      {/* ── Hero：少し下げて余白を活かす ── */}
       <section
-        className="hero-frame-outer shrink-0 px-3 pt-1 pb-1"
+        className="hero-frame-outer relative z-[1] shrink-0 px-3 pt-5 pb-2"
         style={{ display: "flex", justifyContent: "center" }}
       >
         <div style={{ width: "100%", aspectRatio: "16 / 9" }}>
@@ -108,66 +102,59 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Banner List (3つの横長バナー) ── */}
+      {/* ── コンパクトバナー ── */}
       <div
-        className="flex-1 min-h-0 flex flex-col gap-2 px-4 pt-2 pb-2"
-        style={{ background: "var(--gray-light)" }}
+        className="relative z-[1] flex-1 min-h-0 flex flex-col gap-1.5 px-3 pt-1 pb-2"
       >
         {banners.map((banner) => (
           <Link
             key={banner.en}
             href={banner.href}
-            className="relative w-full active:translate-y-[1px] transition-transform"
+            className="relative w-full active:translate-y-[1px] transition-transform home-banner-card"
             style={{
               flex: 1,
               minHeight: 0,
               display: "flex",
               alignItems: "center",
-              gap: "12px",
-              padding: "8px 12px",
-              borderRadius: "10px",
+              gap: "8px",
+              padding: "6px 10px",
+              borderRadius: "12px",
               background:
-                "linear-gradient(180deg, #FFFFFF 0%, #FBF7F2 100%)",
-              border: `1.5px solid ${GOLD_BORDER}`,
-              boxShadow: [
-                "inset 0 1px 0 rgba(255,255,255,0.95)",
-                "inset 0 -2px 0 rgba(201,169,110,0.18)",
-                "0 2px 6px rgba(42,28,32,0.08)",
-                "0 1px 2px rgba(42,28,32,0.06)",
-              ].join(", "),
+                "linear-gradient(165deg, rgba(255,255,255,0.96) 0%, rgba(252,248,252,0.92) 55%, rgba(248,242,246,0.88) 100%)",
+              border: `1px solid ${GOLD_BORDER}`,
+              boxShadow:
+                "inset 0 1px 0 rgba(255,255,255,0.92), 0 2px 8px rgba(196,104,122,0.07), 0 1px 2px rgba(42,28,32,0.04)",
             }}
           >
-            {/* 画像枠: サイズ固定 (見切れない) */}
             <div
               style={{
-                width: "150px",
-                height: "78px",
+                width: "104px",
+                height: "54px",
                 position: "relative",
                 flexShrink: 0,
-                borderRadius: "6px",
+                borderRadius: "8px",
                 overflow: "hidden",
-                background: "#F5EFE7",
-                border: "1px solid rgba(201,169,110,0.35)",
+                background: "#FFF9F5",
+                border: "1px solid rgba(201,169,110,0.28)",
               }}
             >
               <Image
                 src={banner.img}
                 alt={banner.ja}
                 fill
-                sizes="150px"
+                sizes="104px"
                 style={{ objectFit: "contain" }}
               />
             </div>
 
-            {/* テキスト */}
             <div style={{ flex: 1, minWidth: 0 }}>
               <p
                 style={{
                   color: "#C4687A",
-                  fontSize: "9px",
-                  letterSpacing: "0.22em",
+                  fontSize: "8px",
+                  letterSpacing: "0.18em",
                   fontFamily: "var(--font-noto), sans-serif",
-                  marginBottom: "2px",
+                  marginBottom: "1px",
                   fontWeight: 600,
                 }}
               >
@@ -176,20 +163,20 @@ export default function HomePage() {
               <h2
                 style={{
                   color: "#2A1C20",
-                  fontSize: "14px",
+                  fontSize: "12px",
                   lineHeight: 1.25,
                   fontFamily: "var(--font-shippori), serif",
-                  letterSpacing: "0.04em",
-                  marginBottom: "2px",
+                  letterSpacing: "0.03em",
+                  marginBottom: "1px",
                 }}
               >
                 {banner.ja}
               </h2>
               <p
                 style={{
-                  color: "#7A6065",
-                  fontSize: "10px",
-                  lineHeight: 1.3,
+                  color: "#8a757a",
+                  fontSize: "9px",
+                  lineHeight: 1.25,
                   fontFamily: "var(--font-noto), sans-serif",
                 }}
               >
@@ -197,10 +184,9 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* 矢印 */}
             <ChevronRight
-              size={16}
-              style={{ color: "rgba(201,169,110,0.95)", flexShrink: 0 }}
+              size={14}
+              style={{ color: "rgba(201,169,110,0.85)", flexShrink: 0 }}
             />
           </Link>
         ))}
@@ -208,36 +194,32 @@ export default function HomePage() {
 
       {/* ── 予約ボタン ── */}
       <div
-        className="shrink-0 pt-1 pb-3"
+        className="relative z-[1] shrink-0 pt-1 pb-3"
         style={{
-          background: "var(--gray-light)",
           display: "flex",
           justifyContent: "center",
         }}
       >
         <Link
           href={RESERVATION_URL}
-          className="flex items-center justify-center text-[13px] font-semibold active:translate-y-[2px] transition-all"
+          className="flex items-center justify-center text-[12px] font-semibold active:translate-y-[2px] transition-all"
           style={{
             background:
               "linear-gradient(180deg, #F099B3 0%, #E47C97 45%, #C4687A 100%)",
             color: "white",
-            width: "52%",
-            maxWidth: "200px",
-            height: "38px",
-            borderRadius: "9px",
+            width: "48%",
+            maxWidth: "184px",
+            height: "36px",
+            borderRadius: "999px",
             border: "1px solid rgba(158,74,90,0.55)",
             boxShadow: [
               "inset 0 1px 0 rgba(255,255,255,0.55)",
-              "inset 0 -2px 0 rgba(158,74,90,0.55)",
-              "0 1px 0 rgba(255,255,255,0.5)",
-              "0 3px 0 rgba(120,55,70,0.5)",
-              "0 6px 14px rgba(158,74,90,0.40)",
-              "0 1px 2px rgba(42,28,32,0.22)",
+              "inset 0 -2px 0 rgba(158,74,90,0.45)",
+              "0 4px 14px rgba(196,104,122,0.38)",
             ].join(", "),
-            letterSpacing: "0.12em",
+            letterSpacing: "0.14em",
             fontFamily: "var(--font-noto), sans-serif",
-            textShadow: "0 1px 1px rgba(120,55,70,0.55)",
+            textShadow: "0 1px 1px rgba(120,55,70,0.45)",
           }}
         >
           予約する

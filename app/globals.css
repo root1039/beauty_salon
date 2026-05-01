@@ -130,7 +130,7 @@ body {
 /* Page wrapper（ブログ・予約：ノッチ下でも上部が切れない／ホームバー余白） */
 .page-content {
   padding-top: max(10px, env(safe-area-inset-top, 0px));
-  padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(94px + env(safe-area-inset-bottom, 0px));
   min-height: 100dvh;
   min-height: 100svh;
 }
@@ -138,6 +138,48 @@ body {
 /* サロン・メニュー：固定高レイアウトでもセーフエリア */
 .page-scroll-frame {
   padding-top: max(8px, env(safe-area-inset-top, 0px));
+}
+
+/* ── ホーム：メッシュグラデ＋さりげない装飾 ── */
+.home-page-root {
+  background:
+    radial-gradient(ellipse 130% 65% at 50% -18%, rgba(255, 228, 238, 0.9) 0%, transparent 52%),
+    radial-gradient(ellipse 65% 48% at 98% 22%, rgba(252, 236, 246, 0.65) 0%, transparent 48%),
+    radial-gradient(ellipse 50% 42% at 4% 35%, rgba(236, 244, 255, 0.45) 0%, transparent 46%),
+    linear-gradient(178deg, #fff9fc 0%, #f8eef4 40%, #ebe8f4 78%, #e5eaf5 100%);
+}
+
+.home-page-decor::before,
+.home-page-decor::after {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.22;
+  color: rgba(196, 104, 122, 0.55);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.home-page-decor::before {
+  content: "\2727"; /* ✧ */
+  top: 10%;
+  left: 7%;
+}
+
+.home-page-decor::after {
+  content: "\2741"; /* ❁ */
+  bottom: 38%;
+  right: 8%;
+  opacity: 0.18;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes homeSparkle {
+    0%, 100% { opacity: 0.18; transform: scale(1); }
+    50% { opacity: 0.32; transform: scale(1.06); }
+  }
+  .home-page-decor::before {
+    animation: homeSparkle 5s ease-in-out infinite;
+  }
 }
 
 /* Frosted glass */
