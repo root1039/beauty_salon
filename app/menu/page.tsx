@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 export default function MenuPage() {
   return (
     <div
+      className="page-scroll-frame"
       style={{
         height: "calc(100dvh - 68px)",
         display: "flex",

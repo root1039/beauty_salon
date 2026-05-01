@@ -127,10 +127,17 @@ body {
      0   0 60px rgba(217,168,181,0.08);
 }
 
-/* Page wrapper */
+/* Page wrapper（ブログ・予約：ノッチ下でも上部が切れない／ホームバー余白） */
 .page-content {
-  padding-bottom: 88px;
+  padding-top: max(10px, env(safe-area-inset-top, 0px));
+  padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px));
   min-height: 100dvh;
+  min-height: 100svh;
+}
+
+/* サロン・メニュー：固定高レイアウトでもセーフエリア */
+.page-scroll-frame {
+  padding-top: max(8px, env(safe-area-inset-top, 0px));
 }
 
 /* Frosted glass */
@@ -239,6 +246,91 @@ body {
 .ball-float-1 { animation: ballFloat1 7s   ease-in-out infinite; }
 .ball-float-2 { animation: ballFloat2 5.5s ease-in-out infinite; }
 .ball-float-3 { animation: ballFloat3 4s   ease-in-out infinite; }
+
+/* ── Page header compact：薄いガラス風＋太めゴールド枠の脈動 ── */
+@keyframes pageHeaderGoldPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 3px rgba(201, 169, 110, 0.42),
+      0 0 0 6px rgba(212, 180, 115, 0.18),
+      0 4px 22px rgba(42, 28, 32, 0.07),
+      0 0 36px rgba(201, 169, 110, 0.16);
+  }
+  50% {
+    box-shadow:
+      0 0 0 3px rgba(228, 195, 130, 0.58),
+      0 0 0 8px rgba(201, 169, 110, 0.22),
+      0 6px 28px rgba(42, 28, 32, 0.09),
+      0 0 52px rgba(201, 169, 110, 0.24);
+  }
+}
+
+.page-header-compact {
+  background: linear-gradient(
+    168deg,
+    rgba(255, 255, 255, 0.52) 0%,
+    rgba(252, 250, 247, 0.38) 45%,
+    rgba(242, 238, 232, 0.34) 100%
+  );
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border: 3px solid rgba(201, 169, 110, 0.5);
+  animation: pageHeaderGoldPulse 5.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-header-compact {
+    animation: none;
+    box-shadow:
+      0 4px 18px rgba(42, 28, 32, 0.08),
+      0 0 40px rgba(201, 169, 110, 0.14);
+  }
+}
+
+/* ── メニュータブ：記事ヒーロー メタリックグラデーション ── */
+@keyframes metallicHeroShift {
+  0%, 100% {
+    background-position: 10% 40%;
+  }
+  50% {
+    background-position: 90% 60%;
+  }
+}
+
+.menu-tab-hero-metallic {
+  position: relative;
+  background-size: 260% 260%;
+  animation: metallicHeroShift 18s ease-in-out infinite;
+  overflow: hidden;
+}
+
+.menu-tab-hero-metallic::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(
+    118deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 62%
+  );
+  opacity: 0.25;
+  mix-blend-mode: overlay;
+}
+
+.menu-tab-hero-metallic > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-tab-hero-metallic {
+    animation: none;
+    background-size: 100% 100%;
+  }
+}
 
 /* ── Hero 画像フレーム（ピンクネオンなし／ゴールドの柔らかい光＋軽い動き） ── */
 @keyframes heroFrameGlow {

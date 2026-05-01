@@ -86,9 +86,10 @@ const tabs = [
     Icon: Zap,
     prTitle: "全ての周波数を、1台で。",
     prSubtitle: "高周波施術で身体の土台から整え、根本からボディラインをケア",
-    headerBg: "linear-gradient(135deg, #1C1C1C 0%, #3D2530 100%)",
-    headerColor: "#FAF8F5",
-    accentColor: "var(--rose-muted)",
+    headerBg:
+      "linear-gradient(148deg, #121215 0%, #303038 22%, #1e1e24 48%, #484852 72%, #16161a 100%)",
+    headerColor: "#f3f0ea",
+    accentColor: "#d4bc90",
     sections: [
       {
         type: "lead" as const,
@@ -127,9 +128,10 @@ const tabs = [
     Icon: Shirt,
     prTitle: "着るだけで、身体が整う。",
     prSubtitle: "機能素材が身体に寄り添う、補整下着でならではの体感",
-    headerBg: "linear-gradient(135deg, #F2D4DA 0%, #E8BEC7 100%)",
-    headerColor: "var(--charcoal)",
-    accentColor: "var(--rose-dark)",
+    headerBg:
+      "linear-gradient(132deg, #9d766a 0%, #e9d2c8 26%, #c49a8c 52%, #f5ebe5 74%, #b0887c 100%)",
+    headerColor: "#1f1417",
+    accentColor: "#6d3d45",
     sections: [
       {
         type: "lead" as const,
@@ -170,9 +172,10 @@ const tabs = [
     Icon: Droplets,
     prTitle: "まず、水を変えることから。",
     prSubtitle: "医療現場も認めた電解水素水で、内側から体質を変える",
-    headerBg: "linear-gradient(135deg, #E8F4F8 0%, #D4E8F0 100%)",
-    headerColor: "var(--charcoal)",
-    accentColor: "#4A8FA0",
+    headerBg:
+      "linear-gradient(128deg, #5f8394 0%, #dcecf2 30%, #8eb4c4 55%, #eef6fa 78%, #6a94a8 100%)",
+    headerColor: "#0c1820",
+    accentColor: "#1e5366",
     sections: [
       {
         type: "lead" as const,
@@ -213,9 +216,10 @@ const tabs = [
     Icon: Leaf,
     prTitle: "毎日の選択が、未来の自分をつくる。",
     prSubtitle: "食べるもの・使うものの質を変えれば、健康の土台が変わる",
-    headerBg: "linear-gradient(135deg, #F5F0E8 0%, #EDE5D4 100%)",
-    headerColor: "var(--charcoal)",
-    accentColor: "#8B7050",
+    headerBg:
+      "linear-gradient(135deg, #8a7a58 0%, #ebe4d2 28%, #bdb196 56%, #f7f2e8 82%, #9a8b68 100%)",
+    headerColor: "#1c1810",
+    accentColor: "#4a3f28",
     sections: [
       {
         type: "lead" as const,
@@ -296,11 +300,20 @@ export default function MenuTabs() {
       {/* Content */}
       <div className="flex-1 overflow-y-auto">
         {/* Hero header */}
-        <div className="px-5 pt-6 pb-7" style={{ background: tab.headerBg }}>
-          <div className="flex items-center gap-3 mb-4">
+        <div
+          className="menu-tab-hero-metallic px-5 pt-5 pb-6"
+          style={{ background: tab.headerBg }}
+        >
+          <div className="flex items-center gap-3 mb-3">
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center"
-              style={{ background: "rgba(255,255,255,0.2)" }}
+              style={{
+                background:
+                  tab.id === "treatment"
+                    ? "rgba(255,255,255,0.12)"
+                    : "rgba(15, 15, 18, 0.12)",
+                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.25)",
+              }}
             >
               <Icon size={18} style={{ color: tab.accentColor }} />
             </div>
@@ -309,12 +322,25 @@ export default function MenuTabs() {
             </span>
           </div>
           <h2
-            className="text-2xl mb-2 leading-snug"
-            style={{ fontFamily: "var(--font-shippori), serif", color: tab.headerColor }}
+            className="text-2xl mb-1.5 leading-snug"
+            style={{
+              fontFamily: "var(--font-shippori), serif",
+              color: tab.headerColor,
+              textShadow:
+                tab.id === "treatment"
+                  ? "0 1px 2px rgba(0,0,0,0.35)"
+                  : "0 1px 0 rgba(255,255,255,0.35)",
+            }}
           >
             {tab.prTitle}
           </h2>
-          <p className="text-xs leading-relaxed" style={{ color: tab.headerColor, opacity: 0.75 }}>
+          <p
+            className="text-xs leading-relaxed"
+            style={{
+              color: tab.headerColor,
+              opacity: tab.id === "treatment" ? 0.72 : 0.78,
+            }}
+          >
             {tab.prSubtitle}
           </p>
         </div>
