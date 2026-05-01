@@ -182,6 +182,117 @@ body {
   }
 }
 
+/* ── ホーム：浮遊する色丸（大中小・それぞれ別軌道） ── */
+@keyframes homeOrbFloatLg {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  18% {
+    transform: translate(18px, -22px) scale(1.04);
+  }
+  38% {
+    transform: translate(-14px, -38px) scale(0.97);
+  }
+  58% {
+    transform: translate(26px, 8px) scale(1.02);
+  }
+  78% {
+    transform: translate(-8px, 20px) scale(0.99);
+  }
+}
+
+@keyframes homeOrbFloatMd {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  22% {
+    transform: translate(-32px, 14px) rotate(4deg);
+  }
+  48% {
+    transform: translate(12px, -26px) rotate(-3deg);
+  }
+  72% {
+    transform: translate(24px, 18px) rotate(2deg);
+  }
+}
+
+@keyframes homeOrbFloatSm {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(40px, -20px);
+  }
+  50% {
+    transform: translate(-18px, -36px);
+  }
+  75% {
+    transform: translate(8px, 22px);
+  }
+}
+
+.home-float-orb {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.home-float-orb--lg {
+  width: 132px;
+  height: 132px;
+  left: max(-12%, env(safe-area-inset-left, 0px));
+  top: 14%;
+  background: radial-gradient(
+    circle at 32% 30%,
+    rgba(255, 228, 238, 0.72) 0%,
+    rgba(236, 170, 190, 0.28) 48%,
+    rgba(196, 104, 122, 0.08) 100%
+  );
+  box-shadow: 0 0 40px rgba(255, 210, 225, 0.35);
+  animation: homeOrbFloatLg 32s ease-in-out infinite;
+}
+
+.home-float-orb--md {
+  width: 76px;
+  height: 76px;
+  right: max(-4%, env(safe-area-inset-right, 0px));
+  top: 38%;
+  background: radial-gradient(
+    circle at 38% 38%,
+    rgba(255, 248, 232, 0.85) 0%,
+    rgba(228, 200, 150, 0.38) 55%,
+    rgba(201, 169, 110, 0.12) 100%
+  );
+  box-shadow: 0 0 28px rgba(228, 195, 130, 0.28);
+  animation: homeOrbFloatMd 24s ease-in-out infinite;
+  animation-delay: -6s;
+}
+
+.home-float-orb--sm {
+  width: 46px;
+  height: 46px;
+  left: 18%;
+  bottom: 26%;
+  background: radial-gradient(
+    circle at 28% 28%,
+    rgba(232, 244, 255, 0.9) 0%,
+    rgba(180, 205, 235, 0.42) 60%,
+    rgba(140, 170, 210, 0.15) 100%
+  );
+  box-shadow: 0 0 22px rgba(180, 200, 235, 0.35);
+  animation: homeOrbFloatSm 19s ease-in-out infinite;
+  animation-delay: -11s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-float-orb--lg,
+  .home-float-orb--md,
+  .home-float-orb--sm {
+    animation: none;
+    opacity: 0.55;
+  }
+}
+
 /* Frosted glass */
 .glass {
   backdrop-filter: blur(16px) saturate(160%);

@@ -52,6 +52,16 @@ export default function HomePage() {
       {/* やわらかな装飾（キラ・小花モチーフ） */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden z-0 home-page-decor" aria-hidden />
 
+      {/* ゆるく漂う色付きの円（大中小） */}
+      <div
+        className="pointer-events-none absolute inset-0 overflow-hidden z-0 home-floating-orbs"
+        aria-hidden
+      >
+        <span className="home-float-orb home-float-orb--lg" />
+        <span className="home-float-orb home-float-orb--md" />
+        <span className="home-float-orb home-float-orb--sm" />
+      </div>
+
       {/* ── 上部：余白＋見出し＋Instagram ── */}
       <div
         className="relative z-[1] shrink-0 px-3 pt-4"
