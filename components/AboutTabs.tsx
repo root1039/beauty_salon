@@ -1,26 +1,64 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, startTransition, type CSSProperties } from "react";
 import { useSearchParams } from "next/navigation";
-import { MapPin, Clock, Heart, MessageCircle } from "lucide-react";
+import Link from "next/link";
+import { MapPin, Clock, MessageCircle } from "lucide-react";
 
-const LINE_URL = "https://line.me/R/ti/p/@root1039";
+const RESERVATION_URL = "/contact";
+const LINE_URL = "https://lin.ee/zCQoCoz";
 
-const values = [
+/** Googleマップ（泉中央駅）。ピン位置を店舗住所に合わせる場合は Googleマップの「地図を埋め込む」からsrcを差し替えてください。 */
+const MAP_EMBED_SRC =
+  "https://maps.google.com/maps?q=%E6%B3%89%E4%B8%AD%E5%A4%AE%E9%A7%85+%E5%AE%AE%E5%9F%8E%E7%9C%8C%E4%BB%99%E5%8F%B0%E5%B8%82&hl=ja&z=15&output=embed";
+
+const salonConceptCards = [
   { num: "01", title: "根本を見る", body: "悩みの表面ではなく、その原因・習慣・土台を見つめます。体型、肌、不調のほとんどは日常の積み重ねから生まれています。" },
   { num: "02", title: "毎日の質を上げる", body: "着る・食べる・使う・飲む・休む。毎日の選択の質を少しずつ整えることで、身体は自然と変わっていきます。" },
-  { num: "03", title: "施術で整え、習慣で育てる", body: "Winbackの施術で身体の土台を整え、補整下着・水・食品で日常を変える。施術後も戻らない身体をつくります。" },
+  { num: "03", title: "施術で整え、習慣で育てる", body: "施術で身体の土台を整え、補整下着・水・食品で日常を変える。施術後も戻りにくい身体をつくります。" },
   { num: "04", title: "ごきげんに生きる", body: "健康も美容も、我慢や制限ではなく、機嫌よく自分を整える選択から。Root1039が目指すのは、ごきげんな毎日です。" },
 ];
 
-const tabNames = ["プロフィール", "コンセプト", "アクセス"];
+const tabNames = ["代表挨拶", "会社・サロン概要", "アクセス"];
+
+const reservationButtonStyle: CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  textDecoration: "none",
+  background: "linear-gradient(180deg, #F099B3 0%, #E47C97 45%, #C4687A 100%)",
+  color: "white",
+  width: "100%",
+  maxWidth: "200px",
+  height: "38px",
+  borderRadius: "9px",
+  border: "1px solid rgba(158,74,90,0.55)",
+  boxShadow: [
+    "inset 0 1px 0 rgba(255,255,255,0.55)",
+    "inset 0 -2px 0 rgba(158,74,90,0.55)",
+    "0 1px 0 rgba(255,255,255,0.5)",
+    "0 3px 0 rgba(120,55,70,0.5)",
+    "0 6px 14px rgba(158,74,90,0.40)",
+    "0 1px 2px rgba(42,28,32,0.22)",
+  ].join(", "),
+  letterSpacing: "0.12em",
+  fontFamily: "var(--font-noto), sans-serif",
+  fontSize: "13px",
+  fontWeight: 600,
+  textShadow: "0 1px 1px rgba(120,55,70,0.55)",
+};
 
 export default function AboutTabs() {
   const searchParams = useSearchParams();
   const [activeIdx, setActiveIdx] = useState(0);
 
   useEffect(() => {
-    if (searchParams.get("tab") === "concept") setActiveIdx(1);
+    const tab = searchParams.get("tab");
+    if (tab === "overview" || tab === "concept") {
+      startTransition(() => setActiveIdx(1));
+    } else if (tab === "access") {
+      startTransition(() => setActiveIdx(2));
+    }
   }, [searchParams]);
 
   return (
@@ -34,7 +72,7 @@ export default function AboutTabs() {
           <button
             key={name}
             onClick={() => setActiveIdx(i)}
-            className="flex-1 py-3 text-xs font-medium transition-all"
+            className="flex-1 py-3 text-xs font-medium transition-all leading-tight"
             style={{
               color: i === activeIdx ? "var(--rose)" : "var(--muted)",
               borderBottom: i === activeIdx ? "2px solid var(--rose)" : "2px solid transparent",
@@ -51,12 +89,12 @@ export default function AboutTabs() {
       {/* Content */}
       <div className="flex-1 overflow-y-auto" style={{ background: "var(--cream)" }}>
 
-        {/* ── プロフィール ── */}
+        {/* ── 代表挨拶 ── */}
         {activeIdx === 0 && (
-          <div className="p-4 space-y-3">
+          <div className="p-4 space-y-4">
             <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid var(--border)" }}>
               <div
-                className="w-full h-32 flex items-center justify-center"
+                className="w-full h-28 flex items-center justify-center"
                 style={{ background: "linear-gradient(135deg, var(--rose-light), var(--rose-muted))" }}
               >
                 <div className="text-center">
@@ -70,16 +108,30 @@ export default function AboutTabs() {
                 </div>
               </div>
               <div className="p-5" style={{ background: "white" }}>
-                <p className="text-[10px] tracking-widest mb-1" style={{ color: "var(--rose)" }}>PROFILE</p>
+                <p className="text-[10px] tracking-widest mb-1" style={{ color: "var(--rose)" }}>GREETING</p>
                 <h2 className="text-lg mb-0.5" style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}>
-                  高橋 佑卯美（ゆーみん）
+                  代表挨拶
                 </h2>
-                <p className="text-xs mb-3" style={{ color: "var(--muted)" }}>美容歴16年 / 2児の母</p>
-                <p className="text-sm leading-6" style={{ color: "var(--charcoal)" }}>
-                  「着る・食べる・使う｜習慣の質を整えてごきげんに生きる」をテーマに、
-                  仙台・泉中央でRoot1039を運営。
-                  難しいことを生活に近い言葉で伝えることが得意な"ピンクの人"です。
+                <p className="text-xs mb-4" style={{ color: "var(--muted)" }}>
+                  高橋 佑卯美（ゆーみん）｜美容歴16年 / 2児の母
                 </p>
+                <div className="text-sm leading-7 space-y-4" style={{ color: "var(--charcoal)" }}>
+                  <p>
+                    はじめまして。Root1039の代表を務めております、高橋 佑卯美です。
+                    美容の現場に携わって早いもので16年。母として子どもを育てながら、このサロンを通じて皆さまと向き合う日々を大切にしています。
+                  </p>
+                  <p>
+                    私がこの仕事に込めているのは、「お客様おひとりおひとりの悩みを、根本から少しずつ良い方向へ変えていきたい」という思いです。
+                    体型や肌、不調のこと——表面的なテクニックだけでは続きにくいものだからこそ、習慣や身体の土台まで一緒に見つめ直し、無理のない歩み方をご提案したいと考えています。
+                  </p>
+                  <p>
+                    経営者として誠実であり続けるためにも、流行に流されず、あなたに本当に必要なケアと情報だけをお届けすることを約束します。
+                    そして最終的には、鏡の前の悦びにとどまらず、日々が穏やかで満たされ、ご自身の人生を心から楽しめる——そんな「豊かな毎日」を送っていただきたい。それが私の願いです。
+                  </p>
+                  <p className="mb-0">
+                    Root1039が、あなたの暮らしに寄り添う小さな支えになれたら幸いです。どうぞよろしくお願いいたします。
+                  </p>
+                </div>
               </div>
             </div>
             <a
@@ -95,17 +147,60 @@ export default function AboutTabs() {
           </div>
         )}
 
-        {/* ── コンセプト ── */}
+        {/* ── 会社・サロン概要 ── */}
         {activeIdx === 1 && (
           <div className="p-4 space-y-3">
+            <div className="rounded-2xl p-5" style={{ background: "white", border: "1px solid var(--border)" }}>
+              <p className="text-[10px] tracking-widest mb-3" style={{ color: "var(--rose)" }}>COMPANY & SALON</p>
+              <h3 className="text-base mb-4" style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}>
+                会社・サロン情報
+              </h3>
+              <dl className="space-y-4 text-xs" style={{ color: "var(--charcoal)" }}>
+                <div>
+                  <dt className="font-medium mb-1" style={{ color: "var(--rose-dark)" }}>サロン名</dt>
+                  <dd style={{ color: "var(--muted)", lineHeight: 1.7 }}>Root1039</dd>
+                </div>
+                <div className="h-px" style={{ background: "var(--border)" }} />
+                <div>
+                  <dt className="font-medium mb-1" style={{ color: "var(--rose-dark)" }}>運営</dt>
+                  <dd style={{ color: "var(--muted)", lineHeight: 1.7 }}>株式会社Rootiv</dd>
+                </div>
+                <div className="h-px" style={{ background: "var(--border)" }} />
+                <div>
+                  <dt className="font-medium mb-1" style={{ color: "var(--rose-dark)" }}>代表者</dt>
+                  <dd style={{ color: "var(--muted)", lineHeight: 1.7 }}>高橋 佑卯美</dd>
+                </div>
+                <div className="h-px" style={{ background: "var(--border)" }} />
+                <div>
+                  <dt className="font-medium mb-1" style={{ color: "var(--rose-dark)" }}>所在地</dt>
+                  <dd style={{ color: "var(--muted)", lineHeight: 1.7 }}>
+                    〒981-3109<br />
+                    宮城県仙台市泉区中央<br />
+                    （番地・建物名は防犯・プライバシー保護のため、ご予約確定後にご案内しております）
+                  </dd>
+                </div>
+                <div className="h-px" style={{ background: "var(--border)" }} />
+                <div>
+                  <dt className="font-medium mb-1" style={{ color: "var(--rose-dark)" }}>事業内容</dt>
+                  <dd style={{ color: "var(--muted)", lineHeight: 1.7 }}>
+                    エステティックサービスの提供／美容・健康に関する商品のご案内・販売支援／美容に関する情報の発信
+                  </dd>
+                </div>
+                <div className="h-px" style={{ background: "var(--border)" }} />
+                <div>
+                  <dt className="font-medium mb-1" style={{ color: "var(--rose-dark)" }}>営業時間・予約</dt>
+                  <dd style={{ color: "var(--muted)", lineHeight: 1.7 }}>完全予約制</dd>
+                </div>
+              </dl>
+            </div>
             <p
-              className="text-sm leading-6 px-1 mb-1"
+              className="text-xs leading-6 px-1"
               style={{ color: "var(--muted)" }}
             >
               美容の悩みも身体の不調も、原因は日常の中にあります。
               Root1039は、その根っこを一緒に見つけ、整えていきます。
             </p>
-            {values.map((v) => (
+            {salonConceptCards.map((v) => (
               <div
                 key={v.num}
                 className="rounded-2xl p-4"
@@ -132,7 +227,19 @@ export default function AboutTabs() {
 
         {/* ── アクセス ── */}
         {activeIdx === 2 && (
-          <div className="p-4 space-y-3">
+          <div className="p-4 space-y-4">
+            <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid var(--border)", background: "white" }}>
+              <iframe
+                title="サロン周辺の地図（泉中央駅付近）"
+                src={MAP_EMBED_SRC}
+                width="100%"
+                height="240"
+                style={{ border: 0, display: "block" }}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+            </div>
             <div className="rounded-2xl p-5" style={{ background: "white", border: "1px solid var(--border)" }}>
               <p className="text-[10px] tracking-widest mb-4" style={{ color: "var(--rose)" }}>SALON INFO</p>
               <ul className="space-y-4">
@@ -141,7 +248,9 @@ export default function AboutTabs() {
                   <div>
                     <p className="text-sm font-medium" style={{ color: "var(--charcoal)" }}>所在地</p>
                     <p className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>
-                      宮城県仙台市泉区<br />（詳細はご予約後にお知らせします）
+                      泉中央駅から徒歩5分<br />
+                      宮城県仙台市泉区<br />
+                      詳細住所はご予約後にご案内します
                     </p>
                   </div>
                 </li>
@@ -150,26 +259,26 @@ export default function AboutTabs() {
                   <Clock size={15} className="mt-0.5 shrink-0" style={{ color: "var(--rose)" }} />
                   <div>
                     <p className="text-sm font-medium" style={{ color: "var(--charcoal)" }}>営業時間</p>
-                    <p className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>完全予約制（LINEにてご相談ください）</p>
+                    <p className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>LINEにてご相談してください。</p>
                   </div>
-                </li>
-                <div className="h-px" style={{ background: "var(--border)" }} />
-                <li className="flex items-start gap-3">
-                  <Heart size={15} className="mt-0.5 shrink-0" style={{ color: "var(--rose)" }} />
-                  <p className="text-sm" style={{ color: "var(--charcoal)" }}>女性専用サロン</p>
                 </li>
               </ul>
             </div>
-            <a
-              href={LINE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full h-12 rounded-xl text-sm font-medium active:opacity-80 transition-opacity"
-              style={{ background: "#06C755", color: "white" }}
-            >
-              <MessageCircle size={16} />
-              LINEで予約する
-            </a>
+            <div className="flex flex-col items-center gap-3 pb-2">
+              <Link href={RESERVATION_URL} className="active:translate-y-[2px] transition-all" style={reservationButtonStyle}>
+                予約する
+              </Link>
+              <a
+                href={LINE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full max-w-[200px] h-11 rounded-xl text-xs font-medium active:opacity-80 transition-opacity"
+                style={{ background: "#06C755", color: "white" }}
+              >
+                <MessageCircle size={16} />
+                LINEで相談する
+              </a>
+            </div>
           </div>
         )}
       </div>

@@ -240,38 +240,59 @@ body {
 .ball-float-2 { animation: ballFloat2 5.5s ease-in-out infinite; }
 .ball-float-3 { animation: ballFloat3 4s   ease-in-out infinite; }
 
-/* ── Hero neon glow ── */
-@keyframes heroNeonPulse {
+/* ── Hero 画像フレーム（ピンクネオンなし／ゴールドの柔らかい光＋軽い動き） ── */
+@keyframes heroFrameGlow {
   0%, 100% {
     box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.18),
-      0 0 8px rgba(228, 124, 151, 0.32),
-      0 0 18px rgba(201, 169, 110, 0.30),
-      0 0 28px rgba(196, 104, 122, 0.18);
+      0 0 0 2px rgba(255, 255, 255, 0.30),
+      0 0 0 4px rgba(201, 169, 110, 0.22),
+      0 4px 20px rgba(42, 28, 32, 0.12),
+      0 0 40px rgba(201, 169, 110, 0.22),
+      0 0 72px rgba(201, 169, 110, 0.10);
   }
   50% {
     box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.30),
-      0 0 14px rgba(228, 124, 151, 0.55),
-      0 0 28px rgba(201, 169, 110, 0.50),
-      0 0 44px rgba(196, 104, 122, 0.30);
+      0 0 0 2px rgba(255, 255, 255, 0.40),
+      0 0 0 5px rgba(201, 169, 110, 0.32),
+      0 6px 28px rgba(42, 28, 32, 0.14),
+      0 0 56px rgba(201, 169, 110, 0.32),
+      0 0 96px rgba(201, 169, 110, 0.14);
   }
 }
 
-.hero-neon {
-  position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  animation: heroNeonPulse 3.6s ease-in-out infinite;
+@keyframes heroFrameFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
 }
 
-/* 上品な内側ハイライト */
-.hero-neon::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.10);
+/* 外枠：ごく弱い浮遊で視線を誘導（派手にしない） */
+.hero-frame-outer {
+  animation: heroFrameFloat 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-frame-outer {
+    animation: none;
+  }
+  .hero-frame {
+    animation: none;
+    box-shadow:
+      0 0 0 2px rgba(255, 255, 255, 0.32),
+      0 0 0 4px rgba(201, 169, 110, 0.26),
+      0 5px 24px rgba(42, 28, 32, 0.12),
+      0 0 48px rgba(201, 169, 110, 0.24);
+  }
+}
+
+.hero-frame {
+  position: relative;
+  border: 3px solid rgba(201, 169, 110, 0.65);
+  animation: heroFrameGlow 5s ease-in-out infinite;
 }
 
 /* ── Header ticker (right to left, seamless loop) ── */

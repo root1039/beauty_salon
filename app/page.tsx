@@ -9,7 +9,7 @@ const GOLD_BORDER = "rgba(201,169,110,0.9)";
 const headerLine1 = "根本改善エステ「Root1039」";
 const headerLine2 = "仙台市泉区 泉中央駅から徒歩5分";
 const tickerText =
-  "WINBACK BACK4導入店・根本改善・あなたにあわせた施術・ブログで美容や健康についてまとめてます・いいねでクーポンGET";
+  "高周波施術取り扱い・根本改善・あなたにあわせたケア・ブログで美容や健康についてまとめてます・いいねでクーポンGET";
 
 const banners = [
   {
@@ -100,7 +100,7 @@ export default function HomePage() {
 
       {/* ── Hero Slider (告知画像 16:9) ── */}
       <section
-        className="shrink-0 px-3 pt-1 pb-1"
+        className="hero-frame-outer shrink-0 px-3 pt-1 pb-1"
         style={{ display: "flex", justifyContent: "center" }}
       >
         <div style={{ width: "100%", aspectRatio: "16 / 9" }}>

@@ -1,13 +1,12 @@
-import { MessageCircle, Clock, MapPin, Camera, BookOpen } from "lucide-react";
+import { Clock, MapPin, Camera, BookOpen } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
+import ReservationChannels from "@/components/ReservationChannels";
 
 export const metadata = {
   title: "ご予約 | Root1039",
-  description: "Root1039へのご予約・お問い合わせはLINE公式アカウントから。仙台・泉中央の根本改善型インナービューティーサロン。",
+  description:
+    "Root1039へのご予約・お問い合わせ。メール（準備中）またはLINE公式アカウントから。仙台・泉中央の根本改善型インナービューティーサロン。",
 };
-
-// TODO: Replace with actual LINE official account URL
-const LINE_URL = "https://line.me/R/ti/p/@root1039";
 const INSTAGRAM_URL = "https://www.instagram.com/yuumin_root1039/";
 const NOTE_URL = "https://note.com/yuumin_root1039";
 
@@ -37,50 +36,7 @@ export default function ContactPage() {
         compact
       />
 
-      {/* ── LINE CTA ── */}
-      <section className="px-4 pt-8 pb-6">
-        <div
-          className="rounded-2xl overflow-hidden"
-          style={{ border: "1px solid var(--border)" }}
-        >
-          <div
-            className="px-6 pt-8 pb-6 text-center"
-            style={{ background: "linear-gradient(135deg, #06C755 0%, #059640 100%)" }}
-          >
-            <div
-              className="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center"
-              style={{ background: "rgba(255,255,255,0.2)" }}
-            >
-              <MessageCircle size={32} color="white" />
-            </div>
-            <h2
-              className="text-xl mb-2 text-white"
-              style={{ fontFamily: "var(--font-shippori), serif" }}
-            >
-              LINE公式アカウント
-            </h2>
-            <p className="text-sm mb-6" style={{ color: "rgba(255,255,255,0.8)" }}>
-              ご予約・ご相談はLINEから<br />お気軽にどうぞ
-            </p>
-            <a
-              href={LINE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 h-14 rounded-xl text-base font-bold transition-opacity active:opacity-80"
-              style={{ background: "white", color: "#06C755" }}
-            >
-              <MessageCircle size={20} />
-              LINEで予約する
-            </a>
-          </div>
-          <div className="px-6 py-4" style={{ background: "white" }}>
-            <p className="text-xs text-center leading-5" style={{ color: "var(--muted)" }}>
-              24時間メッセージ受付中<br />
-              返信は営業時間内に順次対応します
-            </p>
-          </div>
-        </div>
-      </section>
+      <ReservationChannels />
 
       {/* ── Salon Info ── */}
       <section

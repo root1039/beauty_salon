@@ -8,8 +8,8 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const slides = [
   { src: `${BASE_PATH}/images/header-1.png`, fit: "cover" },
   { src: `${BASE_PATH}/images/header-2.png`, fit: "cover" },
-  { src: `${BASE_PATH}/images/header-3.png`, fit: "cover" },
   { src: `${BASE_PATH}/images/header-4.png`, fit: "cover" },
+  { src: `${BASE_PATH}/images/header-3.png`, fit: "cover" },
   { src: `${BASE_PATH}/images/header-5.png`, fit: "cover" },
 ];
 
@@ -25,7 +25,7 @@ export default function HeroSlider() {
 
   return (
     <div
-      className="hero-neon relative h-full w-full overflow-hidden"
+      className="hero-frame relative h-full w-full overflow-hidden"
       style={{
         borderRadius: "12px",
         background: "#0E0712",
