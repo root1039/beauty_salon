@@ -8,15 +8,68 @@ import { Zap, Shirt, Droplets, Leaf } from "lucide-react";
 const RESERVATION_URL = "/contact";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-/** メニュー記事用写真（public/images/menu/ に配置。拡張子が異なる場合はファイル名に合わせて変更してください） */
+/** メニュー記事用写真（public/images/menu/）。ASCIIファイル名のみ（GitHub Pages等で日本語URLが失敗するため） */
 const MENU_IMG = {
-  innerwear1: `${BASE_PATH}/images/menu/補正下着1.png`,
-  innerwear2: `${BASE_PATH}/images/menu/補正下着2.png`,
-  water1: `${BASE_PATH}/images/menu/水素水1.png`,
-  water2: `${BASE_PATH}/images/menu/水素水2.png`,
-  food1: `${BASE_PATH}/images/menu/食品1.png`,
-  daily1: `${BASE_PATH}/images/menu/日用品1.png`,
+  innerwear1: `${BASE_PATH}/images/menu/innerwear-1.png`,
+  innerwear2: `${BASE_PATH}/images/menu/innerwear-2.png`,
+  water1: `${BASE_PATH}/images/menu/water-1.png`,
+  water2: `${BASE_PATH}/images/menu/water-2.png`,
+  food1: `${BASE_PATH}/images/menu/food-1.png`,
+  daily1: `${BASE_PATH}/images/menu/daily-1.png`,
 } as const;
+
+function MenuArticleImage({
+  src,
+  label,
+  bg,
+}: {
+  src?: string;
+  label: string;
+  bg: string;
+}) {
+  const [broken, setBroken] = useState(false);
+  const showPhoto = Boolean(src) && !broken;
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        aspectRatio: "4 / 3",
+        background: bg,
+        borderRadius: "10px",
+        overflow: "hidden",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        marginBottom: "6px",
+      }}
+    >
+      {showPhoto ? (
+        <Image
+          src={src!}
+          alt={label}
+          fill
+          sizes="(max-width: 430px) 100vw, 400px"
+          unoptimized
+          style={{ objectFit: "cover" }}
+          onError={() => setBroken(true)}
+        />
+      ) : (
+        <span
+          style={{
+            color: "rgba(255,255,255,0.45)",
+            fontSize: "10px",
+            textAlign: "center",
+            padding: "0 20px",
+            lineHeight: 1.6,
+          }}
+        >
+          {label}
+        </span>
+      )}
+    </div>
+  );
+}
 
 type Section =
   | { type: "lead"; text: string }
@@ -281,45 +334,9 @@ export default function MenuTabs() {
               );
             }
             if (section.type === "image") {
-              const src = section.src;
               return (
                 <div key={i} className="mb-5">
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      aspectRatio: "4 / 3",
-                      background: section.bg,
-                      borderRadius: "10px",
-                      overflow: "hidden",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginBottom: "6px",
-                    }}
-                  >
-                    {src ? (
-                      <Image
-                        src={src}
-                        alt={section.label}
-                        fill
-                        sizes="(max-width: 430px) 100vw, 400px"
-                        style={{ objectFit: "cover" }}
-                      />
-                    ) : (
-                      <span
-                        style={{
-                          color: "rgba(255,255,255,0.45)",
-                          fontSize: "10px",
-                          textAlign: "center",
-                          padding: "0 20px",
-                          lineHeight: 1.6,
-                        }}
-                      >
-                        {section.label}
-                      </span>
-                    )}
-                  </div>
+                  <MenuArticleImage src={section.src} label={section.label} bg={section.bg} />
                   <p
                     style={{
                       fontSize: "10px",
