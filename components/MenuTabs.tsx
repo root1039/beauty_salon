@@ -1,14 +1,26 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Zap, Shirt, Droplets, Leaf } from "lucide-react";
 
 const RESERVATION_URL = "/contact";
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+/** メニュー記事用写真（public/images/menu/ に配置。拡張子が異なる場合はファイル名に合わせて変更してください） */
+const MENU_IMG = {
+  innerwear1: `${BASE_PATH}/images/menu/補正下着1.png`,
+  innerwear2: `${BASE_PATH}/images/menu/補正下着2.png`,
+  water1: `${BASE_PATH}/images/menu/水素水1.png`,
+  water2: `${BASE_PATH}/images/menu/水素水2.png`,
+  food1: `${BASE_PATH}/images/menu/食品1.png`,
+  daily1: `${BASE_PATH}/images/menu/日用品1.png`,
+} as const;
 
 type Section =
   | { type: "lead"; text: string }
-  | { type: "image"; label: string; bg: string; caption: string }
+  | { type: "image"; label: string; bg: string; caption: string; src?: string }
   | { type: "text"; text: string }
   | { type: "heading"; text: string }
   | { type: "hashtags"; tags: string[] };
@@ -75,6 +87,7 @@ const tabs = [
         label: "補整下着イメージ",
         bg: "linear-gradient(135deg, #F0C8D5 0%, #D4A0B5 100%)",
         caption: "素材と設計にこだわった、次世代の補整下着",
+        src: MENU_IMG.innerwear1,
       },
       {
         type: "text" as const,
@@ -85,6 +98,7 @@ const tabs = [
         label: "女性のライフスタイル・ボディラインイメージ",
         bg: "linear-gradient(135deg, #EAC0CC 0%, #D4A0B0 100%)",
         caption: "毎日着用することで、施術効果を日常にキープ",
+        src: MENU_IMG.innerwear2,
       },
       {
         type: "text" as const,
@@ -116,6 +130,7 @@ const tabs = [
         label: "電解水素水整水器・清潔な水のイメージ",
         bg: "linear-gradient(135deg, #C8E8F0 0%, #A0C8DC 100%)",
         caption: "電解水素水整水器 — 長年の研究に裏打ちされた技術",
+        src: MENU_IMG.water1,
       },
       {
         type: "text" as const,
@@ -126,6 +141,7 @@ const tabs = [
         label: "家族で使う水素水・日常シーン",
         bg: "linear-gradient(135deg, #B8D8E8 0%, #88B8D0 100%)",
         caption: "食事改善よりも取り組みやすく、家族みんなで続けやすい",
+        src: MENU_IMG.water2,
       },
       {
         type: "text" as const,
@@ -161,6 +177,7 @@ const tabs = [
         label: "新鮮な有機野菜・食品イメージ",
         bg: "linear-gradient(135deg, #EAE0D0 0%, #D5C8B0 100%)",
         caption: "生産の背景が見える、安心・安全の食卓へ",
+        src: MENU_IMG.food1,
       },
       {
         type: "text" as const,
@@ -175,6 +192,7 @@ const tabs = [
         label: "ナチュラル日用品・エコグッズイメージ",
         bg: "linear-gradient(135deg, #D5E8D0 0%, #B8D5B5 100%)",
         caption: "養生の考え方と最新テクノロジーで、ひとにも地球にもやさしく",
+        src: MENU_IMG.daily1,
       },
       {
         type: "text" as const,
@@ -263,31 +281,44 @@ export default function MenuTabs() {
               );
             }
             if (section.type === "image") {
+              const src = section.src;
               return (
                 <div key={i} className="mb-5">
                   <div
                     style={{
+                      position: "relative",
                       width: "100%",
                       aspectRatio: "4 / 3",
                       background: section.bg,
                       borderRadius: "10px",
+                      overflow: "hidden",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       marginBottom: "6px",
                     }}
                   >
-                    <span
-                      style={{
-                        color: "rgba(255,255,255,0.45)",
-                        fontSize: "10px",
-                        textAlign: "center",
-                        padding: "0 20px",
-                        lineHeight: 1.6,
-                      }}
-                    >
-                      {section.label}
-                    </span>
+                    {src ? (
+                      <Image
+                        src={src}
+                        alt={section.label}
+                        fill
+                        sizes="(max-width: 430px) 100vw, 400px"
+                        style={{ objectFit: "cover" }}
+                      />
+                    ) : (
+                      <span
+                        style={{
+                          color: "rgba(255,255,255,0.45)",
+                          fontSize: "10px",
+                          textAlign: "center",
+                          padding: "0 20px",
+                          lineHeight: 1.6,
+                        }}
+                      >
+                        {section.label}
+                      </span>
+                    )}
                   </div>
                   <p
                     style={{
