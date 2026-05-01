@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Megaphone } from "lucide-react";
 import HeroSlider from "@/components/HeroSlider";
 import InstagramFab from "@/components/InstagramFab";
 
@@ -9,6 +9,10 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const GOLD_BORDER = "rgba(201,169,110,0.65)";
 const headerLine1 = "根本改善エステ「Root1039」";
 const headerLine2 = "仙台市泉区 泉中央駅から徒歩5分";
+
+/** ヘッダー画像の上に流れるお知らせ（無缝ループ） */
+const tickerText =
+  "高周波施術取り扱い・根本改善・あなたにあわせたケア・ブログで美容や健康についてまとめてます・いいねでクーポンGET";
 
 const banners = [
   {
@@ -90,11 +94,54 @@ export default function HomePage() {
           </div>
           <InstagramFab className="mt-0.5" />
         </div>
+
+        {/* ── アナウンス（メガホン＋流れるテキスト） ── */}
+        <div
+          className="flex items-center gap-2 mt-3 px-0.5"
+          role="region"
+          aria-label="お知らせ"
+        >
+          <div
+            className="flex shrink-0 items-center justify-center rounded-full"
+            style={{
+              width: 30,
+              height: 30,
+              background:
+                "linear-gradient(145deg, rgba(255,236,244,0.95) 0%, rgba(252,214,228,0.55) 100%)",
+              border: "1px solid rgba(196,104,122,0.35)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.9)",
+            }}
+            aria-hidden
+          >
+            <Megaphone size={15} strokeWidth={2.2} style={{ color: "#C4687A" }} />
+          </div>
+          <div
+            className="header-ticker flex-1 min-w-0"
+            style={{
+              height: "28px",
+              borderRadius: "999px",
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(252,248,250,0.88) 100%)",
+              border: "1px solid rgba(201,169,110,0.55)",
+              display: "flex",
+              alignItems: "center",
+              overflow: "hidden",
+              padding: "0 10px",
+              boxShadow:
+                "inset 0 1px 0 rgba(255,255,255,0.95), 0 1px 4px rgba(196,104,122,0.06)",
+            }}
+          >
+            <div className="header-ticker__track">
+              <span>{tickerText}</span>
+              <span aria-hidden="true">{tickerText}</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* ── Hero：少し下げて余白を活かす ── */}
       <section
-        className="hero-frame-outer relative z-[1] shrink-0 px-3 pt-5 pb-2"
+        className="hero-frame-outer relative z-[1] shrink-0 px-3 pt-3 pb-2"
         style={{ display: "flex", justifyContent: "center" }}
       >
         <div style={{ width: "100%", aspectRatio: "16 / 9" }}>

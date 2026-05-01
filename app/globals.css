@@ -455,6 +455,12 @@ body {
   flex-shrink: 0;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .header-ticker__track {
+    animation: none;
+  }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--gray-light); }
