@@ -50,6 +50,9 @@ export default function BottomNav() {
             const normalizedHref = href.replace(/\/+$/, "") || "/";
             const active = normalizedPathname === normalizedHref;
             const isHome = href === "/";
+            const isContact = href === "/contact";
+            const pinkActive = active && isContact;
+            const goldActive = active && !isContact;
 
             return (
               <li key={href} className="flex-1 flex justify-center">
@@ -57,19 +60,32 @@ export default function BottomNav() {
                   href={href}
                   className="btn-press flex flex-col items-center justify-center gap-0 w-full max-w-[58px] py-1 rounded-[16px]"
                   style={{
-                    color: active ? "#b84562" : "rgba(140, 125, 132, 0.55)",
+                    color: pinkActive
+                      ? "#b84562"
+                      : goldActive
+                        ? "#7a6220"
+                        : "rgba(140, 125, 132, 0.55)",
                     fontFamily: "var(--font-noto), sans-serif",
-                    background: active
+                    background: pinkActive
                       ? "linear-gradient(165deg, rgba(255,255,255,0.98) 0%, rgba(255,230,242,0.92) 55%, rgba(252,208,226,0.72) 100%)"
-                      : "transparent",
-                    boxShadow: active
+                      : goldActive
+                        ? "linear-gradient(165deg, rgba(255,255,255,0.98) 0%, rgba(255,248,228,0.94) 55%, rgba(245,220,165,0.78) 100%)"
+                        : "transparent",
+                    boxShadow: pinkActive
                       ? [
                           "inset 0 1px 0 rgba(255,255,255,0.95)",
                           "inset 0 -1px 0 rgba(196,104,122,0.12)",
                           "0 3px 12px rgba(196,104,122,0.22)",
                           "0 0 0 1px rgba(201,169,110,0.32)",
                         ].join(", ")
-                      : "none",
+                      : goldActive
+                        ? [
+                            "inset 0 1px 0 rgba(255,255,255,0.95)",
+                            "inset 0 -1px 0 rgba(200,165,80,0.14)",
+                            "0 3px 12px rgba(200,165,80,0.20)",
+                            "0 0 0 1px rgba(195,170,120,0.38)",
+                          ].join(", ")
+                        : "none",
                     transform: active ? "translateY(-2px)" : "none",
                   }}
                 >
@@ -79,26 +95,40 @@ export default function BottomNav() {
                     style={{
                       width: isHome ? 36 : 34,
                       height: isHome ? 36 : 34,
-                      background: active
+                      background: pinkActive
                         ? "linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(252,218,234,0.82) 100%)"
-                        : "rgba(255,255,255,0.18)",
-                      boxShadow: active
+                        : goldActive
+                          ? "linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(255,236,200,0.88) 100%)"
+                          : "rgba(255,255,255,0.18)",
+                      boxShadow: pinkActive
                         ? [
                             "inset 0 1px 0 rgba(255,255,255,0.98)",
                             "inset 0 -1px 0 rgba(196,104,122,0.18)",
                             "0 3px 8px rgba(196,104,122,0.22)",
                           ].join(", ")
-                        : "none",
+                        : goldActive
+                          ? [
+                              "inset 0 1px 0 rgba(255,255,255,0.98)",
+                              "inset 0 -1px 0 rgba(190,155,70,0.20)",
+                              "0 3px 8px rgba(200,165,80,0.20)",
+                            ].join(", ")
+                          : "none",
                     }}
                   >
                     <Icon
                       size={isHome ? 20 : 18}
                       strokeWidth={active ? 2.2 : 1.55}
                       style={{
-                        color: active ? "#c4687a" : "rgba(130, 115, 122, 0.50)",
-                        filter: active
+                        color: pinkActive
+                          ? "#c4687a"
+                          : goldActive
+                            ? "#a67c20"
+                            : "rgba(130, 115, 122, 0.50)",
+                        filter: pinkActive
                           ? "drop-shadow(0 1px 2px rgba(196,104,122,0.40))"
-                          : "none",
+                          : goldActive
+                            ? "drop-shadow(0 1px 2px rgba(180,140,50,0.35))"
+                            : "none",
                       }}
                     />
                   </span>
@@ -124,11 +154,11 @@ export default function BottomNav() {
                         borderRadius: "999px",
                         marginTop: "2px",
                         background: active
-                          ? "linear-gradient(90deg, #F099B3, #C4687A)"
-                          : "rgba(196, 104, 122, 0.22)",
+                          ? "linear-gradient(90deg, #E8C458, #B8860B)"
+                          : "rgba(180, 150, 80, 0.22)",
                         transition: "width 0.3s ease",
                         boxShadow: active
-                          ? "0 1px 4px rgba(196,104,122,0.45)"
+                          ? "0 1px 4px rgba(180,140,50,0.40)"
                           : "none",
                       }}
                     />

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Zap, Shirt, Droplets, Leaf, ChevronLeft, ChevronRight } from "lucide-react";
+import { tabAuxNavButton, tabPillActive, tabPillIdle } from "@/components/tabNavTheme";
 
 const RESERVATION_URL = "/contact";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -293,28 +294,7 @@ export default function MenuTabs() {
               style={{
                 outline: "none",
                 fontFamily: "var(--font-noto), sans-serif",
-                ...(active
-                  ? {
-                      color: "white",
-                      fontWeight: 700,
-                      background:
-                        "linear-gradient(180deg, #F099B3 0%, #E47C97 42%, #C4687A 100%)",
-                      border: "1px solid rgba(158,74,90,0.50)",
-                      boxShadow: [
-                        "inset 0 1px 0 rgba(255,255,255,0.42)",
-                        "inset 0 -2px 0 rgba(120,55,70,0.38)",
-                        "0 1px 0 rgba(255,255,255,0.45)",
-                        "0 3px 0 rgba(120,55,70,0.36)",
-                        "0 5px 12px rgba(196,104,122,0.28)",
-                      ].join(", "),
-                      textShadow: "0 1px 1px rgba(120,55,70,0.45)",
-                    }
-                  : {
-                      color: "rgba(122, 96, 101, 0.40)",
-                      fontWeight: 400,
-                      background: "transparent",
-                      border: "1px solid transparent",
-                    }),
+                ...(active ? tabPillActive : tabPillIdle),
               }}
             >
               {t.label}
@@ -462,12 +442,7 @@ export default function MenuTabs() {
                 type="button"
                 onClick={() => setActiveIdx(activeIdx - 1)}
                 className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg active:opacity-70 transition-opacity"
-                style={{
-                  color: "var(--rose)",
-                  fontFamily: "var(--font-noto), sans-serif",
-                  border: "1px solid var(--border)",
-                  background: "white",
-                }}
+                style={tabAuxNavButton}
               >
                 <ChevronLeft size={16} strokeWidth={2.2} />
                 {tabs[activeIdx - 1].label}
@@ -478,12 +453,7 @@ export default function MenuTabs() {
                 type="button"
                 onClick={() => setActiveIdx(activeIdx + 1)}
                 className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg active:opacity-70 transition-opacity"
-                style={{
-                  color: "var(--rose)",
-                  fontFamily: "var(--font-noto), sans-serif",
-                  border: "1px solid var(--border)",
-                  background: "white",
-                }}
+                style={tabAuxNavButton}
               >
                 {tabs[activeIdx + 1].label}
                 <ChevronRight size={16} strokeWidth={2.2} />
