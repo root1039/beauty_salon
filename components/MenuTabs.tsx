@@ -272,7 +272,7 @@ export default function MenuTabs() {
     <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
       {/* Tab bar */}
       <div
-        className="flex overflow-x-auto shrink-0"
+        className="flex overflow-x-auto shrink-0 pt-1"
         style={{
           borderBottom: "1px solid var(--border)",
           background: "white",

@@ -1,15 +1,12 @@
 "use client";
 
-import { Mail, MessageCircle } from "lucide-react";
+import { Mail, MessageCircle, ChevronRight } from "lucide-react";
 
 const LINE_ADD_URL = "https://lin.ee/zCQoCoz";
 
-const chipBase =
-  "flex flex-col items-center justify-center gap-2 rounded-xl px-3 py-4 text-center transition-all active:scale-[0.98] border";
-
 export default function ReservationChannels() {
   return (
-    <section className="px-4 pt-8 pb-6">
+    <section className="px-4 pt-4 pb-6">
       <div
         className="rounded-2xl p-5"
         style={{
@@ -18,78 +15,144 @@ export default function ReservationChannels() {
           boxShadow: "0 8px 28px rgba(42, 28, 32, 0.06)",
         }}
       >
-        <p
-          className="text-[11px] tracking-[0.18em] mb-1"
-          style={{ color: "var(--rose)" }}
-        >
+        <p className="text-[11px] tracking-[0.18em] mb-1" style={{ color: "var(--rose)" }}>
           RESERVATION
         </p>
         <h2
-          className="text-base mb-4"
-          style={{
-            fontFamily: "var(--font-shippori), serif",
-            color: "var(--charcoal)",
-          }}
+          className="text-base mb-5"
+          style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}
         >
           ご予約方法をお選びください
         </h2>
-        <div className="grid grid-cols-2 gap-3">
-          <button
-            type="button"
-            title="メールでの予約は現在準備中です"
-            aria-label="メールで予約（準備中）"
-            className={chipBase}
+
+        {/* ── LINE ボタン ── */}
+        <a
+          href={LINE_ADD_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-4 w-full px-5 rounded-2xl active:scale-[0.98] active:translate-y-[2px] transition-all"
+          style={{
+            height: "72px",
+            background: "linear-gradient(180deg, #1ADA6E 0%, #06C755 55%, #05AA49 100%)",
+            border: "1px solid rgba(4, 140, 60, 0.55)",
+            boxShadow: [
+              "inset 0 1px 0 rgba(255,255,255,0.30)",
+              "inset 0 -3px 0 rgba(3, 90, 38, 0.50)",
+              "0 1px 0 rgba(255,255,255,0.45)",
+              "0 4px 0 rgba(3, 90, 38, 0.40)",
+              "0 8px 22px rgba(6, 199, 85, 0.38)",
+              "0 2px 6px rgba(42, 28, 32, 0.12)",
+            ].join(", "),
+            textDecoration: "none",
+          }}
+        >
+          <div
             style={{
-              background: "var(--cream)",
-              borderColor: "var(--border)",
-              color: "var(--charcoal)",
-              cursor: "default",
+              width: "42px",
+              height: "42px",
+              borderRadius: "11px",
+              background: "rgba(255,255,255,0.20)",
+              border: "1px solid rgba(255,255,255,0.25)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
             }}
           >
-            <div
-              className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-              style={{ background: "rgba(196, 104, 122, 0.12)" }}
+            <MessageCircle size={22} strokeWidth={2.2} style={{ color: "white" }} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <p
+              style={{
+                color: "white",
+                fontWeight: 700,
+                fontSize: "16px",
+                letterSpacing: "0.04em",
+                fontFamily: "var(--font-noto), sans-serif",
+                lineHeight: 1.2,
+                textShadow: "0 1px 2px rgba(2, 70, 30, 0.45)",
+              }}
             >
-              <Mail size={18} strokeWidth={2} style={{ color: "var(--rose)" }} />
-            </div>
-            <span className="text-xs font-semibold leading-tight" style={{ fontFamily: "var(--font-noto), sans-serif" }}>
-              メールで
-              <br />
-              予約
-            </span>
-            <span className="text-[10px] leading-tight" style={{ color: "var(--muted)" }}>
+              LINEで予約する
+            </p>
+            <p
+              style={{
+                color: "rgba(255,255,255,0.80)",
+                fontSize: "11px",
+                marginTop: "3px",
+                fontFamily: "var(--font-noto), sans-serif",
+              }}
+            >
+              公式アカウントに友だち追加
+            </p>
+          </div>
+          <ChevronRight size={20} style={{ color: "rgba(255,255,255,0.70)", flexShrink: 0 }} />
+        </a>
+
+        <div style={{ height: "10px" }} />
+
+        {/* ── メール ボタン ── */}
+        <button
+          type="button"
+          title="メールでの予約は現在準備中です"
+          aria-label="メールで予約（準備中）"
+          className="flex items-center gap-4 w-full px-5 rounded-2xl"
+          style={{
+            height: "72px",
+            background: "white",
+            border: "1px solid rgba(180, 165, 170, 0.55)",
+            boxShadow: [
+              "inset 0 1px 0 rgba(255,255,255,0.95)",
+              "inset 0 -2px 0 rgba(0,0,0,0.06)",
+              "0 1px 0 rgba(255,255,255,0.6)",
+              "0 3px 0 rgba(160, 140, 145, 0.30)",
+              "0 6px 16px rgba(42, 28, 32, 0.07)",
+            ].join(", "),
+            cursor: "default",
+            textAlign: "left",
+          }}
+        >
+          <div
+            style={{
+              width: "42px",
+              height: "42px",
+              borderRadius: "11px",
+              background: "rgba(196, 104, 122, 0.10)",
+              border: "1px solid rgba(196, 104, 122, 0.18)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <Mail size={22} strokeWidth={2.2} style={{ color: "var(--rose)" }} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <p
+              style={{
+                color: "var(--charcoal)",
+                fontWeight: 700,
+                fontSize: "16px",
+                letterSpacing: "0.04em",
+                fontFamily: "var(--font-noto), sans-serif",
+                lineHeight: 1.2,
+              }}
+            >
+              メールで予約する
+            </p>
+            <p
+              style={{
+                color: "var(--muted)",
+                fontSize: "11px",
+                marginTop: "3px",
+                fontFamily: "var(--font-noto), sans-serif",
+              }}
+            >
               準備中
-            </span>
-          </button>
-          <a
-            href={LINE_ADD_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={chipBase}
-            style={{
-              background: "linear-gradient(180deg, #f4fdf7 0%, #e8faf0 100%)",
-              borderColor: "rgba(6, 199, 85, 0.35)",
-              color: "#04502a",
-              textDecoration: "none",
-              cursor: "pointer",
-            }}
-          >
-            <div
-              className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-              style={{ background: "rgba(6, 199, 85, 0.15)" }}
-            >
-              <MessageCircle size={18} strokeWidth={2} color="#06C755" />
-            </div>
-            <span className="text-xs font-semibold leading-tight" style={{ fontFamily: "var(--font-noto), sans-serif" }}>
-              LINEで
-              <br />
-              予約
-            </span>
-            <span className="text-[10px] leading-tight" style={{ color: "rgba(4, 80, 42, 0.75)" }}>
-              公式を追加
-            </span>
-          </a>
-        </div>
+            </p>
+          </div>
+        </button>
+
         <p className="text-[10px] leading-5 mt-4 text-center" style={{ color: "var(--muted)" }}>
           LINEは友だち追加後、トークからご予約・ご相談いただけます。
         </p>

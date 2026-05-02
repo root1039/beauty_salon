@@ -3,10 +3,9 @@
 import { useState, useEffect, startTransition, type CSSProperties } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { MapPin, Clock, MessageCircle } from "lucide-react";
+import { MapPin, Clock } from "lucide-react";
 
 const RESERVATION_URL = "/contact";
-const LINE_URL = "https://lin.ee/zCQoCoz";
 
 /** Googleマップ（泉中央駅）。ピン位置を店舗住所に合わせる場合は Googleマップの「地図を埋め込む」からsrcを差し替えてください。 */
 const MAP_EMBED_SRC =
@@ -65,7 +64,7 @@ export default function AboutTabs() {
     <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
       {/* Tab bar */}
       <div
-        className="flex shrink-0"
+        className="flex shrink-0 pt-1"
         style={{ borderBottom: "1px solid var(--border)", background: "white" }}
       >
         {tabNames.map((name, i) => (
@@ -93,20 +92,16 @@ export default function AboutTabs() {
         {activeIdx === 0 && (
           <div className="p-4 space-y-4">
             <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid var(--border)" }}>
-              <div
-                className="w-full h-28 flex items-center justify-center"
-                style={{ background: "linear-gradient(135deg, var(--rose-light), var(--rose-muted))" }}
+              <video
+                className="block w-full h-auto align-top"
+                autoPlay
+                loop
+                muted
+                playsInline
+                aria-label="代表 高橋 佑卯美"
               >
-                <div className="text-center">
-                  <div
-                    className="w-14 h-14 rounded-full mx-auto mb-1 flex items-center justify-center"
-                    style={{ background: "var(--rose)" }}
-                  >
-                    <span className="text-white text-xl" style={{ fontFamily: "var(--font-shippori), serif" }}>ゆ</span>
-                  </div>
-                  <p className="text-[10px]" style={{ color: "var(--rose-dark)" }}>Photo</p>
-                </div>
-              </div>
+                <source src="/images/profile.mp4" type="video/mp4" />
+              </video>
               <div className="p-5" style={{ background: "white" }}>
                 <p className="text-[10px] tracking-widest mb-1" style={{ color: "var(--rose)" }}>GREETING</p>
                 <h2 className="text-lg mb-0.5" style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}>
@@ -259,7 +254,7 @@ export default function AboutTabs() {
                   <Clock size={15} className="mt-0.5 shrink-0" style={{ color: "var(--rose)" }} />
                   <div>
                     <p className="text-sm font-medium" style={{ color: "var(--charcoal)" }}>営業時間</p>
-                    <p className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>LINEにてご相談してください。</p>
+                    <p className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>完全予約制</p>
                   </div>
                 </li>
               </ul>
@@ -268,16 +263,6 @@ export default function AboutTabs() {
               <Link href={RESERVATION_URL} className="active:translate-y-[2px] transition-all" style={reservationButtonStyle}>
                 予約する
               </Link>
-              <a
-                href={LINE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full max-w-[200px] h-11 rounded-xl text-xs font-medium active:opacity-80 transition-opacity"
-                style={{ background: "#06C755", color: "white" }}
-              >
-                <MessageCircle size={16} />
-                LINEで相談する
-              </a>
             </div>
           </div>
         )}

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 
@@ -61,8 +60,16 @@ const tagColors: Record<string, string> = {
 
 export default function BlogPage() {
   return (
-    <div className="page-content" style={{ background: "var(--cream)" }}>
-      {/* ── Header ── */}
+    <div
+      className="page-scroll-frame"
+      style={{
+        height: "calc(100dvh - 74px)",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        background: "var(--gray-light)",
+      }}
+    >
       <PageHeader
         en="BLOG"
         title="ブログ"
@@ -70,8 +77,9 @@ export default function BlogPage() {
         compact
       />
 
+      <div className="subpage-scroll-body" style={{ background: "var(--cream)" }}>
       {/* ── note.com Banner ── */}
-      <div className="px-4 pt-6">
+      <div className="px-4 pt-4">
         <a
           href="https://note.com/yuumin_root1039"
           target="_blank"
@@ -177,6 +185,7 @@ export default function BlogPage() {
         >
           有料記事を見る <ArrowRight size={13} />
         </a>
+      </div>
       </div>
     </div>
   );

@@ -27,8 +27,16 @@ const faqs = [
 
 export default function ContactPage() {
   return (
-    <div className="page-content" style={{ background: "var(--cream)" }}>
-      {/* ── Header ── */}
+    <div
+      className="page-scroll-frame"
+      style={{
+        height: "calc(100dvh - 74px)",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        background: "var(--gray-light)",
+      }}
+    >
       <PageHeader
         en="RESERVATION"
         title="ご予約・お問い合わせ"
@@ -36,37 +44,34 @@ export default function ContactPage() {
         compact
       />
 
+      <div className="subpage-scroll-body" style={{ background: "var(--cream)" }}>
       <ReservationChannels />
 
       {/* ── Salon Info ── */}
       <section
-        className="mx-4 mb-6 rounded-2xl p-6"
+        className="mx-4 mb-4 rounded-xl px-4 py-3"
         style={{ background: "white", border: "1px solid var(--border)" }}
       >
-        <p className="text-[11px] tracking-[0.2em] mb-4" style={{ color: "var(--rose)" }}>SALON INFO</p>
-        <ul className="space-y-4">
-          <li className="flex items-start gap-3">
-            <MapPin size={16} className="mt-0.5 shrink-0" style={{ color: "var(--rose)" }} />
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <MapPin size={13} className="shrink-0" style={{ color: "var(--rose)" }} />
             <div>
-              <p className="text-sm font-medium mb-0.5" style={{ color: "var(--charcoal)" }}>所在地</p>
-              <p className="text-sm" style={{ color: "var(--muted)" }}>
+              <p className="text-[10px] font-medium" style={{ color: "var(--charcoal)" }}>所在地</p>
+              <p className="text-[10px]" style={{ color: "var(--muted)", lineHeight: 1.5 }}>
                 宮城県仙台市泉区<br />
-                <span className="text-xs">（詳細はご予約後にご案内します）</span>
+                <span style={{ fontSize: "9px" }}>（ご予約後にご案内）</span>
               </p>
             </div>
-          </li>
-          <div className="h-px" style={{ background: "var(--border)" }} />
-          <li className="flex items-start gap-3">
-            <Clock size={16} className="mt-0.5 shrink-0" style={{ color: "var(--rose)" }} />
+          </div>
+          <div className="self-stretch w-px" style={{ background: "var(--border)" }} />
+          <div className="flex items-center gap-2">
+            <Clock size={13} className="shrink-0" style={{ color: "var(--rose)" }} />
             <div>
-              <p className="text-sm font-medium mb-0.5" style={{ color: "var(--charcoal)" }}>営業時間</p>
-              <p className="text-sm" style={{ color: "var(--muted)" }}>
-                完全予約制<br />
-                <span className="text-xs">LINEにてご相談ください</span>
-              </p>
+              <p className="text-[10px] font-medium" style={{ color: "var(--charcoal)" }}>営業時間</p>
+              <p className="text-[10px]" style={{ color: "var(--muted)" }}>完全予約制</p>
             </div>
-          </li>
-        </ul>
+          </div>
+        </div>
       </section>
 
       {/* ── FAQ ── */}
@@ -129,6 +134,7 @@ export default function ContactPage() {
           </a>
         </div>
       </section>
+      </div>
     </div>
   );
 }

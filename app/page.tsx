@@ -7,7 +7,6 @@ import InstagramFab from "@/components/InstagramFab";
 const RESERVATION_URL = "/contact";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const GOLD_BORDER = "rgba(201,169,110,0.65)";
-const headerLine1 = "根本改善エステ「Root1039」";
 const headerLine2 = "仙台市泉区 泉中央駅から徒歩5分";
 
 /** ヘッダー画像の上に流れるお知らせ（無缝ループ） */
@@ -71,24 +70,22 @@ export default function HomePage() {
       >
         <div className="flex items-start justify-between gap-2 pl-1">
           <div className="w-10 shrink-0" aria-hidden />
-          <div
-            className="flex-1 min-w-0 text-center"
-            style={{
-              fontFamily: "var(--font-noto), sans-serif",
-              color: "#2A1C20",
-            }}
-          >
+          <div className="flex-1 min-w-0 text-center">
             <p
               className="mb-0.5"
               style={{
                 margin: 0,
-                fontSize: "11px",
-                letterSpacing: "0.14em",
-                fontWeight: 700,
-                opacity: 0.92,
+                fontSize: "13px",
+                letterSpacing: "0.1em",
+                fontWeight: 600,
+                lineHeight: 1.45,
+                fontFamily: "var(--font-shippori), serif",
+                color: "#2A1C20",
               }}
             >
-              {headerLine1}
+              根本改善エステ「
+              <span style={{ color: "#C4687A", fontWeight: 700 }}>Root1039</span>
+              」
             </p>
             <p
               style={{
@@ -97,6 +94,7 @@ export default function HomePage() {
                 letterSpacing: "0.12em",
                 fontWeight: 500,
                 color: "#7A6065",
+                fontFamily: "var(--font-noto), sans-serif",
               }}
             >
               {headerLine2}

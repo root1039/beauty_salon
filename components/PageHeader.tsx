@@ -18,10 +18,10 @@ export default function PageHeader({
   compact = false,
 }: Props) {
   const wrapClass = compact
-    ? "shrink-0 mx-3 mt-1.5 px-4 pt-4 pb-3 rounded-xl relative overflow-hidden page-header-compact"
+    ? "shrink-0 mx-3 mt-2 mb-4 px-3.5 pt-2.5 pb-2 rounded-lg relative overflow-hidden page-header-compact"
     : "mx-3 mt-3 px-5 pt-10 pb-8 rounded-2xl relative overflow-hidden";
 
-  const titleClass = compact ? "text-xl tracking-wide" : "text-3xl leading-snug";
+  const titleClass = compact ? "text-lg tracking-wide" : "text-3xl leading-snug";
 
   const headerSurfaceStyle = compact
     ? undefined
@@ -41,12 +41,12 @@ export default function PageHeader({
         className="ball-float-1"
         style={{
           position: "absolute",
-          width: compact ? 62 : 88,
-          height: compact ? 62 : 88,
+          width: compact ? 44 : 88,
+          height: compact ? 44 : 88,
           borderRadius: "50%",
           background: `rgba(${ballColor}, ${0.14 * ballOpacity})`,
-          top: compact ? -18 : -22,
-          right: compact ? -18 : -22,
+          top: compact ? -14 : -22,
+          right: compact ? -12 : -22,
           pointerEvents: "none",
         }}
       />
@@ -56,12 +56,12 @@ export default function PageHeader({
         className="ball-float-2"
         style={{
           position: "absolute",
-          width: compact ? 34 : 46,
-          height: compact ? 34 : 46,
+          width: compact ? 26 : 46,
+          height: compact ? 26 : 46,
           borderRadius: "50%",
           background: `rgba(${ballColor}, ${0.22 * ballOpacity})`,
-          top: compact ? 10 : 14,
-          right: compact ? 48 : 58,
+          top: compact ? 6 : 14,
+          right: compact ? 36 : 58,
           pointerEvents: "none",
           animationDelay: "1.3s",
         }}
@@ -72,12 +72,12 @@ export default function PageHeader({
         className="ball-float-3"
         style={{
           position: "absolute",
-          width: compact ? 18 : 22,
-          height: compact ? 18 : 22,
+          width: compact ? 14 : 22,
+          height: compact ? 14 : 22,
           borderRadius: "50%",
           background: `rgba(${ballColor}, ${0.38 * ballOpacity})`,
-          top: compact ? 38 : 46,
-          right: compact ? 24 : 28,
+          top: compact ? 26 : 46,
+          right: compact ? 18 : 28,
           pointerEvents: "none",
           animationDelay: "0.7s",
         }}
@@ -85,7 +85,7 @@ export default function PageHeader({
 
       {/* ── テキスト ── */}
       <p
-        className={`${compact ? "text-[9px] tracking-[0.28em] mb-1.5" : "text-[10px] tracking-[0.3em] mb-2"} relative anim-fade-in`}
+        className={`${compact ? "text-[8px] tracking-[0.26em] mb-1" : "text-[10px] tracking-[0.3em] mb-2"} relative anim-fade-in`}
         style={{
           color: compact ? "rgba(42,28,32,0.38)" : "rgba(42,28,32,0.42)",
           fontFamily: "var(--font-noto), sans-serif",
@@ -95,7 +95,7 @@ export default function PageHeader({
         {en}
       </p>
       <h1
-        className={`${titleClass} relative anim-fade-up delay-1 ${compact ? "leading-snug" : ""}`}
+        className={`${titleClass} relative anim-fade-up delay-1 ${compact ? "leading-tight" : ""}`}
         style={{
           fontFamily: "var(--font-shippori), serif",
           color: "#2A1C20",
