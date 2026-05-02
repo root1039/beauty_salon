@@ -4,15 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-
-/** 1枚目=サロン、2〜4枚目=ブログ、5枚目=アクセス */
+/**
+ * 画像・遷移先はルート相対パスのみ。
+ * basePath（GitHub Pages 等）は next.config の basePath が Link/Image に付与するため、
+ * NEXT_PUBLIC_BASE_PATH を href に足すと二重になりエラーになる。
+ */
 const slides = [
-  { src: `${BASE_PATH}/images/header-1.png`, fit: "cover" as const, href: `${BASE_PATH}/about/` },
-  { src: `${BASE_PATH}/images/header-2.png`, fit: "cover" as const, href: `${BASE_PATH}/blog/` },
-  { src: `${BASE_PATH}/images/header-4.png`, fit: "cover" as const, href: `${BASE_PATH}/blog/` },
-  { src: `${BASE_PATH}/images/header-3.png`, fit: "cover" as const, href: `${BASE_PATH}/blog/` },
-  { src: `${BASE_PATH}/images/header-5.png`, fit: "cover" as const, href: `${BASE_PATH}/about/?tab=access` },
+  { src: "/images/header-1.png", fit: "cover" as const, href: "/about/" },
+  { src: "/images/header-2.png", fit: "cover" as const, href: "/blog/" },
+  { src: "/images/header-4.png", fit: "cover" as const, href: "/blog/" },
+  { src: "/images/header-3.png", fit: "cover" as const, href: "/blog/" },
+  { src: "/images/header-5.png", fit: "cover" as const, href: "/about/?tab=access" },
 ];
 
 export default function HeroSlider() {
