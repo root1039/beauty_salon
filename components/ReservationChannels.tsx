@@ -99,14 +99,15 @@ export default function ReservationChannels() {
           className="flex items-center gap-4 w-full px-5 rounded-2xl"
           style={{
             height: "72px",
-            background: "white",
-            border: "1px solid rgba(180, 165, 170, 0.55)",
+            background: "linear-gradient(180deg, #FF7BA3 0%, #E84D7A 48%, #C42D5E 100%)",
+            border: "1px solid rgba(165, 45, 85, 0.55)",
             boxShadow: [
-              "inset 0 1px 0 rgba(255,255,255,0.95)",
-              "inset 0 -2px 0 rgba(0,0,0,0.06)",
-              "0 1px 0 rgba(255,255,255,0.6)",
-              "0 3px 0 rgba(160, 140, 145, 0.30)",
-              "0 6px 16px rgba(42, 28, 32, 0.07)",
+              "inset 0 1px 0 rgba(255,255,255,0.32)",
+              "inset 0 -3px 0 rgba(110, 25, 55, 0.45)",
+              "0 1px 0 rgba(255,255,255,0.4)",
+              "0 4px 0 rgba(130, 35, 70, 0.42)",
+              "0 8px 22px rgba(228, 77, 122, 0.42)",
+              "0 2px 6px rgba(42, 28, 32, 0.12)",
             ].join(", "),
             cursor: "default",
             textAlign: "left",
@@ -117,32 +118,33 @@ export default function ReservationChannels() {
               width: "42px",
               height: "42px",
               borderRadius: "11px",
-              background: "rgba(196, 104, 122, 0.10)",
-              border: "1px solid rgba(196, 104, 122, 0.18)",
+              background: "rgba(255,255,255,0.22)",
+              border: "1px solid rgba(255,255,255,0.28)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               flexShrink: 0,
             }}
           >
-            <Mail size={22} strokeWidth={2.2} style={{ color: "var(--rose)" }} />
+            <Mail size={22} strokeWidth={2.2} style={{ color: "white" }} />
           </div>
           <div style={{ flex: 1 }}>
             <p
               style={{
-                color: "var(--charcoal)",
+                color: "white",
                 fontWeight: 700,
                 fontSize: "16px",
                 letterSpacing: "0.04em",
                 fontFamily: "var(--font-noto), sans-serif",
                 lineHeight: 1.2,
+                textShadow: "0 1px 2px rgba(90, 20, 45, 0.45)",
               }}
             >
               メールで予約する
             </p>
             <p
               style={{
-                color: "var(--muted)",
+                color: "rgba(255,255,255,0.88)",
                 fontSize: "11px",
                 marginTop: "3px",
                 fontFamily: "var(--font-noto), sans-serif",

@@ -10,6 +10,8 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 /** メニュー記事用写真（public/images/menu/）。ASCIIファイル名のみ（GitHub Pages等で日本語URLが失敗するため） */
 const MENU_IMG = {
+  winback1: `${BASE_PATH}/images/menu/winback-1.png`,
+  winback2: `${BASE_PATH}/images/menu/winback-2.png`,
   innerwear1: `${BASE_PATH}/images/menu/innerwear-1.png`,
   innerwear2: `${BASE_PATH}/images/menu/innerwear-2.png`,
   water1: `${BASE_PATH}/images/menu/water-1.png`,
@@ -97,9 +99,10 @@ const tabs = [
       },
       {
         type: "image" as const,
-        label: "高周波施術シーン",
+        label: "WINBACK BACK4",
         bg: "linear-gradient(135deg, #2A1C20 0%, #5A3040 100%)",
         caption: "複数周波数を組み合わせた、根本からのボディケア",
+        src: MENU_IMG.winback1,
       },
       {
         type: "text" as const,
@@ -107,9 +110,10 @@ const tabs = [
       },
       {
         type: "image" as const,
-        label: "ボディライン・施術効果イメージ",
+        label: "WINBACK 周波数アプローチ",
         bg: "linear-gradient(135deg, #3D2530 0%, #6B3A46 100%)",
         caption: "運動現場でも選ばれる技術を、日常の身体ケアに",
+        src: MENU_IMG.winback2,
       },
       {
         type: "text" as const,

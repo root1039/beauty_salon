@@ -1,4 +1,4 @@
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 
 export const metadata = {
@@ -158,32 +158,6 @@ export default function BlogPage() {
         >
           noteで全記事を読む
           <ExternalLink size={15} />
-        </a>
-      </div>
-
-      {/* ── Paid content note ── */}
-      <div
-        className="mx-4 mb-6 rounded-2xl p-5"
-        style={{ background: "var(--rose-light)", border: "1px solid var(--rose-muted)" }}
-      >
-        <p className="text-[10px] tracking-widest mb-2" style={{ color: "var(--rose-dark)" }}>PREMIUM</p>
-        <h3
-          className="text-base mb-2"
-          style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}
-        >
-          セミナー内容・有料コンテンツ
-        </h3>
-        <p className="text-xs leading-5 mb-4" style={{ color: "var(--muted)" }}>
-          より深い知識やセミナーの内容は、noteの有料記事として公開しています。
-        </p>
-        <a
-          href="https://note.com/yuumin_root1039"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-xs font-medium"
-          style={{ color: "var(--rose)" }}
-        >
-          有料記事を見る <ArrowRight size={13} />
         </a>
       </div>
       </div>

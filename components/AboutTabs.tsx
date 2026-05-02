@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect, startTransition, type CSSProperties } from "react";
+import { useState, useEffect, useRef, startTransition, type CSSProperties } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { MapPin, Clock } from "lucide-react";
 
 const RESERVATION_URL = "/contact";
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 /** Googleマップ（泉中央駅）。ピン位置を店舗住所に合わせる場合は Googleマップの「地図を埋め込む」からsrcを差し替えてください。 */
 const MAP_EMBED_SRC =
@@ -46,6 +47,41 @@ const reservationButtonStyle: CSSProperties = {
   fontWeight: 600,
   textShadow: "0 1px 1px rgba(120,55,70,0.55)",
 };
+
+function GreetingVideo() {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.defaultMuted = true;
+    el.muted = true;
+    const tryPlay = () => {
+      void el.play().catch(() => {});
+    };
+    tryPlay();
+    el.addEventListener("loadeddata", tryPlay);
+    el.addEventListener("canplay", tryPlay);
+    return () => {
+      el.removeEventListener("loadeddata", tryPlay);
+      el.removeEventListener("canplay", tryPlay);
+    };
+  }, []);
+  return (
+    <video
+      ref={ref}
+      className="block w-full h-auto align-top"
+      autoPlay
+      playsInline
+      muted
+      loop
+      preload="auto"
+      poster={`${BASE_PATH}/images/profile.png`}
+      aria-label="代表 高橋 佑卯美"
+    >
+      <source src={`${BASE_PATH}/images/profile.mp4`} type="video/mp4" />
+    </video>
+  );
+}
 
 export default function AboutTabs() {
   const searchParams = useSearchParams();
@@ -92,16 +128,7 @@ export default function AboutTabs() {
         {activeIdx === 0 && (
           <div className="p-4 space-y-4">
             <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid var(--border)" }}>
-              <video
-                className="block w-full h-auto align-top"
-                autoPlay
-                loop
-                muted
-                playsInline
-                aria-label="代表 高橋 佑卯美"
-              >
-                <source src="/images/profile.mp4" type="video/mp4" />
-              </video>
+              <GreetingVideo />
               <div className="p-5" style={{ background: "white" }}>
                 <p className="text-[10px] tracking-widest mb-1" style={{ color: "var(--rose)" }}>GREETING</p>
                 <h2 className="text-lg mb-0.5" style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}>
@@ -158,7 +185,7 @@ export default function AboutTabs() {
                 <div className="h-px" style={{ background: "var(--border)" }} />
                 <div>
                   <dt className="font-medium mb-1" style={{ color: "var(--rose-dark)" }}>運営</dt>
-                  <dd style={{ color: "var(--muted)", lineHeight: 1.7 }}>株式会社Rootiv</dd>
+                  <dd style={{ color: "var(--muted)", lineHeight: 1.7 }}>Rootiv株式会社</dd>
                 </div>
                 <div className="h-px" style={{ background: "var(--border)" }} />
                 <div>
@@ -195,6 +222,18 @@ export default function AboutTabs() {
               美容の悩みも身体の不調も、原因は日常の中にあります。
               Root1039は、その根っこを一緒に見つけ、整えていきます。
             </p>
+            <div
+              className="rounded-2xl overflow-hidden bg-white"
+              style={{ border: "1px solid var(--border)" }}
+            >
+              <img
+                src={`${BASE_PATH}/images/header-1.png`}
+                alt="Root1039 のコンセプト"
+                className="block w-full h-auto align-top"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
             {salonConceptCards.map((v) => (
               <div
                 key={v.num}
