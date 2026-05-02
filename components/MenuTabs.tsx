@@ -276,29 +276,51 @@ export default function MenuTabs() {
     <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
       {/* Tab bar */}
       <div
-        className="flex overflow-x-auto shrink-0 pt-1"
+        className="flex overflow-x-auto shrink-0 gap-1.5 px-3 py-2"
         style={{
+          background: "linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(245,240,244,0.96) 100%)",
           borderBottom: "1px solid var(--border)",
-          background: "white",
           scrollbarWidth: "none",
         }}
       >
-        {tabs.map((t, i) => (
-          <button
-            key={t.id}
-            onClick={() => setActiveIdx(i)}
-            className="shrink-0 px-4 py-3 text-xs font-medium transition-all whitespace-nowrap"
-            style={{
-              color: i === activeIdx ? "var(--rose)" : "var(--muted)",
-              borderBottom: i === activeIdx ? "2px solid var(--rose)" : "2px solid transparent",
-              background: "none",
-              outline: "none",
-              fontFamily: "var(--font-noto), sans-serif",
-            }}
-          >
-            {t.label}
-          </button>
-        ))}
+        {tabs.map((t, i) => {
+          const active = i === activeIdx;
+          return (
+            <button
+              key={t.id}
+              onClick={() => setActiveIdx(i)}
+              className="btn-press shrink-0 px-3 py-2 text-xs whitespace-nowrap rounded-[10px]"
+              style={{
+                outline: "none",
+                fontFamily: "var(--font-noto), sans-serif",
+                ...(active
+                  ? {
+                      color: "white",
+                      fontWeight: 700,
+                      background:
+                        "linear-gradient(180deg, #F099B3 0%, #E47C97 42%, #C4687A 100%)",
+                      border: "1px solid rgba(158,74,90,0.50)",
+                      boxShadow: [
+                        "inset 0 1px 0 rgba(255,255,255,0.42)",
+                        "inset 0 -2px 0 rgba(120,55,70,0.38)",
+                        "0 1px 0 rgba(255,255,255,0.45)",
+                        "0 3px 0 rgba(120,55,70,0.36)",
+                        "0 5px 12px rgba(196,104,122,0.28)",
+                      ].join(", "),
+                      textShadow: "0 1px 1px rgba(120,55,70,0.45)",
+                    }
+                  : {
+                      color: "rgba(122, 96, 101, 0.40)",
+                      fontWeight: 400,
+                      background: "transparent",
+                      border: "1px solid transparent",
+                    }),
+              }}
+            >
+              {t.label}
+            </button>
+          );
+        })}
       </div>
 
       {/* Content */}
@@ -478,33 +500,37 @@ export default function MenuTabs() {
               paddingBottom: "12px",
             }}
           >
-            <Link
-              href={RESERVATION_URL}
-              className="flex items-center justify-center text-[13px] font-semibold active:translate-y-[2px] transition-all"
-              style={{
-                background:
-                  "linear-gradient(180deg, #F099B3 0%, #E47C97 45%, #C4687A 100%)",
-                color: "white",
-                width: "52%",
-                maxWidth: "200px",
-                height: "38px",
-                borderRadius: "9px",
-                border: "1px solid rgba(158,74,90,0.55)",
-                boxShadow: [
-                  "inset 0 1px 0 rgba(255,255,255,0.55)",
-                  "inset 0 -2px 0 rgba(158,74,90,0.55)",
-                  "0 1px 0 rgba(255,255,255,0.5)",
-                  "0 3px 0 rgba(120,55,70,0.5)",
-                  "0 6px 14px rgba(158,74,90,0.40)",
-                  "0 1px 2px rgba(42,28,32,0.22)",
-                ].join(", "),
-                letterSpacing: "0.12em",
-                fontFamily: "var(--font-noto), sans-serif",
-                textShadow: "0 1px 1px rgba(120,55,70,0.55)",
-              }}
-            >
-              予約する
-            </Link>
+            <div className="resv-ring-wrap" style={{ borderRadius: "9px" }}>
+              <Link
+                href={RESERVATION_URL}
+                className="btn-press flex items-center justify-center gap-1.5 text-[13px] font-semibold"
+                style={{
+                  background:
+                    "linear-gradient(180deg, #F099B3 0%, #E47C97 45%, #C4687A 100%)",
+                  color: "white",
+                  width: "52%",
+                  minWidth: "160px",
+                  maxWidth: "200px",
+                  height: "40px",
+                  borderRadius: "9px",
+                  border: "1px solid rgba(158,74,90,0.55)",
+                  boxShadow: [
+                    "inset 0 1px 0 rgba(255,255,255,0.55)",
+                    "inset 0 -2px 0 rgba(158,74,90,0.55)",
+                    "0 1px 0 rgba(255,255,255,0.5)",
+                    "0 4px 0 rgba(120,55,70,0.50)",
+                    "0 8px 18px rgba(158,74,90,0.42)",
+                    "0 1px 2px rgba(42,28,32,0.22)",
+                  ].join(", "),
+                  letterSpacing: "0.12em",
+                  fontFamily: "var(--font-noto), sans-serif",
+                  textShadow: "0 1px 1px rgba(120,55,70,0.55)",
+                }}
+              >
+                予約する
+                <ChevronRight size={14} strokeWidth={2.5} style={{ opacity: 0.85 }} />
+              </Link>
+            </div>
           </div>
         </div>
       </div>

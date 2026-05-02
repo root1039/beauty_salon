@@ -49,59 +49,90 @@ export default function BottomNav() {
           {navItems.map(({ href, label, Icon }) => {
             const normalizedHref = href.replace(/\/+$/, "") || "/";
             const active = normalizedPathname === normalizedHref;
+            const isHome = href === "/";
+
             return (
               <li key={href} className="flex-1 flex justify-center">
                 <Link
                   href={href}
-                  className="flex flex-col items-center justify-center gap-0.5 w-full max-w-[58px] py-1.5 rounded-[14px] transition-all duration-200 active:scale-[0.97]"
+                  className="btn-press flex flex-col items-center justify-center gap-0 w-full max-w-[58px] py-1 rounded-[16px]"
                   style={{
-                    color: active ? "#b84562" : "#8a787e",
+                    color: active ? "#b84562" : "rgba(140, 125, 132, 0.55)",
                     fontFamily: "var(--font-noto), sans-serif",
                     background: active
-                      ? "linear-gradient(165deg, rgba(255,255,255,0.95) 0%, rgba(255,236,244,0.88) 55%, rgba(252,214,228,0.65) 100%)"
+                      ? "linear-gradient(165deg, rgba(255,255,255,0.98) 0%, rgba(255,230,242,0.92) 55%, rgba(252,208,226,0.72) 100%)"
                       : "transparent",
                     boxShadow: active
                       ? [
-                          "inset 0 1px 0 rgba(255,255,255,0.9)",
-                          "0 2px 10px rgba(196,104,122,0.18)",
-                          "0 0 0 1px rgba(201,169,110,0.35)",
+                          "inset 0 1px 0 rgba(255,255,255,0.95)",
+                          "inset 0 -1px 0 rgba(196,104,122,0.12)",
+                          "0 3px 12px rgba(196,104,122,0.22)",
+                          "0 0 0 1px rgba(201,169,110,0.32)",
                         ].join(", ")
                       : "none",
+                    transform: active ? "translateY(-2px)" : "none",
                   }}
                 >
+                  {/* アイコン丸背景 */}
                   <span
                     className="flex items-center justify-center rounded-full"
                     style={{
-                      width: 34,
-                      height: 34,
+                      width: isHome ? 36 : 34,
+                      height: isHome ? 36 : 34,
                       background: active
-                        ? "linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(252,224,234,0.75) 100%)"
-                        : "rgba(255,255,255,0.35)",
+                        ? "linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(252,218,234,0.82) 100%)"
+                        : "rgba(255,255,255,0.18)",
                       boxShadow: active
-                        ? "inset 0 1px 0 rgba(255,255,255,0.95), 0 2px 6px rgba(196,104,122,0.15)"
+                        ? [
+                            "inset 0 1px 0 rgba(255,255,255,0.98)",
+                            "inset 0 -1px 0 rgba(196,104,122,0.18)",
+                            "0 3px 8px rgba(196,104,122,0.22)",
+                          ].join(", ")
                         : "none",
                     }}
                   >
                     <Icon
-                      size={19}
-                      strokeWidth={active ? 2.15 : 1.65}
+                      size={isHome ? 20 : 18}
+                      strokeWidth={active ? 2.2 : 1.55}
                       style={{
-                        color: active ? "#c4687a" : "#9a8a90",
+                        color: active ? "#c4687a" : "rgba(130, 115, 122, 0.50)",
                         filter: active
-                          ? "drop-shadow(0 1px 1px rgba(196,104,122,0.35))"
+                          ? "drop-shadow(0 1px 2px rgba(196,104,122,0.40))"
                           : "none",
                       }}
                     />
                   </span>
+
+                  {/* ラベル */}
                   <span
                     className="text-[9px] tracking-tight leading-none mt-0.5"
                     style={{
                       fontWeight: active ? 700 : 500,
-                      opacity: active ? 1 : 0.88,
+                      opacity: active ? 1 : 0.55,
                     }}
                   >
                     {label}
                   </span>
+
+                  {/* ホームのみ：ピンクインジケータードット */}
+                  {isHome && (
+                    <span
+                      style={{
+                        display: "block",
+                        width: active ? "18px" : "5px",
+                        height: "2.5px",
+                        borderRadius: "999px",
+                        marginTop: "2px",
+                        background: active
+                          ? "linear-gradient(90deg, #F099B3, #C4687A)"
+                          : "rgba(196, 104, 122, 0.22)",
+                        transition: "width 0.3s ease",
+                        boxShadow: active
+                          ? "0 1px 4px rgba(196,104,122,0.45)"
+                          : "none",
+                      }}
+                    />
+                  )}
                 </Link>
               </li>
             );

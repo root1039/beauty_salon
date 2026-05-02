@@ -250,35 +250,38 @@ export default function HomePage() {
       {/* ── 予約ボタン ── */}
       <div
         className="relative z-[1] shrink-0 pt-1 pb-3"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-        }}
+        style={{ display: "flex", justifyContent: "center" }}
       >
-        <Link
-          href={RESERVATION_URL}
-          className="flex items-center justify-center text-[12px] font-semibold active:translate-y-[2px] transition-all"
-          style={{
-            background:
-              "linear-gradient(180deg, #F099B3 0%, #E47C97 45%, #C4687A 100%)",
-            color: "white",
-            width: "48%",
-            maxWidth: "184px",
-            height: "36px",
-            borderRadius: "999px",
-            border: "1px solid rgba(158,74,90,0.55)",
-            boxShadow: [
-              "inset 0 1px 0 rgba(255,255,255,0.55)",
-              "inset 0 -2px 0 rgba(158,74,90,0.45)",
-              "0 4px 14px rgba(196,104,122,0.38)",
-            ].join(", "),
-            letterSpacing: "0.14em",
-            fontFamily: "var(--font-noto), sans-serif",
-            textShadow: "0 1px 1px rgba(120,55,70,0.45)",
-          }}
-        >
-          予約する
-        </Link>
+        <div className="resv-ring-wrap" style={{ borderRadius: "999px" }}>
+          <Link
+            href={RESERVATION_URL}
+            className="btn-press flex items-center justify-center gap-1.5 text-[12px] font-semibold"
+            style={{
+              background:
+                "linear-gradient(180deg, #F099B3 0%, #E47C97 45%, #C4687A 100%)",
+              color: "white",
+              width: "48%",
+              minWidth: "160px",
+              maxWidth: "184px",
+              height: "38px",
+              borderRadius: "999px",
+              border: "1px solid rgba(158,74,90,0.55)",
+              boxShadow: [
+                "inset 0 1px 0 rgba(255,255,255,0.55)",
+                "inset 0 -2px 0 rgba(158,74,90,0.52)",
+                "0 1px 0 rgba(255,255,255,0.45)",
+                "0 4px 0 rgba(120,55,70,0.45)",
+                "0 8px 18px rgba(196,104,122,0.42)",
+              ].join(", "),
+              letterSpacing: "0.14em",
+              fontFamily: "var(--font-noto), sans-serif",
+              textShadow: "0 1px 1px rgba(120,55,70,0.45)",
+            }}
+          >
+            予約する
+            <ChevronRight size={13} strokeWidth={2.5} style={{ opacity: 0.85 }} />
+          </Link>
+        </div>
       </div>
     </div>
   );

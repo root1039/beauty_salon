@@ -584,3 +584,82 @@ body {
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--gray-light); }
 ::-webkit-scrollbar-thumb { background: var(--pink-mid); border-radius: 2px; }
+
+/* ── ボタン押し込み感（press-in 速い / release スプリング） ── */
+/*
+  CSS仕様: 状態変化時のトランジションは「遷移元」のtransitionプロパティを使う
+  - :active 突入時 → 遷移元 = 通常状態 → 通常状態の transition (0.06s 速い) でpress-in
+  - :active 離脱時 → 遷移元 = :active  → :active の transition (0.22s spring) でrelease
+*/
+.btn-press {
+  /* press-in のスピード（速い＝0.06s） */
+  transition: transform 0.06s ease-out, box-shadow 0.06s ease-out;
+}
+.btn-press:active {
+  transform: translateY(4px) scale(0.972);
+  /* release のスプリング感（0.22s オーバーシュート） */
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.20s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-press          { transition: none; }
+  .btn-press:active   { transform: none; }
+}
+
+/* ── 予約ボタン：パルスリングラッパー ── */
+@keyframes resvRingPulse {
+  0%, 100% { opacity: 0; transform: scale(1); }
+  50%       { opacity: 1; transform: scale(1.07); }
+}
+
+.resv-ring-wrap {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.resv-ring-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: inherit;
+  border: 1.5px solid rgba(196, 104, 122, 0.55);
+  box-shadow: 0 0 10px rgba(196, 104, 122, 0.22);
+  pointer-events: none;
+  animation: resvRingPulse 3s ease-in-out infinite;
+}
+
+/* ── FAB 予約ボタン：浮遊＋グロウ ── */
+@keyframes fabFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+@keyframes fabGlow {
+  0%, 100% {
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.52),
+      inset 0 -3px 0 rgba(120,55,70,0.48),
+      0 1px 0 rgba(255,255,255,0.45),
+      0 4px 0 rgba(120,55,70,0.42),
+      0 7px 22px rgba(196,104,122,0.42);
+  }
+  50% {
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.52),
+      inset 0 -3px 0 rgba(120,55,70,0.48),
+      0 1px 0 rgba(255,255,255,0.45),
+      0 4px 0 rgba(120,55,70,0.42),
+      0 10px 32px rgba(196,104,122,0.62),
+      0 0 0 7px rgba(196,104,122,0.10);
+  }
+}
+
+.fab-resv {
+  animation: fabFloat 4s ease-in-out infinite, fabGlow 3s ease-in-out 0.4s infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .resv-ring-wrap::before { animation: none; opacity: 0.45; }
+  .fab-resv { animation: none; }
+}

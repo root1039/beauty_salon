@@ -30,7 +30,7 @@ export default function ReservationChannels() {
           href={LINE_ADD_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-4 w-full px-5 rounded-2xl active:scale-[0.98] active:translate-y-[2px] transition-all"
+          className="btn-press flex items-center gap-4 w-full px-5 rounded-2xl"
           style={{
             height: "72px",
             background: "linear-gradient(180deg, #1ADA6E 0%, #06C755 55%, #05AA49 100%)",

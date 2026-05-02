@@ -29,20 +29,21 @@ const reservationButtonStyle: CSSProperties = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  gap: "6px",
   textDecoration: "none",
   background: "linear-gradient(180deg, #F099B3 0%, #E47C97 45%, #C4687A 100%)",
   color: "white",
   width: "100%",
   maxWidth: "200px",
-  height: "38px",
+  height: "40px",
   borderRadius: "9px",
   border: "1px solid rgba(158,74,90,0.55)",
   boxShadow: [
     "inset 0 1px 0 rgba(255,255,255,0.55)",
     "inset 0 -2px 0 rgba(158,74,90,0.55)",
     "0 1px 0 rgba(255,255,255,0.5)",
-    "0 3px 0 rgba(120,55,70,0.5)",
-    "0 6px 14px rgba(158,74,90,0.40)",
+    "0 4px 0 rgba(120,55,70,0.50)",
+    "0 8px 18px rgba(158,74,90,0.42)",
     "0 1px 2px rgba(42,28,32,0.22)",
   ].join(", "),
   letterSpacing: "0.12em",
@@ -104,25 +105,50 @@ export default function AboutTabs() {
     <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
       {/* Tab bar */}
       <div
-        className="flex shrink-0 pt-1"
-        style={{ borderBottom: "1px solid var(--border)", background: "white" }}
+        className="flex shrink-0 gap-1.5 px-3 py-2"
+        style={{
+          background: "linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(245,240,244,0.96) 100%)",
+          borderBottom: "1px solid var(--border)",
+        }}
       >
-        {tabNames.map((name, i) => (
+        {tabNames.map((name, i) => {
+          const active = i === activeIdx;
+          return (
           <button
             key={name}
             onClick={() => setActiveIdx(i)}
-            className="flex-1 py-3 text-xs font-medium transition-all leading-tight"
+            className="btn-press flex-1 py-2 text-xs leading-tight rounded-[10px]"
             style={{
-              color: i === activeIdx ? "var(--rose)" : "var(--muted)",
-              borderBottom: i === activeIdx ? "2px solid var(--rose)" : "2px solid transparent",
-              background: "none",
               outline: "none",
               fontFamily: "var(--font-noto), sans-serif",
+              ...(active
+                ? {
+                    color: "white",
+                    fontWeight: 700,
+                    background:
+                      "linear-gradient(180deg, #F099B3 0%, #E47C97 42%, #C4687A 100%)",
+                    border: "1px solid rgba(158,74,90,0.50)",
+                    boxShadow: [
+                      "inset 0 1px 0 rgba(255,255,255,0.42)",
+                      "inset 0 -2px 0 rgba(120,55,70,0.38)",
+                      "0 1px 0 rgba(255,255,255,0.45)",
+                      "0 3px 0 rgba(120,55,70,0.36)",
+                      "0 5px 12px rgba(196,104,122,0.28)",
+                    ].join(", "),
+                    textShadow: "0 1px 1px rgba(120,55,70,0.45)",
+                  }
+                : {
+                    color: "rgba(122, 96, 101, 0.40)",
+                    fontWeight: 400,
+                    background: "transparent",
+                    border: "1px solid transparent",
+                  }),
             }}
           >
             {name}
           </button>
-        ))}
+          );
+        })}
       </div>
 
       {/* Content */}
@@ -164,7 +190,7 @@ export default function AboutTabs() {
               href="https://www.instagram.com/yuumin_root1039/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between p-4 rounded-xl active:opacity-70 transition-opacity"
+              className="flex items-center justify-between p-4 rounded-xl btn-press"
               style={{ background: "white", border: "1px solid var(--border)" }}
             >
               <span className="text-sm" style={{ color: "var(--charcoal)" }}>Instagramはこちら</span>
@@ -174,7 +200,7 @@ export default function AboutTabs() {
               <button
                 type="button"
                 onClick={() => setActiveIdx(1)}
-                className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg active:opacity-70 transition-opacity"
+                className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg btn-press"
                 style={{
                   color: "var(--rose)",
                   fontFamily: "var(--font-noto), sans-serif",
@@ -280,7 +306,7 @@ export default function AboutTabs() {
               <button
                 type="button"
                 onClick={() => setActiveIdx(0)}
-                className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg active:opacity-70 transition-opacity"
+                className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg btn-press"
                 style={{
                   color: "var(--rose)",
                   fontFamily: "var(--font-noto), sans-serif",
@@ -294,7 +320,7 @@ export default function AboutTabs() {
               <button
                 type="button"
                 onClick={() => setActiveIdx(2)}
-                className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg active:opacity-70 transition-opacity"
+                className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg btn-press"
                 style={{
                   color: "var(--rose)",
                   fontFamily: "var(--font-noto), sans-serif",
@@ -355,7 +381,7 @@ export default function AboutTabs() {
                 <button
                   type="button"
                   onClick={() => setActiveIdx(1)}
-                  className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg active:opacity-70 transition-opacity"
+                  className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg btn-press"
                   style={{
                     color: "var(--rose)",
                     fontFamily: "var(--font-noto), sans-serif",
@@ -368,9 +394,12 @@ export default function AboutTabs() {
                 </button>
               </div>
               <div className="flex justify-center">
-                <Link href={RESERVATION_URL} className="active:translate-y-[2px] transition-all" style={reservationButtonStyle}>
-                  予約する
-                </Link>
+                <div className="resv-ring-wrap" style={{ borderRadius: "9px" }}>
+                  <Link href={RESERVATION_URL} className="btn-press" style={reservationButtonStyle}>
+                    予約する
+                    <ChevronRight size={14} strokeWidth={2.5} style={{ opacity: 0.85 }} />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

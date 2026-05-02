@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Shippori_Mincho, Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 import BottomNav from "@/components/BottomNav";
+import ReservationFab from "@/components/ReservationFab";
 import SplashScreen from "@/components/SplashScreen";
 
 const shippori = Shippori_Mincho({
@@ -54,6 +55,7 @@ export default function RootLayout({
         <div className="app-frame">
           <main>{children}</main>
         </div>
+        <ReservationFab />
         <BottomNav />
       </body>
     </html>
