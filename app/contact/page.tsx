@@ -58,8 +58,9 @@ export default function ContactPage() {
             <div>
               <p className="text-[10px] font-medium" style={{ color: "var(--charcoal)" }}>所在地</p>
               <p className="text-[10px]" style={{ color: "var(--muted)", lineHeight: 1.5 }}>
-                宮城県仙台市泉区<br />
-                <span style={{ fontSize: "9px" }}>（ご予約後にご案内）</span>
+                〒981-3133
+                <br />
+                宮城県仙台市泉区泉中央2丁目21-1
               </p>
             </div>
           </div>

@@ -3,14 +3,18 @@
 import { useState, useEffect, useRef, startTransition, type CSSProperties } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { MapPin, Clock } from "lucide-react";
+import { MapPin, Clock, ChevronLeft, ChevronRight } from "lucide-react";
 
 const RESERVATION_URL = "/contact";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-/** Googleマップ（泉中央駅）。ピン位置を店舗住所に合わせる場合は Googleマップの「地図を埋め込む」からsrcを差し替えてください。 */
-const MAP_EMBED_SRC =
-  "https://maps.google.com/maps?q=%E6%B3%89%E4%B8%AD%E5%A4%AE%E9%A7%85+%E5%AE%AE%E5%9F%8E%E7%9C%8C%E4%BB%99%E5%8F%B0%E5%B8%82&hl=ja&z=15&output=embed";
+const SALON_ADDRESS_LINE = "宮城県仙台市泉区泉中央2丁目21-1";
+const SALON_POSTAL = "〒981-3133";
+
+/** 店舗所在地付近の地図 */
+const MAP_EMBED_SRC = `https://maps.google.com/maps?q=${encodeURIComponent(
+  "宮城県仙台市泉区泉中央2丁目21-1"
+)}&hl=ja&z=16&output=embed`;
 
 const salonConceptCards = [
   { num: "01", title: "根本を見る", body: "悩みの表面ではなく、その原因・習慣・土台を見つめます。体型、肌、不調のほとんどは日常の積み重ねから生まれています。" },
@@ -166,6 +170,22 @@ export default function AboutTabs() {
               <span className="text-sm" style={{ color: "var(--charcoal)" }}>Instagramはこちら</span>
               <span className="text-xs font-medium" style={{ color: "var(--rose)" }}>@yuumin_root1039 →</span>
             </a>
+            <div className="flex justify-end pt-1">
+              <button
+                type="button"
+                onClick={() => setActiveIdx(1)}
+                className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg active:opacity-70 transition-opacity"
+                style={{
+                  color: "var(--rose)",
+                  fontFamily: "var(--font-noto), sans-serif",
+                  border: "1px solid var(--border)",
+                  background: "white",
+                }}
+              >
+                会社・サロン概要
+                <ChevronRight size={16} strokeWidth={2.2} />
+              </button>
+            </div>
           </div>
         )}
 
@@ -196,9 +216,9 @@ export default function AboutTabs() {
                 <div>
                   <dt className="font-medium mb-1" style={{ color: "var(--rose-dark)" }}>所在地</dt>
                   <dd style={{ color: "var(--muted)", lineHeight: 1.7 }}>
-                    〒981-3109<br />
-                    宮城県仙台市泉区中央<br />
-                    （番地・建物名は防犯・プライバシー保護のため、ご予約確定後にご案内しております）
+                    {SALON_POSTAL}
+                    <br />
+                    {SALON_ADDRESS_LINE}
                   </dd>
                 </div>
                 <div className="h-px" style={{ background: "var(--border)" }} />
@@ -256,6 +276,36 @@ export default function AboutTabs() {
                 </div>
               </div>
             ))}
+            <div className="flex items-center justify-between gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setActiveIdx(0)}
+                className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg active:opacity-70 transition-opacity"
+                style={{
+                  color: "var(--rose)",
+                  fontFamily: "var(--font-noto), sans-serif",
+                  border: "1px solid var(--border)",
+                  background: "white",
+                }}
+              >
+                <ChevronLeft size={16} strokeWidth={2.2} />
+                代表挨拶
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveIdx(2)}
+                className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg active:opacity-70 transition-opacity"
+                style={{
+                  color: "var(--rose)",
+                  fontFamily: "var(--font-noto), sans-serif",
+                  border: "1px solid var(--border)",
+                  background: "white",
+                }}
+              >
+                アクセス
+                <ChevronRight size={16} strokeWidth={2.2} />
+              </button>
+            </div>
           </div>
         )}
 
@@ -264,7 +314,7 @@ export default function AboutTabs() {
           <div className="p-4 space-y-4">
             <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid var(--border)", background: "white" }}>
               <iframe
-                title="サロン周辺の地図（泉中央駅付近）"
+                title="サロン所在地周辺の地図"
                 src={MAP_EMBED_SRC}
                 width="100%"
                 height="240"
@@ -281,10 +331,12 @@ export default function AboutTabs() {
                   <MapPin size={15} className="mt-0.5 shrink-0" style={{ color: "var(--rose)" }} />
                   <div>
                     <p className="text-sm font-medium" style={{ color: "var(--charcoal)" }}>所在地</p>
-                    <p className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>
-                      泉中央駅から徒歩5分<br />
-                      宮城県仙台市泉区<br />
-                      詳細住所はご予約後にご案内します
+                    <p className="text-xs mt-0.5" style={{ color: "var(--muted)", lineHeight: 1.65 }}>
+                      {SALON_POSTAL}
+                      <br />
+                      {SALON_ADDRESS_LINE}
+                      <br />
+                      泉中央駅から徒歩5分
                     </p>
                   </div>
                 </li>
@@ -298,10 +350,28 @@ export default function AboutTabs() {
                 </li>
               </ul>
             </div>
-            <div className="flex flex-col items-center gap-3 pb-2">
-              <Link href={RESERVATION_URL} className="active:translate-y-[2px] transition-all" style={reservationButtonStyle}>
-                予約する
-              </Link>
+            <div className="flex flex-col items-stretch gap-3 pb-2">
+              <div className="flex justify-start">
+                <button
+                  type="button"
+                  onClick={() => setActiveIdx(1)}
+                  className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg active:opacity-70 transition-opacity"
+                  style={{
+                    color: "var(--rose)",
+                    fontFamily: "var(--font-noto), sans-serif",
+                    border: "1px solid var(--border)",
+                    background: "white",
+                  }}
+                >
+                  <ChevronLeft size={16} strokeWidth={2.2} />
+                  会社・サロン概要
+                </button>
+              </div>
+              <div className="flex justify-center">
+                <Link href={RESERVATION_URL} className="active:translate-y-[2px] transition-all" style={reservationButtonStyle}>
+                  予約する
+                </Link>
+              </div>
             </div>
           </div>
         )}

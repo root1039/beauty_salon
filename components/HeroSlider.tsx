@@ -1,16 +1,18 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
+/** 1枚目=サロン、2〜4枚目=ブログ、5枚目=アクセス */
 const slides = [
-  { src: `${BASE_PATH}/images/header-1.png`, fit: "cover" },
-  { src: `${BASE_PATH}/images/header-2.png`, fit: "cover" },
-  { src: `${BASE_PATH}/images/header-4.png`, fit: "cover" },
-  { src: `${BASE_PATH}/images/header-3.png`, fit: "cover" },
-  { src: `${BASE_PATH}/images/header-5.png`, fit: "cover" },
+  { src: `${BASE_PATH}/images/header-1.png`, fit: "cover" as const, href: `${BASE_PATH}/about/` },
+  { src: `${BASE_PATH}/images/header-2.png`, fit: "cover" as const, href: `${BASE_PATH}/blog/` },
+  { src: `${BASE_PATH}/images/header-4.png`, fit: "cover" as const, href: `${BASE_PATH}/blog/` },
+  { src: `${BASE_PATH}/images/header-3.png`, fit: "cover" as const, href: `${BASE_PATH}/blog/` },
+  { src: `${BASE_PATH}/images/header-5.png`, fit: "cover" as const, href: `${BASE_PATH}/about/?tab=access` },
 ];
 
 export default function HeroSlider() {
@@ -32,7 +34,7 @@ export default function HeroSlider() {
       }}
     >
       {/* 定点フェード切替 */}
-      {slides.map(({ src, fit }, i) => (
+      {slides.map(({ src, fit, href }, i) => (
         <div
           key={src}
           style={{
@@ -41,16 +43,30 @@ export default function HeroSlider() {
             opacity: i === current ? 1 : 0,
             transition: "opacity 800ms ease-in-out",
             zIndex: i === current ? 2 : 1,
+            pointerEvents: i === current ? "auto" : "none",
           }}
         >
-          <Image
-            src={src}
-            alt={`ヘッダー画像 ${i + 1}`}
-            fill
-            priority={i === 0}
-            sizes="430px"
-            style={{ objectFit: fit as "cover" | "contain" }}
-          />
+          <Link
+            href={href}
+            className="absolute inset-0 block"
+            aria-label={
+              i === 0
+                ? "サロンについてへ"
+                : i === slides.length - 1
+                  ? "アクセスへ"
+                  : "ブログへ"
+            }
+            style={{ zIndex: 1 }}
+          >
+            <Image
+              src={src}
+              alt=""
+              fill
+              priority={i === 0}
+              sizes="430px"
+              style={{ objectFit: fit }}
+            />
+          </Link>
         </div>
       ))}
 

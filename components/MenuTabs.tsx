@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Zap, Shirt, Droplets, Leaf } from "lucide-react";
+import { Zap, Shirt, Droplets, Leaf, ChevronLeft, ChevronRight } from "lucide-react";
 
 const RESERVATION_URL = "/contact";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -424,6 +424,50 @@ export default function MenuTabs() {
             }
             return null;
           })}
+
+          {/* 隣のメニュータブへ */}
+          <div
+            className={`flex items-center gap-2 mb-3 ${
+              activeIdx === 0
+                ? "justify-end"
+                : activeIdx === tabs.length - 1
+                  ? "justify-start"
+                  : "justify-between"
+            }`}
+          >
+            {activeIdx > 0 && (
+              <button
+                type="button"
+                onClick={() => setActiveIdx(activeIdx - 1)}
+                className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg active:opacity-70 transition-opacity"
+                style={{
+                  color: "var(--rose)",
+                  fontFamily: "var(--font-noto), sans-serif",
+                  border: "1px solid var(--border)",
+                  background: "white",
+                }}
+              >
+                <ChevronLeft size={16} strokeWidth={2.2} />
+                {tabs[activeIdx - 1].label}
+              </button>
+            )}
+            {activeIdx < tabs.length - 1 && (
+              <button
+                type="button"
+                onClick={() => setActiveIdx(activeIdx + 1)}
+                className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg active:opacity-70 transition-opacity"
+                style={{
+                  color: "var(--rose)",
+                  fontFamily: "var(--font-noto), sans-serif",
+                  border: "1px solid var(--border)",
+                  background: "white",
+                }}
+              >
+                {tabs[activeIdx + 1].label}
+                <ChevronRight size={16} strokeWidth={2.2} />
+              </button>
+            )}
+          </div>
 
           {/* 予約するボタン */}
           <div
