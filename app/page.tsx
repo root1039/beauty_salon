@@ -157,94 +157,84 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── コンパクトバナー ── */}
-      <div
-        className="relative z-[1] flex-1 min-h-0 flex flex-col gap-1.5 px-3 pt-1 pb-2"
-      >
-        {banners.map((banner) => (
-          <Link
-            key={banner.en}
-            href={banner.href}
-            className="relative w-full active:translate-y-[1px] transition-transform home-banner-card"
-            style={{
-              flex: 1,
-              minHeight: 0,
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: "6px 10px",
-              borderRadius: "12px",
-              background:
-                "linear-gradient(165deg, rgba(255,255,255,0.96) 0%, rgba(252,248,252,0.92) 55%, rgba(248,242,246,0.88) 100%)",
-              border: `1px solid ${GOLD_BORDER}`,
-              boxShadow:
-                "inset 0 1px 0 rgba(255,255,255,0.92), 0 2px 8px rgba(196,104,122,0.07), 0 1px 2px rgba(42,28,32,0.04)",
-            }}
-          >
-            <div
+      {/* ── コンパクトバナー（横3列・画像は切らずに収める） ── */}
+      <div className="relative z-[1] flex flex-1 min-h-0 flex-col justify-center px-3 pt-1 pb-2">
+        <div className="grid w-full min-w-0 grid-cols-3 gap-1.5 sm:gap-2">
+          {banners.map((banner) => (
+            <Link
+              key={banner.en}
+              href={banner.href}
+              className="home-banner-card flex min-w-0 flex-col active:translate-y-[1px] rounded-xl transition-transform"
               style={{
-                width: "104px",
-                height: "54px",
-                position: "relative",
-                flexShrink: 0,
-                borderRadius: "8px",
-                overflow: "hidden",
-                background: "#FFF9F5",
-                border: "1px solid rgba(201,169,110,0.28)",
+                padding: "6px 4px 8px",
+                background:
+                  "linear-gradient(165deg, rgba(255,255,255,0.96) 0%, rgba(252,248,252,0.92) 55%, rgba(248,242,246,0.88) 100%)",
+                border: `1px solid ${GOLD_BORDER}`,
+                boxShadow:
+                  "inset 0 1px 0 rgba(255,255,255,0.92), 0 2px 8px rgba(196,104,122,0.07), 0 1px 2px rgba(42,28,32,0.04)",
               }}
             >
-              <Image
-                src={banner.img}
-                alt={banner.ja}
-                fill
-                sizes="104px"
-                style={{ objectFit: "contain" }}
-              />
-            </div>
+              <div
+                className="relative mb-1.5 w-full overflow-hidden rounded-lg"
+                style={{
+                  aspectRatio: "4 / 3",
+                  background: "#FFF9F5",
+                  border: "1px solid rgba(201,169,110,0.28)",
+                }}
+              >
+                <Image
+                  src={banner.img}
+                  alt={banner.ja}
+                  fill
+                  sizes="(max-width: 430px) 33vw, 140px"
+                  className="object-contain"
+                />
+              </div>
 
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <p
-                style={{
-                  color: "#C4687A",
-                  fontSize: "8px",
-                  letterSpacing: "0.18em",
-                  fontFamily: "var(--font-noto), sans-serif",
-                  marginBottom: "1px",
-                  fontWeight: 600,
-                }}
-              >
-                {banner.en}
-              </p>
-              <h2
-                style={{
-                  color: "#2A1C20",
-                  fontSize: "12px",
-                  lineHeight: 1.25,
-                  fontFamily: "var(--font-shippori), serif",
-                  letterSpacing: "0.03em",
-                  marginBottom: "1px",
-                }}
-              >
-                {banner.ja}
-              </h2>
-              <p
-                style={{
-                  color: "#8a757a",
-                  fontSize: "9px",
-                  lineHeight: 1.25,
-                  fontFamily: "var(--font-noto), sans-serif",
-                }}
-              >
-                {banner.sub}
-              </p>
-            </div>
-
-            <ChevronRight
-              size={14}
-              style={{ color: "rgba(201,169,110,0.85)", flexShrink: 0 }}
-            />
-          </Link>
-        ))}
+              <div className="flex min-h-0 flex-1 flex-col items-center px-0.5 text-center">
+                <p
+                  className="mb-0.5 w-full truncate"
+                  style={{
+                    color: "#C4687A",
+                    fontSize: "7px",
+                    letterSpacing: "0.12em",
+                    fontFamily: "var(--font-noto), sans-serif",
+                    fontWeight: 600,
+                  }}
+                >
+                  {banner.en}
+                </p>
+                <h2
+                  className="mb-0.5 line-clamp-2 w-full leading-tight"
+                  style={{
+                    color: "#2A1C20",
+                    fontSize: "10px",
+                    fontFamily: "var(--font-shippori), serif",
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  {banner.ja}
+                </h2>
+                <p
+                  className="line-clamp-3 w-full leading-snug"
+                  style={{
+                    color: "#8a757a",
+                    fontSize: "7.5px",
+                    fontFamily: "var(--font-noto), sans-serif",
+                  }}
+                >
+                  {banner.sub}
+                </p>
+                <ChevronRight
+                  size={12}
+                  className="mt-0.5 shrink-0 opacity-70"
+                  style={{ color: "rgba(201,169,110,0.9)" }}
+                  aria-hidden
+                />
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
 
       {/* ── 予約ボタン ── */}
