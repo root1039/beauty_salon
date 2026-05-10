@@ -85,7 +85,7 @@ export default function HomePage() {
 
         {/* 3. Hero image */}
         <div className="mb-2.5">
-          <div style={{ aspectRatio: "16 / 9", width: "100%" }}>
+          <div style={{ aspectRatio: "1 / 1", width: "100%" }}>
             <HeroSlider />
           </div>
         </div>
@@ -114,7 +114,7 @@ export default function HomePage() {
                   alt={card.title}
                   fill
                   sizes="(max-width: 430px) 33vw, 130px"
-                  className="object-cover"
+                  className="object-contain"
                   loading="lazy"
                 />
               </div>

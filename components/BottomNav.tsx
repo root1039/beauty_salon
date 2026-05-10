@@ -31,7 +31,7 @@ export default function BottomNav() {
       }}
     >
       <div
-        className="flex items-center justify-between rounded-t-lg px-1.5 py-1.5"
+        className="flex items-center justify-between rounded-t-lg px-2 py-2.5"
         style={{
           background: "white",
           border: "1px solid var(--pink-mid)",
@@ -47,7 +47,7 @@ export default function BottomNav() {
             <Link
               key={href}
               href={href}
-              className="flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-md px-1 py-0.5 transition"
+              className="flex min-w-0 flex-1 flex-col items-center gap-1 rounded-md px-1.5 py-1.5 transition"
               style={{
                 textDecoration: "none",
                 color: active ? "#C4687A" : "#7A6065",
@@ -55,11 +55,11 @@ export default function BottomNav() {
               }}
             >
               <Icon
-                className="h-6 w-6"
+                className="h-7 w-7"
                 strokeWidth={active ? 2.2 : 1.5}
               />
               <span
-                className="truncate text-[9px] font-medium"
+                className="truncate text-[10px] font-medium"
                 style={{
                   fontFamily: "var(--font-shippori), serif",
                   letterSpacing: "0.02em",
