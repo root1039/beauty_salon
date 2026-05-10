@@ -7,11 +7,11 @@ import { useEffect, useState } from "react";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const slides = [
-  { src: `${BASE_PATH}/images/header-1.png`, fit: "cover" as const, href: "/about/" },
-  { src: `${BASE_PATH}/images/header-2.png`, fit: "cover" as const, href: "/blog/" },
-  { src: `${BASE_PATH}/images/header-4.png`, fit: "cover" as const, href: "/blog/" },
-  { src: `${BASE_PATH}/images/header-3.png`, fit: "cover" as const, href: "/blog/" },
-  { src: `${BASE_PATH}/images/header-5.png`, fit: "cover" as const, href: "/about/?tab=access" },
+  { src: `${BASE_PATH}/images/header-1.png`, fit: "contain" as const, href: "/about/" },
+  { src: `${BASE_PATH}/images/header-2.png`, fit: "contain" as const, href: "/blog/" },
+  { src: `${BASE_PATH}/images/header-4.png`, fit: "contain" as const, href: "/blog/" },
+  { src: `${BASE_PATH}/images/header-3.png`, fit: "contain" as const, href: "/blog/" },
+  { src: `${BASE_PATH}/images/header-5.png`, fit: "contain" as const, href: "/about/?tab=access" },
 ];
 
 export default function HeroSlider() {
