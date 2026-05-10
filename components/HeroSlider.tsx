@@ -4,10 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-/**
- * 静的書き出し + GitHub Pages（サブパス）では public 画像の URL にプレフィックスが必要。
- * Link の href は next/link が basePath を付けるためルート相対のみ（二重にしない）。
- */
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const slides = [
@@ -24,19 +20,15 @@ export default function HeroSlider() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
-    }, 3200); // 3.2秒ごとにフェード切替
+    }, 3200);
     return () => clearInterval(timer);
   }, []);
 
   return (
     <div
-      className="hero-frame relative h-full w-full overflow-hidden"
-      style={{
-        borderRadius: "12px",
-        background: "#0E0712",
-      }}
+      className="relative h-full w-full overflow-hidden"
+      style={{ background: "#0E0712" }}
     >
-      {/* 定点フェード切替 */}
       {slides.map(({ src, fit, href }, i) => (
         <div
           key={src}
@@ -73,7 +65,7 @@ export default function HeroSlider() {
         </div>
       ))}
 
-      {/* ドットインジケーター */}
+      {/* Dot indicators */}
       <div
         className="absolute bottom-2.5 left-1/2 flex gap-1.5"
         style={{ transform: "translateX(-50%)", zIndex: 10 }}
@@ -82,12 +74,15 @@ export default function HeroSlider() {
           <span
             key={i}
             style={{
-              width:      i === current ? "18px" : "6px",
-              height:     "6px",
+              width: i === current ? "18px" : "6px",
+              height: "6px",
               borderRadius: "3px",
-              background: i === current ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.50)",
+              background:
+                i === current
+                  ? "rgba(255,255,255,0.95)"
+                  : "rgba(255,255,255,0.50)",
               transition: "all 0.3s ease",
-              display:    "block",
+              display: "block",
             }}
           />
         ))}

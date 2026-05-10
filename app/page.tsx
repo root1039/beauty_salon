@@ -1,278 +1,167 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronRight, Megaphone } from "lucide-react";
+import { Bell, ChevronRight, CalendarDays } from "lucide-react";
 import HeroSlider from "@/components/HeroSlider";
-import InstagramFab from "@/components/InstagramFab";
+import HomeHeader from "@/components/HomeHeader";
 
 const RESERVATION_URL = "/contact";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-const GOLD_BORDER = "rgba(201,169,110,0.65)";
-const headerLine2 = "仙台市泉区 泉中央駅から徒歩5分";
 
-/** ヘッダー画像の上に流れるお知らせ（無缝ループ） */
-const tickerText =
-  "高周波施術取り扱い・根本改善・あなたにあわせたケア・ブログで美容や健康についてまとめてます・いいねでクーポンGET";
+const noticeText =
+  "高周波施術取り扱い・根本改善・あなたにあわせたケア";
 
-const banners = [
+const cards = [
   {
     href: "/about",
-    en: "ABOUT",
-    ja: "サロンについて",
-    sub: "代表挨拶 / Root1039",
+    title: "サロンについて",
+    desc: "代表挨拶 / Root1039",
     img: `${BASE_PATH}/images/banner-about.png`,
   },
   {
     href: "/menu",
-    en: "MENU",
-    ja: "メニュー・商品",
-    sub: "最新機器 / 生活改善",
+    title: "メニュー・商品",
+    desc: "最新機器 / 生活改善",
     img: `${BASE_PATH}/images/banner-menu.png`,
   },
   {
     href: "/blog",
-    en: "BLOG",
-    ja: "ブログ",
-    sub: "美容と健康のヒントを発信中",
+    title: "ブログ",
+    desc: "美容と健康のヒントを発信中",
     img: `${BASE_PATH}/images/banner-blog.png`,
   },
 ];
 
 export default function HomePage() {
   return (
-    <div
-      className="home-page-root relative"
-      style={{
-        height: "calc(100dvh - 74px)",
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-      }}
-    >
-      {/* やわらかな装飾（キラ・小花モチーフ） */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden z-0 home-page-decor" aria-hidden />
-
-      {/* ゆるく漂う色付きの円（大中小） */}
+    <section className="mx-auto flex min-h-screen w-full flex-col bg-transparent px-2 pt-2 pb-[5.25rem]">
       <div
-        className="pointer-events-none absolute inset-0 overflow-hidden z-0 home-floating-orbs"
-        aria-hidden
-      >
-        <span className="home-float-orb home-float-orb--lg" />
-        <span className="home-float-orb home-float-orb--md" />
-        <span className="home-float-orb home-float-orb--sm" />
-      </div>
-
-      {/* ── 上部：余白＋見出し＋Instagram ── */}
-      <div
-        className="relative z-[1] shrink-0 px-3 pt-4"
+        className="rounded-lg bg-white px-0 pb-2.5 pt-2"
         style={{
-          paddingTop: "max(14px, env(safe-area-inset-top, 0px))",
+          border: "1px solid var(--gray-light)",
+          boxShadow: "0 6px 18px rgba(0,0,0,0.06)",
         }}
       >
-        <div className="flex items-start justify-between gap-2 pl-1">
-          <div className="w-10 shrink-0" aria-hidden />
-          <div className="flex-1 min-w-0 text-center">
-            <p
-              className="mb-0.5"
-              style={{
-                margin: 0,
-                fontSize: "13px",
-                letterSpacing: "0.1em",
-                fontWeight: 600,
-                lineHeight: 1.45,
-                fontFamily: "var(--font-shippori), serif",
-                color: "#2A1C20",
-              }}
-            >
-              根本改善エステ「
-              <span style={{ color: "#C4687A", fontWeight: 700 }}>Root1039</span>
-              」
-            </p>
-            <p
-              style={{
-                margin: 0,
-                fontSize: "9.5px",
-                letterSpacing: "0.12em",
-                fontWeight: 500,
-                color: "#7A6065",
-                fontFamily: "var(--font-noto), sans-serif",
-              }}
-            >
-              {headerLine2}
-            </p>
-          </div>
-          <InstagramFab className="mt-0.5" />
-        </div>
+        {/* 1. Header */}
+        <HomeHeader />
 
-        {/* ── アナウンス（メガホン＋流れるテキスト） ── */}
-        <div
-          className="flex items-center gap-2 mt-3 px-0.5"
-          role="region"
-          aria-label="お知らせ"
-        >
-          <div
-            className="flex shrink-0 items-center justify-center rounded-full"
+        {/* 2. Notice bar */}
+        <div className="mx-2.5 mb-1.5">
+          <Link
+            href="/blog"
+            className="flex items-center gap-1.5 rounded-md px-1.5 py-1.5"
             style={{
-              width: 30,
-              height: 30,
-              background:
-                "linear-gradient(145deg, rgba(255,236,244,0.95) 0%, rgba(252,214,228,0.55) 100%)",
-              border: "1px solid rgba(196,104,122,0.35)",
-              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.9)",
-            }}
-            aria-hidden
-          >
-            <Megaphone size={15} strokeWidth={2.2} style={{ color: "#C4687A" }} />
-          </div>
-          <div
-            className="header-ticker flex-1 min-w-0"
-            style={{
-              height: "28px",
-              borderRadius: "999px",
-              background:
-                "linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(252,248,250,0.88) 100%)",
-              border: "1px solid rgba(201,169,110,0.55)",
-              display: "flex",
-              alignItems: "center",
-              overflow: "hidden",
-              padding: "0 10px",
-              boxShadow:
-                "inset 0 1px 0 rgba(255,255,255,0.95), 0 1px 4px rgba(196,104,122,0.06)",
+              textDecoration: "none",
+              border: "1px solid rgba(196,104,122,0.2)",
+              background: "rgba(247,237,240,0.6)",
             }}
           >
-            <div className="header-ticker__track">
-              <span>{tickerText}</span>
-              <span aria-hidden="true">{tickerText}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Hero：少し下げて余白を活かす ── */}
-      <section
-        className="hero-frame-outer relative z-[1] shrink-0 px-3 pt-3 pb-2"
-        style={{ display: "flex", justifyContent: "center" }}
-      >
-        <div style={{ width: "100%", aspectRatio: "16 / 9" }}>
-          <HeroSlider />
-        </div>
-      </section>
-
-      {/* ── コンパクトバナー（横3列・画像は切らずに収める） ── */}
-      <div className="relative z-[1] flex flex-1 min-h-0 flex-col justify-center px-3 pt-1 pb-2">
-        <div className="grid w-full min-w-0 grid-cols-3 gap-1.5 sm:gap-2">
-          {banners.map((banner) => (
-            <Link
-              key={banner.en}
-              href={banner.href}
-              className="home-banner-card flex min-w-0 flex-col active:translate-y-[1px] rounded-xl transition-transform"
+            <span
+              className="inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-[9px] font-bold text-white"
               style={{
-                padding: "6px 4px 8px",
                 background:
-                  "linear-gradient(165deg, rgba(255,255,255,0.96) 0%, rgba(252,248,252,0.92) 55%, rgba(248,242,246,0.88) 100%)",
-                border: `1px solid ${GOLD_BORDER}`,
-                boxShadow:
-                  "inset 0 1px 0 rgba(255,255,255,0.92), 0 2px 8px rgba(196,104,122,0.07), 0 1px 2px rgba(42,28,32,0.04)",
+                  "linear-gradient(135deg, #5a1432 0%, #9E4A5A 30%, #C4687A 60%, #9E4A5A 100%)",
+                flexShrink: 0,
+              }}
+            >
+              <Bell className="h-3 w-3" />
+              お知らせ
+            </span>
+            <span
+              className="truncate text-[10px] font-medium"
+              style={{
+                fontFamily: "var(--font-shippori), serif",
+                letterSpacing: "0.02em",
+                color: "#9E4A5A",
+              }}
+            >
+              {noticeText}
+            </span>
+            <ChevronRight
+              className="h-3 w-3 shrink-0"
+              style={{ color: "#C4687A" }}
+            />
+          </Link>
+        </div>
+
+        {/* 3. Hero image */}
+        <div className="mb-2.5">
+          <div style={{ aspectRatio: "16 / 9", width: "100%" }}>
+            <HeroSlider />
+          </div>
+        </div>
+
+        {/* 4. 3-card grid */}
+        <div className="mb-1.5 grid grid-cols-3 gap-1.5 px-2.5">
+          {cards.map((card) => (
+            <Link
+              key={card.href}
+              href={card.href}
+              className="home-neon-card rounded-md bg-white p-0.5 text-center transition hover:-translate-y-0.5 hover:shadow-md"
+              style={{
+                textDecoration: "none",
+                border: "1px solid var(--gray-light)",
               }}
             >
               <div
-                className="relative mb-1.5 w-full overflow-hidden rounded-lg"
+                className="relative mb-0.5 w-full overflow-hidden rounded-md"
                 style={{
-                  aspectRatio: "4 / 3",
-                  background: "#FFF9F5",
-                  border: "1px solid rgba(201,169,110,0.28)",
+                  aspectRatio: "1 / 1",
+                  border: "1px solid var(--gray-mid)",
                 }}
               >
                 <Image
-                  src={banner.img}
-                  alt={banner.ja}
+                  src={card.img}
+                  alt={card.title}
                   fill
-                  sizes="(max-width: 430px) 33vw, 140px"
-                  className="object-contain"
+                  sizes="(max-width: 430px) 33vw, 130px"
+                  className="object-cover"
+                  loading="lazy"
                 />
               </div>
-
-              <div className="flex min-h-0 flex-1 flex-col items-center px-0.5 text-center">
-                <p
-                  className="mb-0.5 w-full truncate"
-                  style={{
-                    color: "#C4687A",
-                    fontSize: "7px",
-                    letterSpacing: "0.12em",
-                    fontFamily: "var(--font-noto), sans-serif",
-                    fontWeight: 600,
-                  }}
-                >
-                  {banner.en}
-                </p>
-                <h2
-                  className="mb-0.5 line-clamp-2 w-full leading-tight"
-                  style={{
-                    color: "#2A1C20",
-                    fontSize: "10px",
-                    fontFamily: "var(--font-shippori), serif",
-                    letterSpacing: "0.02em",
-                  }}
-                >
-                  {banner.ja}
-                </h2>
-                <p
-                  className="line-clamp-3 w-full leading-snug"
-                  style={{
-                    color: "#8a757a",
-                    fontSize: "7.5px",
-                    fontFamily: "var(--font-noto), sans-serif",
-                  }}
-                >
-                  {banner.sub}
-                </p>
-                <ChevronRight
-                  size={12}
-                  className="mt-0.5 shrink-0 opacity-70"
-                  style={{ color: "rgba(201,169,110,0.9)" }}
-                  aria-hidden
-                />
-              </div>
+              <p
+                className="text-[10px] font-semibold"
+                style={{
+                  fontFamily: "var(--font-shippori), serif",
+                  letterSpacing: "0.03em",
+                  color: "#2A1C20",
+                }}
+              >
+                {card.title}
+              </p>
+              <p
+                className="text-[8.5px] leading-tight"
+                style={{ color: "#7A6065" }}
+              >
+                {card.desc}
+              </p>
             </Link>
           ))}
         </div>
-      </div>
 
-      {/* ── 予約ボタン ── */}
-      <div
-        className="relative z-[1] shrink-0 pt-1 pb-3"
-        style={{ display: "flex", justifyContent: "center" }}
-      >
-        <div className="resv-ring-wrap" style={{ borderRadius: "999px" }}>
+        {/* 5. CTA button */}
+        <div className="relative mt-2.5 px-2.5">
           <Link
             href={RESERVATION_URL}
-            className="btn-press flex items-center justify-center gap-1.5 text-[12px] font-semibold"
+            className="cta-glint flex items-center justify-center gap-2 rounded-[10px] px-3 py-2.5 transition-transform hover:-translate-y-0.5"
             style={{
+              textDecoration: "none",
               background:
-                "linear-gradient(180deg, #F099B3 0%, #E47C97 45%, #C4687A 100%)",
+                "linear-gradient(145deg, #F099B3 0%, #E47C97 45%, #9E4A5A 100%)",
+              fontFamily: "var(--font-shippori), serif",
+              fontSize: "17px",
+              fontWeight: 600,
+              letterSpacing: "0.1em",
               color: "white",
-              width: "48%",
-              minWidth: "160px",
-              maxWidth: "184px",
-              height: "38px",
-              borderRadius: "999px",
-              border: "1px solid rgba(158,74,90,0.55)",
-              boxShadow: [
-                "inset 0 1px 0 rgba(255,255,255,0.55)",
-                "inset 0 -2px 0 rgba(158,74,90,0.52)",
-                "0 1px 0 rgba(255,255,255,0.45)",
-                "0 4px 0 rgba(120,55,70,0.45)",
-                "0 8px 18px rgba(196,104,122,0.42)",
-              ].join(", "),
-              letterSpacing: "0.14em",
-              fontFamily: "var(--font-noto), sans-serif",
-              textShadow: "0 1px 1px rgba(120,55,70,0.45)",
+              boxShadow:
+                "0 14px 24px rgba(196,104,122,0.4), inset 0 1px 0 rgba(255,255,255,0.42), inset 0 -6px 12px rgba(0,0,0,0.22)",
+              outline: "1px solid rgba(255,255,255,0.25)",
             }}
           >
+            <CalendarDays className="h-5 w-5" />
             予約する
-            <ChevronRight size={13} strokeWidth={2.5} style={{ opacity: 0.85 }} />
           </Link>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
