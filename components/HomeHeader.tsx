@@ -58,7 +58,7 @@ export default function HomeHeader() {
               color: "#2A1C20",
             }}
           >
-            Root1039
+            根本改善エステ Root1039
           </p>
           <p
             style={{
@@ -71,7 +71,7 @@ export default function HomeHeader() {
               color: "#C4687A",
             }}
           >
-            根本改善エステ
+            泉中央駅 北出口3から徒歩5分
           </p>
         </div>
       </Link>

@@ -37,7 +37,7 @@ function MenuArticleImage({
       style={{
         position: "relative",
         width: "100%",
-        aspectRatio: "4 / 3",
+        aspectRatio: "16 / 9",
         background: bg,
         borderRadius: "10px",
         overflow: "hidden",
@@ -54,7 +54,7 @@ function MenuArticleImage({
           fill
           sizes="(max-width: 430px) 100vw, 400px"
           unoptimized
-          style={{ objectFit: "cover" }}
+          style={{ objectFit: "contain" }}
           onError={() => setBroken(true)}
         />
       ) : (

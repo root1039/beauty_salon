@@ -26,7 +26,7 @@ const cards = [
   {
     href: "/blog",
     title: "ブログ",
-    desc: "美容と健康のヒントを発信中",
+    desc: "",
     img: `${BASE_PATH}/images/banner-blog.png`,
   },
 ];
@@ -128,12 +128,14 @@ export default function HomePage() {
               >
                 {card.title}
               </p>
-              <p
-                className="text-[8.5px] leading-tight"
-                style={{ color: "#7A6065" }}
-              >
-                {card.desc}
-              </p>
+              {card.desc ? (
+                <p
+                  className="text-[8.5px] leading-tight"
+                  style={{ color: "#7A6065" }}
+                >
+                  {card.desc}
+                </p>
+              ) : null}
             </Link>
           ))}
         </div>
