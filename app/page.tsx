@@ -14,13 +14,13 @@ const cards = [
   {
     href: "/about",
     title: "サロンについて",
-    desc: "代表挨拶 / Root1039",
+    desc: "",
     img: `${BASE_PATH}/images/banner-about.png`,
   },
   {
     href: "/menu",
     title: "メニュー・商品",
-    desc: "最新機器 / 生活改善",
+    desc: "",
     img: `${BASE_PATH}/images/banner-menu.png`,
   },
   {
@@ -119,7 +119,7 @@ export default function HomePage() {
                 />
               </div>
               <p
-                className="text-[10px] font-semibold"
+                className="text-[11px] font-semibold"
                 style={{
                   fontFamily: "var(--font-shippori), serif",
                   letterSpacing: "0.03em",
