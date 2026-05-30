@@ -1,11 +1,21 @@
 "use client";
 
 import type { CSSProperties, FormEvent } from "react";
-import { useState } from "react";
-import { Mail, MessageCircle, ChevronRight, Copy, CheckCircle2 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  CalendarDays,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Copy,
+  ExternalLink,
+  Mail,
+  MessageCircle,
+} from "lucide-react";
 
 const LINE_ADD_URL = "https://lin.ee/zCQoCoz";
-const RESERVATION_EMAIL = "";
+const RESERVATION_EMAIL = process.env.NEXT_PUBLIC_RESERVATION_EMAIL ?? "";
+const RESERVATION_SHEET_CSV_URL = process.env.NEXT_PUBLIC_RESERVATION_SHEET_CSV_URL ?? "";
 
 const menuOptions = [
   "相談して決めたい",
@@ -28,29 +38,11 @@ const menuOptions = [
 ];
 
 const timeOptions = ["何時でも", "午前", "午後", "夕方以降"];
+const weekLabels = ["日", "月", "火", "水", "木", "金", "土"];
 
-const inputStyle: CSSProperties = {
-  width: "100%",
-  minHeight: "44px",
-  borderRadius: "10px",
-  border: "1px solid var(--border)",
-  background: "white",
-  padding: "10px 12px",
-  color: "var(--charcoal)",
-  fontSize: "13px",
-  lineHeight: 1.5,
-  outline: "none",
-  fontFamily: "var(--font-noto), sans-serif",
-};
-
-const labelStyle: CSSProperties = {
-  display: "block",
-  color: "var(--charcoal)",
-  fontSize: "12px",
-  fontWeight: 700,
-  marginBottom: "6px",
-  fontFamily: "var(--font-noto), sans-serif",
-};
+type ReservationMode = "line" | "mail";
+type AvailabilityStatus = "both" | "am" | "pm" | "closed";
+type AvailabilityMap = Record<string, AvailabilityStatus>;
 
 type FormState = {
   name: string;
@@ -90,13 +82,123 @@ const initialFormState: FormState = {
   cancelConsent: false,
 };
 
+const inputStyle: CSSProperties = {
+  width: "100%",
+  minHeight: "44px",
+  borderRadius: "10px",
+  border: "1px solid var(--border)",
+  background: "white",
+  padding: "10px 12px",
+  color: "var(--charcoal)",
+  fontSize: "13px",
+  lineHeight: 1.5,
+  outline: "none",
+  fontFamily: "var(--font-noto), sans-serif",
+};
+
+const labelStyle: CSSProperties = {
+  display: "block",
+  color: "var(--charcoal)",
+  fontSize: "12px",
+  fontWeight: 700,
+  marginBottom: "6px",
+  fontFamily: "var(--font-noto), sans-serif",
+};
+
+function formatDateKey(date: Date) {
+  const y = date.getFullYear();
+  const m = `${date.getMonth() + 1}`.padStart(2, "0");
+  const d = `${date.getDate()}`.padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+function getMonthStart(offset: number) {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth() + offset, 1);
+}
+
+function getMonthLabel(date: Date) {
+  return `${date.getFullYear()}年${date.getMonth() + 1}月`;
+}
+
+function getMonthDays(month: Date) {
+  const year = month.getFullYear();
+  const monthIndex = month.getMonth();
+  const firstDay = new Date(year, monthIndex, 1);
+  const lastDate = new Date(year, monthIndex + 1, 0).getDate();
+  const cells: Array<Date | null> = [];
+
+  for (let i = 0; i < firstDay.getDay(); i += 1) cells.push(null);
+  for (let date = 1; date <= lastDate; date += 1) {
+    cells.push(new Date(year, monthIndex, date));
+  }
+  while (cells.length % 7 !== 0) cells.push(null);
+  return cells;
+}
+
+function normalizeAvailability(value: string): AvailabilityStatus {
+  const normalized = value.trim().toLowerCase();
+  if (["both", "all", "open", "◎", "〇", "○", "丸", "二重丸", "終日"].includes(normalized)) {
+    return "both";
+  }
+  if (["am", "午前", "午前中"].includes(normalized)) return "am";
+  if (["pm", "午後"].includes(normalized)) return "pm";
+  return "closed";
+}
+
+function parseCsvLine(line: string) {
+  const values: string[] = [];
+  let current = "";
+  let quoted = false;
+
+  for (const char of line) {
+    if (char === "\"") {
+      quoted = !quoted;
+      continue;
+    }
+    if (char === "," && !quoted) {
+      values.push(current.trim());
+      current = "";
+      continue;
+    }
+    current += char;
+  }
+  values.push(current.trim());
+  return values;
+}
+
+function parseAvailabilityCsv(csv: string): AvailabilityMap {
+  const rows = csv
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const map: AvailabilityMap = {};
+
+  for (const [index, row] of rows.entries()) {
+    const [date, status] = parseCsvLine(row);
+    if (index === 0 && date.toLowerCase() === "date") continue;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date || "")) continue;
+    map[date] = normalizeAvailability(status || "");
+  }
+
+  return map;
+}
+
+function getAvailabilityLabel(status?: AvailabilityStatus) {
+  if (status === "both") return "◎";
+  if (status === "am") return "AM";
+  if (status === "pm") return "PM";
+  return "";
+}
+
 function formatDateCandidate(date: string, time: string) {
   return date ? `${date}（${time}）` : "未入力";
 }
 
-function buildReservationText(form: FormState) {
+function buildReservationText(form: FormState, mode: ReservationMode) {
+  const channel = mode === "line" ? "LINE" : "メール";
   return [
-    "【Root1039 予約希望】",
+    `【Root1039 ${channel}予約希望】`,
     "",
     "以下の内容で予約を希望します。",
     "",
@@ -122,15 +224,205 @@ function buildReservationText(form: FormState) {
     form.note || "未入力",
     "",
     "■ 確認事項",
-    "日程はメールでの確認後に確定することを了承しました。",
+    "日程はメールまたはLINEでの確認後に確定することを了承しました。",
     "キャンセル規定を確認しました。",
   ].join("\n");
 }
 
-function EmailReservationForm() {
+function ReservationAvailabilityCalendar() {
+  const [activeMonthIdx, setActiveMonthIdx] = useState(0);
+  const [availability, setAvailability] = useState<AvailabilityMap>({});
+  const [loadState, setLoadState] = useState<"idle" | "loading" | "ready" | "error">(
+    RESERVATION_SHEET_CSV_URL ? "loading" : "idle",
+  );
+
+  const months = useMemo(() => [getMonthStart(0), getMonthStart(1), getMonthStart(2)], []);
+  const activeMonth = months[activeMonthIdx];
+  const days = useMemo(() => getMonthDays(activeMonth), [activeMonth]);
+
+  useEffect(() => {
+    if (!RESERVATION_SHEET_CSV_URL) return;
+
+    let canceled = false;
+    fetch(RESERVATION_SHEET_CSV_URL, { cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to fetch availability");
+        return response.text();
+      })
+      .then((csv) => {
+        if (canceled) return;
+        setAvailability(parseAvailabilityCsv(csv));
+        setLoadState("ready");
+      })
+      .catch(() => {
+        if (canceled) return;
+        setLoadState("error");
+      });
+
+    return () => {
+      canceled = true;
+    };
+  }, []);
+
+  return (
+    <section className="px-4 pb-6">
+      <div
+        className="rounded-2xl p-5"
+        style={{
+          background: "white",
+          border: "1px solid var(--border)",
+          boxShadow: "0 8px 28px rgba(42, 28, 32, 0.06)",
+        }}
+      >
+        <div className="mb-4 flex items-start justify-between gap-3">
+          <div>
+            <p className="text-[11px] tracking-[0.18em] mb-1" style={{ color: "var(--rose)" }}>
+              AVAILABLE DAYS
+            </p>
+            <h2
+              className="text-base"
+              style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}
+            >
+              予約可能日時
+            </h2>
+          </div>
+          <CalendarDays size={22} style={{ color: "var(--rose)" }} />
+        </div>
+
+        <div className="grid grid-cols-3 gap-2 mb-4">
+          {months.map((month, index) => {
+            const active = index === activeMonthIdx;
+            return (
+              <button
+                key={month.toISOString()}
+                type="button"
+                onClick={() => setActiveMonthIdx(index)}
+                className="btn-press rounded-lg px-2 py-2 text-[11px] font-bold"
+                style={{
+                  color: active ? "white" : "var(--rose-dark)",
+                  background: active ? "var(--rose)" : "var(--rose-light)",
+                  border: "1px solid var(--pink-mid)",
+                }}
+              >
+                {index === 0 ? "今月" : index === 1 ? "来月" : "再来月"}
+              </button>
+            );
+          })}
+        </div>
+
+        <div
+          className="rounded-xl p-3"
+          style={{ background: "var(--rose-light)", border: "1px solid var(--pink-mid)" }}
+        >
+          <div className="mb-3 flex items-center justify-between">
+            <button
+              type="button"
+              onClick={() => setActiveMonthIdx(Math.max(0, activeMonthIdx - 1))}
+              disabled={activeMonthIdx === 0}
+              className="rounded-lg p-1.5"
+              style={{ color: activeMonthIdx === 0 ? "var(--pink-mid)" : "var(--rose-dark)" }}
+              aria-label="前の月"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <p className="text-sm font-bold" style={{ color: "var(--charcoal)" }}>
+              {getMonthLabel(activeMonth)}
+            </p>
+            <button
+              type="button"
+              onClick={() => setActiveMonthIdx(Math.min(2, activeMonthIdx + 1))}
+              disabled={activeMonthIdx === 2}
+              className="rounded-lg p-1.5"
+              style={{ color: activeMonthIdx === 2 ? "var(--pink-mid)" : "var(--rose-dark)" }}
+              aria-label="次の月"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-7 gap-1 text-center">
+            {weekLabels.map((label) => (
+              <div
+                key={label}
+                className="py-1 text-[10px] font-bold"
+                style={{ color: label === "日" ? "var(--rose-dark)" : "var(--muted)" }}
+              >
+                {label}
+              </div>
+            ))}
+            {days.map((day, index) => {
+              const key = day ? formatDateKey(day) : `blank-${index}`;
+              const label = day ? getAvailabilityLabel(availability[formatDateKey(day)]) : "";
+              return (
+                <div
+                  key={key}
+                  className="flex min-h-[46px] flex-col items-center justify-center rounded-lg"
+                  style={{
+                    background: day ? "white" : "transparent",
+                    border: day ? "1px solid rgba(194,199,207,0.65)" : "1px solid transparent",
+                  }}
+                >
+                  {day && (
+                    <>
+                      <span className="text-[11px] font-bold" style={{ color: "var(--charcoal)" }}>
+                        {day.getDate()}
+                      </span>
+                      <span
+                        className="text-[10px] font-bold leading-4"
+                        style={{ color: label ? "var(--rose-dark)" : "var(--muted)" }}
+                      >
+                        {label || "-"}
+                      </span>
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="mt-4 flex flex-wrap gap-2 text-[10px] font-bold">
+          <span className="rounded-full px-2.5 py-1" style={{ background: "var(--rose-light)", color: "var(--rose-dark)" }}>
+            ◎ 終日
+          </span>
+          <span className="rounded-full px-2.5 py-1" style={{ background: "var(--rose-light)", color: "var(--rose-dark)" }}>
+            AM 午前
+          </span>
+          <span className="rounded-full px-2.5 py-1" style={{ background: "var(--rose-light)", color: "var(--rose-dark)" }}>
+            PM 午後
+          </span>
+        </div>
+
+        {loadState === "idle" && (
+          <p className="text-[10px] leading-5 mt-4" style={{ color: "var(--muted)" }}>
+            Googleスプレッドシートの公開CSV URLを設定すると、予約可能日時が表示されます。
+          </p>
+        )}
+        {loadState === "loading" && (
+          <p className="text-[10px] leading-5 mt-4" style={{ color: "var(--muted)" }}>
+            予約可能日時を読み込み中です。
+          </p>
+        )}
+        {loadState === "error" && (
+          <p className="text-[10px] leading-5 mt-4" style={{ color: "var(--rose-dark)" }}>
+            予約可能日時を読み込めませんでした。時間をおいて再度ご確認ください。
+          </p>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function ReservationForm({ mode }: { mode: ReservationMode }) {
   const [form, setForm] = useState<FormState>(initialFormState);
   const [preview, setPreview] = useState("");
   const [copied, setCopied] = useState(false);
+  const title = mode === "line" ? "LINE予約フォーム" : "メール予約フォーム";
+  const submitLabel = mode === "line" ? "LINE送信用の内容を作成する" : "メール送信用の内容を作成する";
+  const sendLabel = mode === "line" ? "LINEで送信する" : "メールで送信する";
+  const mailSubject = encodeURIComponent("Root1039 予約希望");
+  const mailBody = encodeURIComponent(preview);
+  const mailHref = `mailto:${RESERVATION_EMAIL}?subject=${mailSubject}&body=${mailBody}`;
 
   const updateField = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((current) => ({ ...current, [key]: value }));
@@ -139,7 +431,7 @@ function EmailReservationForm() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setPreview(buildReservationText(form));
+    setPreview(buildReservationText(form, mode));
     setCopied(false);
   };
 
@@ -150,7 +442,7 @@ function EmailReservationForm() {
   };
 
   return (
-    <section id="email-reservation-form" className="px-4 pb-6">
+    <section id="reservation-form" className="px-4 pb-6">
       <div
         className="rounded-2xl p-5"
         style={{
@@ -160,25 +452,25 @@ function EmailReservationForm() {
         }}
       >
         <p className="text-[11px] tracking-[0.18em] mb-1" style={{ color: "var(--rose)" }}>
-          MAIL FORM
+          RESERVATION FORM
         </p>
         <h2
           className="text-base mb-2"
           style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}
         >
-          メール予約フォーム
+          {title}
         </h2>
         <p className="text-xs leading-6 mb-5" style={{ color: "var(--muted)" }}>
-          入力内容を確認用のメール本文にまとめます。内容をコピーして、メールでお送りください。
+          入力内容を作成してコピーし、下の送信ボタンから{mode === "line" ? "公式LINE" : "メール画面"}へ進んで貼り付けてください。
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label style={labelStyle} htmlFor="reservation-name">
+            <label style={labelStyle} htmlFor={`${mode}-reservation-name`}>
               お名前 <span style={{ color: "var(--rose)" }}>*</span>
             </label>
             <input
-              id="reservation-name"
+              id={`${mode}-reservation-name`}
               required
               value={form.name}
               onChange={(event) => updateField("name", event.target.value)}
@@ -188,11 +480,11 @@ function EmailReservationForm() {
           </div>
 
           <div>
-            <label style={labelStyle} htmlFor="reservation-kana">
+            <label style={labelStyle} htmlFor={`${mode}-reservation-kana`}>
               フリガナ <span style={{ color: "var(--rose)" }}>*</span>
             </label>
             <input
-              id="reservation-kana"
+              id={`${mode}-reservation-kana`}
               required
               value={form.kana}
               onChange={(event) => updateField("kana", event.target.value)}
@@ -203,11 +495,11 @@ function EmailReservationForm() {
 
           <div className="grid grid-cols-1 gap-4">
             <div>
-              <label style={labelStyle} htmlFor="reservation-phone">
+              <label style={labelStyle} htmlFor={`${mode}-reservation-phone`}>
                 電話番号 <span style={{ color: "var(--rose)" }}>*</span>
               </label>
               <input
-                id="reservation-phone"
+                id={`${mode}-reservation-phone`}
                 required
                 type="tel"
                 value={form.phone}
@@ -217,11 +509,11 @@ function EmailReservationForm() {
               />
             </div>
             <div>
-              <label style={labelStyle} htmlFor="reservation-email">
+              <label style={labelStyle} htmlFor={`${mode}-reservation-email`}>
                 メールアドレス <span style={{ color: "var(--rose)" }}>*</span>
               </label>
               <input
-                id="reservation-email"
+                id={`${mode}-reservation-email`}
                 required
                 type="email"
                 value={form.email}
@@ -233,28 +525,26 @@ function EmailReservationForm() {
           </div>
 
           <div>
-            <div>
-              <label style={labelStyle} htmlFor="reservation-visit-type">
-                初回 / 再来
-              </label>
-              <select
-                id="reservation-visit-type"
-                value={form.visitType}
-                onChange={(event) => updateField("visitType", event.target.value)}
-                style={inputStyle}
-              >
-                <option value="初回">初回</option>
-                <option value="再来">再来</option>
-              </select>
-            </div>
+            <label style={labelStyle} htmlFor={`${mode}-reservation-visit-type`}>
+              初回 / 再来
+            </label>
+            <select
+              id={`${mode}-reservation-visit-type`}
+              value={form.visitType}
+              onChange={(event) => updateField("visitType", event.target.value)}
+              style={inputStyle}
+            >
+              <option value="初回">初回</option>
+              <option value="再来">再来</option>
+            </select>
           </div>
 
           <div>
-            <label style={labelStyle} htmlFor="reservation-menu">
+            <label style={labelStyle} htmlFor={`${mode}-reservation-menu`}>
               希望メニュー <span style={{ color: "var(--rose)" }}>*</span>
             </label>
             <select
-              id="reservation-menu"
+              id={`${mode}-reservation-menu`}
               required
               value={form.menu}
               onChange={(event) => updateField("menu", event.target.value)}
@@ -269,11 +559,11 @@ function EmailReservationForm() {
           </div>
 
           <div>
-            <label style={labelStyle} htmlFor="reservation-concern">
+            <label style={labelStyle} htmlFor={`${mode}-reservation-concern`}>
               お悩み・相談内容
             </label>
             <textarea
-              id="reservation-concern"
+              id={`${mode}-reservation-concern`}
               value={form.concern}
               onChange={(event) => updateField("concern", event.target.value)}
               style={{ ...inputStyle, minHeight: "92px", resize: "vertical" }}
@@ -287,7 +577,6 @@ function EmailReservationForm() {
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <input
-                  id="reservation-date1"
                   required
                   type="date"
                   aria-label="第1希望日"
@@ -296,7 +585,6 @@ function EmailReservationForm() {
                   style={inputStyle}
                 />
                 <select
-                  id="reservation-time1"
                   aria-label="第1希望時間帯"
                   value={form.time1}
                   onChange={(event) => updateField("time1", event.target.value)}
@@ -311,7 +599,6 @@ function EmailReservationForm() {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <input
-                  id="reservation-date2"
                   type="date"
                   aria-label="第2希望日"
                   value={form.date2}
@@ -333,7 +620,6 @@ function EmailReservationForm() {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <input
-                  id="reservation-date3"
                   type="date"
                   aria-label="第3希望日"
                   value={form.date3}
@@ -360,11 +646,11 @@ function EmailReservationForm() {
           </div>
 
           <div>
-            <label style={labelStyle} htmlFor="reservation-note">
+            <label style={labelStyle} htmlFor={`${mode}-reservation-note`}>
               その他・事前に伝えたいこと
             </label>
             <textarea
-              id="reservation-note"
+              id={`${mode}-reservation-note`}
               value={form.note}
               onChange={(event) => updateField("note", event.target.value)}
               style={{ ...inputStyle, minHeight: "78px", resize: "vertical" }}
@@ -379,7 +665,7 @@ function EmailReservationForm() {
               onChange={(event) => updateField("scheduleConsent", event.target.checked)}
               style={{ marginTop: "3px", accentColor: "var(--rose)" }}
             />
-            日程はメールでの確認後に確定することを了承しました。
+            日程はメールまたはLINEでの確認後に確定することを了承しました。
           </label>
 
           <label className="flex gap-3 text-xs leading-5" style={{ color: "var(--charcoal)" }}>
@@ -398,7 +684,10 @@ function EmailReservationForm() {
             className="btn-press w-full rounded-xl"
             style={{
               minHeight: "48px",
-              background: "linear-gradient(180deg, #F099B3 0%, #E47C97 45%, #C4687A 100%)",
+              background:
+                mode === "line"
+                  ? "linear-gradient(180deg, #1ADA6E 0%, #06C755 55%, #05AA49 100%)"
+                  : "linear-gradient(180deg, #F099B3 0%, #E47C97 45%, #C4687A 100%)",
               color: "white",
               fontSize: "14px",
               fontWeight: 700,
@@ -406,7 +695,7 @@ function EmailReservationForm() {
               boxShadow: "0 8px 20px rgba(196,104,122,0.28)",
             }}
           >
-            入力内容を確認する
+            {submitLabel}
           </button>
         </form>
 
@@ -417,7 +706,7 @@ function EmailReservationForm() {
           >
             <div className="flex items-center justify-between gap-3 mb-3">
               <p className="text-xs font-bold" style={{ color: "var(--charcoal)" }}>
-                予約メール本文
+                送信用メッセージ
               </p>
               <button
                 type="button"
@@ -433,7 +722,7 @@ function EmailReservationForm() {
                 {copied ? "コピー済み" : "コピー"}
               </button>
             </div>
-            {RESERVATION_EMAIL && (
+            {mode === "mail" && RESERVATION_EMAIL && (
               <p className="text-[10px] leading-5 mb-2" style={{ color: "var(--muted)" }}>
                 送信先: {RESERVATION_EMAIL}
               </p>
@@ -448,6 +737,23 @@ function EmailReservationForm() {
             >
               {preview}
             </pre>
+            <a
+              href={mode === "line" ? LINE_ADD_URL : mailHref}
+              target={mode === "line" ? "_blank" : undefined}
+              rel={mode === "line" ? "noopener noreferrer" : undefined}
+              className="btn-press mt-4 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold"
+              style={{
+                background:
+                  mode === "line"
+                    ? "linear-gradient(180deg, #1ADA6E 0%, #06C755 55%, #05AA49 100%)"
+                    : "linear-gradient(180deg, #F099B3 0%, #E47C97 45%, #C4687A 100%)",
+                color: "white",
+                textDecoration: "none",
+              }}
+            >
+              {sendLabel}
+              <ExternalLink size={16} />
+            </a>
           </div>
         )}
       </div>
@@ -456,12 +762,12 @@ function EmailReservationForm() {
 }
 
 export default function ReservationChannels() {
-  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [reservationMode, setReservationMode] = useState<ReservationMode | null>(null);
 
-  const openEmailForm = () => {
-    setShowEmailForm(true);
+  const openReservationForm = (mode: ReservationMode) => {
+    setReservationMode(mode);
     window.setTimeout(() => {
-      document.getElementById("email-reservation-form")?.scrollIntoView({
+      document.getElementById("reservation-form")?.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
@@ -489,11 +795,9 @@ export default function ReservationChannels() {
             ご予約方法をお選びください
           </h2>
 
-          {/* ── LINE ボタン ── */}
-          <a
-            href={LINE_ADD_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={() => openReservationForm("line")}
             className="btn-press flex items-center gap-4 w-full px-5 rounded-2xl"
             style={{
               height: "72px",
@@ -507,7 +811,7 @@ export default function ReservationChannels() {
                 "0 8px 22px rgba(6, 199, 85, 0.38)",
                 "0 2px 6px rgba(42, 28, 32, 0.12)",
               ].join(", "),
-              textDecoration: "none",
+              textAlign: "left",
             }}
           >
             <div
@@ -547,18 +851,17 @@ export default function ReservationChannels() {
                   fontFamily: "var(--font-noto), sans-serif",
                 }}
               >
-                公式アカウントに友だち追加
+                フォーム作成後、公式LINEへ送信
               </p>
             </div>
             <ChevronRight size={20} style={{ color: "rgba(255,255,255,0.70)", flexShrink: 0 }} />
-          </a>
+          </button>
 
           <div style={{ height: "10px" }} />
 
-          {/* ── メール ボタン ── */}
           <button
             type="button"
-            onClick={openEmailForm}
+            onClick={() => openReservationForm("mail")}
             className="btn-press flex items-center gap-4 w-full px-5 rounded-2xl"
             style={{
               height: "72px",
@@ -612,18 +915,21 @@ export default function ReservationChannels() {
                   fontFamily: "var(--font-noto), sans-serif",
                 }}
               >
-                フォームに入力して本文を作成
+                フォーム作成後、メール画面へ送信
               </p>
             </div>
             <ChevronRight size={20} style={{ color: "rgba(255,255,255,0.75)", flexShrink: 0 }} />
           </button>
 
           <p className="text-[10px] leading-5 mt-4 text-center" style={{ color: "var(--muted)" }}>
-            LINEは友だち追加後、トークからご予約・ご相談いただけます。
+            ご希望の方法を選ぶと、送信用フォームへ移動します。
           </p>
         </div>
       </section>
-      {showEmailForm && <EmailReservationForm />}
+
+      <ReservationAvailabilityCalendar />
+
+      {reservationMode && <ReservationForm key={reservationMode} mode={reservationMode} />}
     </>
   );
 }
