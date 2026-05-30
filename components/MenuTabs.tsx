@@ -1,9 +1,10 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Zap, Shirt, Droplets, Leaf, ChevronLeft, ChevronRight } from "lucide-react";
+import { FileText, Zap, Shirt, Droplets, Leaf, ChevronLeft, ChevronRight } from "lucide-react";
 import { tabAuxNavButton, tabPillActive, tabPillIdle } from "@/components/tabNavTheme";
 
 const RESERVATION_URL = "/contact";
@@ -81,7 +82,283 @@ type Section =
   | { type: "heading"; text: string }
   | { type: "hashtags"; tags: string[] };
 
+const winbackPriceMenus = [
+  {
+    title: "BODY 60分",
+    description: "内臓ケアで代謝を上げ、全身を整え巡らせるボディケア",
+    rows: [
+      ["初回", "¥11,000", "¥11,000"],
+      ["通常", "¥16,500", "¥16,500"],
+      ["2回", "¥28,600", "¥14,300"],
+      ["3回", "¥41,250", "¥13,750"],
+    ],
+  },
+  {
+    title: "FACE 60分",
+    description: "巻き肩・首こり・眼精疲労・現代疲労に特化した上半身集中ケア",
+    rows: [
+      ["初回", "¥11,000", "¥11,000"],
+      ["通常", "¥15,400", "¥15,400"],
+      ["2回", "¥26,400", "¥13,200"],
+      ["3回", "¥37,950", "¥12,650"],
+    ],
+  },
+  {
+    title: "CUSTOM 90分",
+    description: "BODY + FACE half",
+    rows: [
+      ["通常", "¥22,800", "¥22,800"],
+      ["2回", "¥41,250", "¥20,625"],
+      ["3回", "¥59,400", "¥19,800"],
+    ],
+  },
+  {
+    title: "FULL 120分",
+    description: "全身をじっくり整えるフルケア",
+    rows: [
+      ["通常", "¥28,800", "¥28,800"],
+      ["2回", "¥53,200", "¥26,600"],
+      ["3回", "¥77,400", "¥25,800"],
+    ],
+  },
+];
+
+const priceCardStyle: CSSProperties = {
+  background: "white",
+  border: "1px solid rgba(194,199,207,0.9)",
+  borderRadius: "12px",
+  padding: "16px",
+  boxShadow: "0 8px 22px rgba(42, 28, 32, 0.05)",
+};
+
+function PriceTable({
+  title,
+  description,
+  rows,
+}: {
+  title: string;
+  description: string;
+  rows: string[][];
+}) {
+  return (
+    <article style={priceCardStyle}>
+      <div className="mb-3">
+        <h3
+          className="text-lg leading-tight"
+          style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}
+        >
+          {title}
+        </h3>
+        <p className="text-[11px] leading-5 mt-1" style={{ color: "var(--muted)" }}>
+          {description}
+        </p>
+      </div>
+      <div className="grid grid-cols-[0.8fr_1fr_1fr] gap-x-2 gap-y-2 text-xs">
+        <p className="font-bold" style={{ color: "var(--muted)" }}>
+          回数
+        </p>
+        <p className="font-bold text-right" style={{ color: "var(--muted)" }}>
+          価格
+        </p>
+        <p className="font-bold text-right" style={{ color: "var(--muted)" }}>
+          1回あたり
+        </p>
+        {rows.map(([count, price, perVisit]) => (
+          <div key={`${title}-${count}`} className="contents">
+            <p style={{ color: "var(--charcoal)" }}>{count}</p>
+            <p className="text-right font-medium" style={{ color: "var(--charcoal)" }}>
+              {price}
+            </p>
+            <p className="text-right font-medium" style={{ color: "var(--charcoal)" }}>
+              {perVisit}
+            </p>
+          </div>
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function PriceListContent() {
+  return (
+    <div className="mb-7">
+      <div className="mb-5">
+        <p className="text-[11px] tracking-[0.28em] mb-2" style={{ color: "var(--rose)" }}>
+          PRICE LIST
+        </p>
+        <h2
+          className="text-2xl leading-snug mb-2"
+          style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}
+        >
+          料金表
+        </h2>
+        <p className="text-xs leading-6" style={{ color: "var(--muted)" }}>
+          表示価格はすべて税込です。回数コースの期限は、1回目の来店日から1ヶ月以内とさせていただきます。
+        </p>
+      </div>
+
+      <section className="mb-7">
+        <h3
+          className="text-base mb-3"
+          style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}
+        >
+          WINBACK
+        </h3>
+        <div className="space-y-4">
+          {winbackPriceMenus.map((menu) => (
+            <PriceTable
+              key={menu.title}
+              title={menu.title}
+              description={menu.description}
+              rows={menu.rows}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className="mb-7">
+        <h3
+          className="text-base mb-3"
+          style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}
+        >
+          脱毛
+        </h3>
+
+        <div className="space-y-4">
+          <article style={priceCardStyle}>
+            <h4
+              className="text-sm font-bold mb-1"
+              style={{ color: "var(--charcoal)", fontFamily: "var(--font-noto), sans-serif" }}
+            >
+              打ち放題
+            </h4>
+            <p className="text-[11px] leading-5 mb-3" style={{ color: "var(--muted)" }}>
+              シェービング時間込み / VIO除く
+            </p>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              {[
+                ["10分", "¥3,300"],
+                ["20分", "¥6,600"],
+                ["30分", "¥8,800"],
+                ["60分", "¥16,500"],
+              ].map(([time, price]) => (
+                <div
+                  key={time}
+                  className="flex items-center justify-between rounded-lg px-3 py-2"
+                  style={{ background: "var(--rose-light)" }}
+                >
+                  <span style={{ color: "var(--charcoal)" }}>{time}</span>
+                  <span className="font-bold" style={{ color: "var(--rose-dark)" }}>
+                    {price}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article style={priceCardStyle}>
+            <h4
+              className="text-sm font-bold mb-3"
+              style={{ color: "var(--charcoal)", fontFamily: "var(--font-noto), sans-serif" }}
+            >
+              パーツ脱毛
+            </h4>
+            <div className="space-y-3 text-xs leading-5">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="font-bold" style={{ color: "var(--charcoal)" }}>
+                    プチ脱毛
+                  </p>
+                  <p style={{ color: "var(--muted)" }}>脇・鼻下・顎・眉間・眉上など</p>
+                </div>
+                <p className="font-bold whitespace-nowrap" style={{ color: "var(--rose-dark)" }}>
+                  ¥2,200
+                </p>
+              </div>
+              <div className="h-px" style={{ background: "var(--border)" }} />
+              <div className="grid grid-cols-[1fr_auto] gap-x-4 gap-y-2">
+                <p className="font-bold" style={{ color: "var(--charcoal)" }}>
+                  顔 女性
+                </p>
+                <p className="font-bold" style={{ color: "var(--rose-dark)" }}>
+                  ¥7,700
+                </p>
+                <p className="font-bold" style={{ color: "var(--charcoal)" }}>
+                  顔 男性
+                </p>
+                <p className="font-bold" style={{ color: "var(--rose-dark)" }}>
+                  ¥8,800
+                </p>
+                <p className="font-bold" style={{ color: "var(--charcoal)" }}>
+                  顔 キッズ
+                </p>
+                <p className="font-bold" style={{ color: "var(--rose-dark)" }}>
+                  ¥5,500
+                </p>
+              </div>
+              <div className="h-px" style={{ background: "var(--border)" }} />
+              <div className="grid grid-cols-[1fr_auto] gap-x-4 gap-y-2">
+                <p className="font-bold" style={{ color: "var(--charcoal)" }}>
+                  VIO 全部位
+                </p>
+                <p className="font-bold" style={{ color: "var(--rose-dark)" }}>
+                  ¥8,800
+                </p>
+                <p className="text-[11px]" style={{ color: "var(--muted)" }}>
+                  女性のみ / 1部位
+                </p>
+                <p className="font-bold" style={{ color: "var(--rose-dark)" }}>
+                  ¥3,300
+                </p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section style={priceCardStyle}>
+        <h3
+          className="text-base mb-3"
+          style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}
+        >
+          利用規約
+        </h3>
+        <div className="space-y-3 text-xs leading-6" style={{ color: "var(--charcoal)" }}>
+          <p>
+            当サロンは完全予約制となっております。ご予約のキャンセルは、前々日の営業時間内迄にご連絡をお願いいたします。
+          </p>
+          <p>
+            前日または当日のキャンセルになりますと、規定のキャンセル料が発生いたします。
+          </p>
+          <div
+            className="rounded-xl p-3 space-y-2"
+            style={{ background: "var(--rose-light)", color: "var(--rose-dark)" }}
+          >
+            <p className="font-bold">前日キャンセル: 施術料金の30%</p>
+            <p className="font-bold">当日キャンセル: 施術料金の100%</p>
+            <p className="font-bold">当日の予約日変更: 施術料金の50%</p>
+            <p className="font-bold">予約日変更なし: 完全キャンセル扱いで100%</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 const tabs = [
+  {
+    id: "price",
+    label: "料金表",
+    en: "PRICE LIST",
+    Icon: FileText,
+    prTitle: "料金を見やすく、選びやすく。",
+    prSubtitle: "WINBACKと脱毛メニューの価格を、テキストで確認できます",
+    headerBg:
+      "linear-gradient(138deg, #f8f3ee 0%, #e9ded2 34%, #f7edf0 68%, #d8dce2 100%)",
+    headerColor: "#2A1C20",
+    accentColor: "#9E4A5A",
+    sections: [] as Section[],
+  },
   {
     id: "treatment",
     label: "施術",
@@ -306,53 +583,57 @@ export default function MenuTabs() {
       {/* Content */}
       <div className="flex-1 overflow-y-auto">
         {/* Hero header */}
-        <div
-          className="menu-tab-hero-metallic px-5 pt-5 pb-6"
-          style={{ background: tab.headerBg }}
-        >
-          <div className="flex items-center gap-3 mb-3">
-            <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center"
+        {tab.id !== "price" && (
+          <div
+            className="menu-tab-hero-metallic px-5 pt-5 pb-6"
+            style={{ background: tab.headerBg }}
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div
+                className="w-9 h-9 rounded-xl flex items-center justify-center"
+                style={{
+                  background:
+                    tab.id === "treatment"
+                      ? "rgba(255,255,255,0.12)"
+                      : "rgba(15, 15, 18, 0.12)",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.25)",
+                }}
+              >
+                <Icon size={18} style={{ color: tab.accentColor }} />
+              </div>
+              <span className="text-[10px] tracking-[0.2em]" style={{ color: tab.accentColor }}>
+                {tab.en}
+              </span>
+            </div>
+            <h2
+              className="text-2xl mb-1.5 leading-snug"
               style={{
-                background:
+                fontFamily: "var(--font-shippori), serif",
+                color: tab.headerColor,
+                textShadow:
                   tab.id === "treatment"
-                    ? "rgba(255,255,255,0.12)"
-                    : "rgba(15, 15, 18, 0.12)",
-                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.25)",
+                    ? "0 1px 2px rgba(0,0,0,0.35)"
+                    : "0 1px 0 rgba(255,255,255,0.35)",
               }}
             >
-              <Icon size={18} style={{ color: tab.accentColor }} />
-            </div>
-            <span className="text-[10px] tracking-[0.2em]" style={{ color: tab.accentColor }}>
-              {tab.en}
-            </span>
+              {tab.prTitle}
+            </h2>
+            <p
+              className="text-xs leading-relaxed"
+              style={{
+                color: tab.headerColor,
+                opacity: tab.id === "treatment" ? 0.72 : 0.78,
+              }}
+            >
+              {tab.prSubtitle}
+            </p>
           </div>
-          <h2
-            className="text-2xl mb-1.5 leading-snug"
-            style={{
-              fontFamily: "var(--font-shippori), serif",
-              color: tab.headerColor,
-              textShadow:
-                tab.id === "treatment"
-                  ? "0 1px 2px rgba(0,0,0,0.35)"
-                  : "0 1px 0 rgba(255,255,255,0.35)",
-            }}
-          >
-            {tab.prTitle}
-          </h2>
-          <p
-            className="text-xs leading-relaxed"
-            style={{
-              color: tab.headerColor,
-              opacity: tab.id === "treatment" ? 0.72 : 0.78,
-            }}
-          >
-            {tab.prSubtitle}
-          </p>
-        </div>
+        )}
 
         {/* Blog article body */}
         <div className="px-5 pt-6 pb-4" style={{ background: "var(--cream)" }}>
+          {tab.id === "price" && <PriceListContent />}
+
           {tab.sections.map((section, i) => {
             if (section.type === "lead") {
               return (

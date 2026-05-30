@@ -4,7 +4,7 @@ import PageHeader from "@/components/PageHeader";
 
 export const metadata: Metadata = {
   title: "メニュー・商品 | Root1039",
-  description: "施術・補整下着・電解水素水・食品・日用品。Root1039のメニューと商品をご紹介します。",
+  description: "料金表・施術・補整下着・電解水素水・食品・日用品。Root1039のメニューと商品をご紹介します。",
 };
 
 export default function MenuPage() {

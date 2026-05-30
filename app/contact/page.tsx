@@ -5,7 +5,7 @@ import ReservationChannels from "@/components/ReservationChannels";
 export const metadata = {
   title: "ご予約 | Root1039",
   description:
-    "Root1039へのご予約・お問い合わせ。メール（準備中）またはLINE公式アカウントから。仙台・泉中央の根本改善型インナービューティーサロン。",
+    "Root1039へのご予約・お問い合わせ。メール予約フォームまたはLINE公式アカウントから。仙台・泉中央の根本改善型インナービューティーサロン。",
 };
 const INSTAGRAM_URL = "https://www.instagram.com/yuumin_root1039/";
 const NOTE_URL = "https://note.com/yuumin_root1039";
