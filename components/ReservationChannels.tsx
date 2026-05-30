@@ -44,6 +44,37 @@ type ReservationMode = "line" | "mail";
 type AvailabilityStatus = "both" | "am" | "pm" | "closed";
 type AvailabilityMap = Record<string, AvailabilityStatus>;
 
+const availabilityStyles: Record<AvailabilityStatus, { label: string; description: string; color: string; bg: string; border: string }> = {
+  both: {
+    label: "◎",
+    description: "終日予約可",
+    color: "#178A57",
+    bg: "#EAF7F0",
+    border: "#9ED9BA",
+  },
+  am: {
+    label: "AM",
+    description: "午前予約可",
+    color: "#2878B8",
+    bg: "#EAF3FC",
+    border: "#9BC7EC",
+  },
+  pm: {
+    label: "PM",
+    description: "午後予約可",
+    color: "#B96A1F",
+    bg: "#FFF2E5",
+    border: "#F2BE86",
+  },
+  closed: {
+    label: "×",
+    description: "予約満枠",
+    color: "#8B4653",
+    bg: "#F7ECEF",
+    border: "#E0B8C0",
+  },
+};
+
 type FormState = {
   name: string;
   kana: string;
@@ -143,6 +174,9 @@ function normalizeAvailability(value: string): AvailabilityStatus {
   }
   if (["am", "午前", "午前中"].includes(normalized)) return "am";
   if (["pm", "午後"].includes(normalized)) return "pm";
+  if (["closed", "close", "full", "x", "×", "満枠", "予約満枠", "不可"].includes(normalized)) {
+    return "closed";
+  }
   return "closed";
 }
 
@@ -184,11 +218,8 @@ function parseAvailabilityCsv(csv: string): AvailabilityMap {
   return map;
 }
 
-function getAvailabilityLabel(status?: AvailabilityStatus) {
-  if (status === "both") return "◎";
-  if (status === "am") return "AM";
-  if (status === "pm") return "PM";
-  return "";
+function getAvailabilityStyle(status?: AvailabilityStatus) {
+  return availabilityStyles[status ?? "closed"];
 }
 
 function formatDateCandidate(date: string, time: string) {
@@ -352,7 +383,7 @@ function ReservationAvailabilityCalendar() {
             ))}
             {days.map((day, index) => {
               const key = day ? formatDateKey(day) : `blank-${index}`;
-              const label = day ? getAvailabilityLabel(availability[formatDateKey(day)]) : "";
+              const availabilityStyle = day ? getAvailabilityStyle(availability[formatDateKey(day)]) : null;
               return (
                 <div
                   key={key}
@@ -368,10 +399,10 @@ function ReservationAvailabilityCalendar() {
                         {day.getDate()}
                       </span>
                       <span
-                        className="text-[10px] font-bold leading-4"
-                        style={{ color: label ? "var(--rose-dark)" : "var(--muted)" }}
+                        className="text-[11px] font-bold leading-4"
+                        style={{ color: availabilityStyle?.color }}
                       >
-                        {label || "-"}
+                        {availabilityStyle?.label}
                       </span>
                     </>
                   )}
@@ -382,22 +413,24 @@ function ReservationAvailabilityCalendar() {
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2 text-[10px] font-bold">
-          <span className="rounded-full px-2.5 py-1" style={{ background: "var(--rose-light)", color: "var(--rose-dark)" }}>
-            ◎ 終日
-          </span>
-          <span className="rounded-full px-2.5 py-1" style={{ background: "var(--rose-light)", color: "var(--rose-dark)" }}>
-            AM 午前
-          </span>
-          <span className="rounded-full px-2.5 py-1" style={{ background: "var(--rose-light)", color: "var(--rose-dark)" }}>
-            PM 午後
-          </span>
+          {(["both", "am", "pm", "closed"] as AvailabilityStatus[]).map((status) => {
+            const item = availabilityStyles[status];
+            return (
+              <span
+                key={status}
+                className="rounded-full px-2.5 py-1"
+                style={{
+                  background: item.bg,
+                  border: `1px solid ${item.border}`,
+                  color: item.color,
+                }}
+              >
+                {item.label}：{item.description}
+              </span>
+            );
+          })}
         </div>
 
-        {loadState === "idle" && (
-          <p className="text-[10px] leading-5 mt-4" style={{ color: "var(--muted)" }}>
-            Googleスプレッドシートの公開CSV URLを設定すると、予約可能日時が表示されます。
-          </p>
-        )}
         {loadState === "loading" && (
           <p className="text-[10px] leading-5 mt-4" style={{ color: "var(--muted)" }}>
             予約可能日時を読み込み中です。

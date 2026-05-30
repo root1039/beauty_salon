@@ -11,19 +11,21 @@ date,status
 2026-06-01,both
 2026-06-02,am
 2026-06-03,pm
+2026-06-04,closed
 ```
 
 ## 入力値
 
 - `date`: `YYYY-MM-DD` 形式
-- `status`: `both` / `am` / `pm`
+- `status`: `both` / `am` / `pm` / `closed`
 
 表示は以下のようになります。
 
-- `both`: `◎`
-- `am`: `AM`
-- `pm`: `PM`
-- 行がない日、または空欄の日: `-`
+- `both`: `◎` 終日予約可
+- `am`: `AM` 午前予約可
+- `pm`: `PM` 午後予約可
+- `closed`: `×` 予約満枠
+- 行がない日、または空欄の日: `×`
 
 ## 公開CSV URL
 

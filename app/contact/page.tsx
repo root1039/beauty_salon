@@ -8,7 +8,7 @@ export const metadata = {
     "Root1039へのご予約・お問い合わせ。予約可能日時を確認し、LINEまたはメールの予約フォームからご連絡いただけます。",
 };
 const INSTAGRAM_URL = "https://www.instagram.com/yuumin_root1039/";
-const NOTE_URL = "https://note.com/yuumin_root1039";
+const NOTE_URL = "https://note.com/rootiv_yuumin";
 
 const faqs = [
   {
