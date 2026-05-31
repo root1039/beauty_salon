@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      NEXT_PUBLIC_BASE_PATH: /root1039-web
+      NEXT_PUBLIC_BASE_PATH: /beauty_salon
       NEXT_PUBLIC_RESERVATION_EMAIL: ${{ vars.RESERVATION_EMAIL }}
       NEXT_PUBLIC_RESERVATION_SHEET_CSV_URL: ${{ vars.RESERVATION_SHEET_CSV_URL }}
     steps:

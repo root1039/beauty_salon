@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 import path from "path";
 
 const isGitHubActions = process.env.GITHUB_ACTIONS === "true";
-const repoName = "root1039-web";
+const repoName = "beauty_salon";
 
 const nextConfig: NextConfig = {
   turbopack: {
