@@ -17,6 +17,7 @@ export default function ReservationFab() {
     /* app-frame と同幅で中央揃え → right: 16px で右端内側に収まる */
     <div
       aria-hidden={false}
+      className="fab-resv-wrap"
       style={{
         position: "fixed",
         left: "50%",

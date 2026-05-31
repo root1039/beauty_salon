@@ -260,7 +260,13 @@ function buildReservationText(form: FormState, mode: ReservationMode) {
   ].join("\n");
 }
 
-function ReservationAvailabilityCalendar() {
+export function ReservationAvailabilityCalendar({
+  className = "",
+  compact = false,
+}: {
+  className?: string;
+  compact?: boolean;
+}) {
   const [activeMonthIdx, setActiveMonthIdx] = useState(0);
   const [availability, setAvailability] = useState<AvailabilityMap>({});
   const [loadState, setLoadState] = useState<"idle" | "loading" | "ready" | "error">(
@@ -296,16 +302,16 @@ function ReservationAvailabilityCalendar() {
   }, []);
 
   return (
-    <section className="px-4 pb-6">
+    <section className={`reservation-calendar-section px-4 pb-6 ${className}`}>
       <div
-        className="rounded-2xl p-5"
+        className={`reservation-calendar-card rounded-2xl ${compact ? "p-3" : "p-5"}`}
         style={{
           background: "white",
           border: "1px solid var(--border)",
           boxShadow: "0 8px 28px rgba(42, 28, 32, 0.06)",
         }}
       >
-        <div className="mb-4 flex items-start justify-between gap-3">
+        <div className="reservation-calendar-heading mb-4 flex items-start justify-between gap-3">
           <div>
             <p className="text-[11px] tracking-[0.18em] mb-1" style={{ color: "var(--rose)" }}>
               AVAILABLE DAYS
@@ -320,7 +326,7 @@ function ReservationAvailabilityCalendar() {
           <CalendarDays size={22} style={{ color: "var(--rose)" }} />
         </div>
 
-        <div className="grid grid-cols-3 gap-2 mb-4">
+        <div className="reservation-calendar-tabs grid grid-cols-3 gap-2 mb-4">
           {months.map((month, index) => {
             const active = index === activeMonthIdx;
             return (
@@ -328,7 +334,7 @@ function ReservationAvailabilityCalendar() {
                 key={month.toISOString()}
                 type="button"
                 onClick={() => setActiveMonthIdx(index)}
-                className="btn-press rounded-lg px-2 py-2 text-[11px] font-bold"
+                className="reservation-calendar-tab btn-press rounded-lg px-2 py-2 text-[11px] font-bold"
                 style={{
                   color: active ? "white" : "var(--rose-dark)",
                   background: active ? "var(--rose)" : "var(--rose-light)",
@@ -342,7 +348,7 @@ function ReservationAvailabilityCalendar() {
         </div>
 
         <div
-          className="rounded-xl p-3"
+          className="reservation-calendar-month rounded-xl p-3"
           style={{ background: "var(--rose-light)", border: "1px solid var(--pink-mid)" }}
         >
           <div className="mb-3 flex items-center justify-between">
@@ -387,7 +393,7 @@ function ReservationAvailabilityCalendar() {
               return (
                 <div
                   key={key}
-                  className="flex min-h-[46px] flex-col items-center justify-center rounded-lg"
+                  className="reservation-calendar-day flex min-h-[46px] flex-col items-center justify-center rounded-lg"
                   style={{
                     background: day ? "white" : "transparent",
                     border: day ? "1px solid rgba(194,199,207,0.65)" : "1px solid transparent",
@@ -412,7 +418,7 @@ function ReservationAvailabilityCalendar() {
           </div>
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2 text-[10px] font-bold">
+        <div className="reservation-calendar-legend mt-4 flex flex-wrap gap-2 text-[10px] font-bold">
           {(["both", "am", "pm", "closed"] as AvailabilityStatus[]).map((status) => {
             const item = availabilityStyles[status];
             return (

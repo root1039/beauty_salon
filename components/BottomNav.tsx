@@ -1,15 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Home, User, Sparkles, BookOpen, MessageCircle } from "lucide-react";
+
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const navItems = [
   { href: "/", label: "ホーム", Icon: Home },
   { href: "/about", label: "サロン", Icon: User },
   { href: "/menu", label: "メニュー", Icon: Sparkles },
   { href: "/blog", label: "ブログ", Icon: BookOpen },
-  { href: "/contact", label: "予約", Icon: MessageCircle },
+  { href: "/contact", label: "予約", Icon: MessageCircle, reserve: true },
 ];
 
 export default function BottomNav() {
@@ -22,7 +25,7 @@ export default function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 z-50"
+      className="site-nav fixed bottom-0 z-50"
       style={{
         left: "50%",
         transform: "translateX(-50%)",
@@ -31,7 +34,7 @@ export default function BottomNav() {
       }}
     >
       <div
-        className="flex items-center justify-between rounded-t-lg px-2 py-2.5"
+        className="site-nav__inner flex items-center justify-between rounded-t-lg px-2 py-2.5"
         style={{
           background: "white",
           border: "1px solid var(--pink-mid)",
@@ -39,7 +42,35 @@ export default function BottomNav() {
           boxShadow: "0 -6px 20px rgba(0,0,0,0.06)",
         }}
       >
-        {navItems.map(({ href, label, Icon }) => {
+        {/* ロゴ（PCのみ・先頭に表示） */}
+        <Link
+          href="/"
+          className="site-nav__logo mr-2 hidden items-center gap-2"
+          style={{ textDecoration: "none" }}
+          aria-label="Root1039 ホーム"
+        >
+          <Image
+            src={`${BASE_PATH}/images/header-icon.png`}
+            alt="Root1039"
+            width={36}
+            height={36}
+            className="object-contain"
+            style={{ width: 36, height: 36 }}
+          />
+          <span
+            style={{
+              fontSize: "16px",
+              fontWeight: 700,
+              letterSpacing: "0.04em",
+              fontFamily: "var(--font-shippori), serif",
+              color: "#2A1C20",
+            }}
+          >
+            Root1039
+          </span>
+        </Link>
+
+        {navItems.map(({ href, label, Icon, reserve }) => {
           const normalizedHref = href.replace(/\/+$/, "") || "/";
           const active = normalizedPathname === normalizedHref;
 
@@ -47,7 +78,9 @@ export default function BottomNav() {
             <Link
               key={href}
               href={href}
-              className="flex min-w-0 flex-1 flex-col items-center gap-1 rounded-md px-1.5 py-1.5 transition"
+              className={`site-nav__item flex min-w-0 flex-1 flex-col items-center gap-1 rounded-md px-1.5 py-1.5 transition${
+                reserve ? " site-nav__item--reserve" : ""
+              }`}
               style={{
                 textDecoration: "none",
                 color: active ? "#C4687A" : "#7A6065",

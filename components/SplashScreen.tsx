@@ -14,8 +14,8 @@ export default function SplashScreen() {
 
   useEffect(() => {
     const tLogoIn = setTimeout(() => setLogoVisible(true), 60);
-    const tFadeOut = setTimeout(() => setStage("fadeOut"), 2600);
-    const tHidden = setTimeout(() => setStage("hidden"), 3500);
+    const tFadeOut = setTimeout(() => setStage("fadeOut"), 700);
+    const tHidden = setTimeout(() => setStage("hidden"), 1000);
 
     return () => {
       clearTimeout(tLogoIn);
@@ -42,7 +42,7 @@ export default function SplashScreen() {
         alignItems: "center",
         justifyContent: "center",
         opacity: overlayOpacity,
-        transition: "opacity 800ms ease",
+        transition: "opacity 300ms ease",
         pointerEvents: stage === "fadeOut" ? "none" : "auto",
       }}
       aria-hidden={stage === "fadeOut"}
@@ -55,7 +55,7 @@ export default function SplashScreen() {
           position: "relative",
           opacity: logoOpacity,
           transform: `scale(${logoScale})`,
-          transition: "opacity 1200ms ease, transform 1400ms ease",
+          transition: "opacity 450ms ease, transform 600ms ease",
         }}
       >
         <Image
@@ -77,7 +77,7 @@ export default function SplashScreen() {
           background: "rgba(201,169,110,0.18)",
           overflow: "hidden",
           opacity: logoOpacity,
-          transition: "opacity 600ms ease",
+          transition: "opacity 250ms ease",
         }}
       >
         <div

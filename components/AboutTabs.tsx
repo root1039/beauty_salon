@@ -103,10 +103,10 @@ export default function AboutTabs() {
   }, [searchParams]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
+    <div className="tabs-shell" style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
       {/* Tab bar */}
       <div
-        className="flex shrink-0 gap-1.5 px-3 py-2"
+        className="tabs-bar flex shrink-0 gap-1.5 px-3 py-2"
         style={{
           background: "linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(245,240,244,0.96) 100%)",
           borderBottom: "1px solid var(--border)",
@@ -118,7 +118,7 @@ export default function AboutTabs() {
           <button
             key={name}
             onClick={() => setActiveIdx(i)}
-            className="btn-press flex-1 py-2 text-xs leading-tight rounded-[10px]"
+            className="tabs-bar__btn btn-press flex-1 py-2 text-xs leading-tight rounded-[10px]"
             style={{
               outline: "none",
               fontFamily: "var(--font-noto), sans-serif",
@@ -132,7 +132,7 @@ export default function AboutTabs() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto" style={{ background: "var(--cream)" }}>
+      <div className="tabs-content flex-1 overflow-y-auto" style={{ background: "var(--cream)" }}>
 
         {/* ── 代表挨拶 ── */}
         {activeIdx === 0 && (

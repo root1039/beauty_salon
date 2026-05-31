@@ -181,6 +181,340 @@ body {
      0   0 60px rgba(217,168,181,0.08);
 }
 
+/* =======================================================================
+   PC 表示最適化（≧768px のみ）
+   モバイル表示には一切影響しない。デザイン: 藤田晋メソッド
+   - 黒背景＋3D球体を廃し、温かみのあるオフホワイトへ
+   - app-frame を広げ、上部に水平ナビ
+   - ホーム: 左ヒーロー / 右コンテンツの2カラム
+   - メニュー・サロン: 左目次サイドバー / 右本文
+   ======================================================================= */
+@media (min-width: 768px) {
+  /* 背景: ダーク→温かいオフホワイト。中央UIをやさしく浮かせる */
+  body {
+    background:
+      radial-gradient(ellipse 90% 55% at 50% -10%, rgba(255, 232, 240, 0.55) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 50% at 100% 100%, rgba(244, 236, 226, 0.5) 0%, transparent 55%),
+      linear-gradient(160deg, #fdf8f5 0%, #f7f0ec 50%, #f3ece6 100%) !important;
+  }
+
+  /* 漂う球体・スプラッシュ装飾はPCでは非表示 */
+  .bg-rings { display: none !important; }
+
+  /* フレームを横長に。枠線を消し、やわらかい影で浮遊感 */
+  .app-frame {
+    max-width: 1180px;
+    border-left: none;
+    border-right: none;
+    border-radius: 0 0 22px 22px;
+    background: #ffffff;
+    /* 上部固定ナビ(64px)ぶんの余白 */
+    padding-top: 64px;
+    box-shadow:
+      0 12px 40px rgba(42, 28, 32, 0.10),
+      0 2px 10px rgba(196, 104, 122, 0.06);
+  }
+
+  /* ───────── 上部水平ナビ（BottomNav から変身） ───────── */
+  .site-nav {
+    position: fixed !important;
+    top: 0;
+    bottom: auto !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 100% !important;
+    max-width: 1180px !important;
+    padding-bottom: 0 !important;
+    z-index: 50;
+  }
+  .site-nav__inner {
+    border-radius: 0 !important;
+    border: none !important;
+    border-bottom: 1px solid var(--pink-mid) !important;
+    box-shadow: 0 4px 18px rgba(42, 28, 32, 0.05) !important;
+    padding: 0 22px !important;
+    height: 64px;
+    justify-content: flex-start !important;
+    gap: 4px;
+  }
+  /* ナビ各項目: アイコン+テキストを横並びに、ホバー演出 */
+  .site-nav__item {
+    flex: 0 0 auto !important;
+    flex-direction: row !important;
+    gap: 7px !important;
+    padding: 9px 14px !important;
+    border-radius: 9px !important;
+    transition: background 0.2s ease, color 0.2s ease !important;
+  }
+  .site-nav__item:hover {
+    background: var(--pink-pale);
+    color: #C4687A !important;
+  }
+  .site-nav__item svg { width: 19px !important; height: 19px !important; }
+  .site-nav__item span { font-size: 13px !important; }
+  /* ロゴ（PCのみ表示） */
+  .site-nav__logo { display: flex !important; }
+  /* 予約項目を右端のボタン風に */
+  .site-nav__item--reserve {
+    margin-left: auto !important;
+    background: linear-gradient(145deg, #F099B3 0%, #E47C97 45%, #C4687A 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(196, 104, 122, 0.35) !important;
+  }
+  .site-nav__item--reserve:hover { color: #fff !important; filter: brightness(1.04); }
+
+  /* 右下FAB予約ボタンはPCでは不要 */
+  .fab-resv-wrap { display: none !important; }
+
+  /* ───────── ホーム: 2カラム ───────── */
+  .home-card-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    column-gap: 30px;
+    row-gap: 12px;
+    align-items: start;
+    padding: 18px 30px 20px;
+  }
+  /* 左: ヒーロー画像を「カード上端〜カレンダー下端」に合わせる（行2-3をスパン） */
+  .home-el-hero {
+    grid-column: 1;
+    grid-row: 2 / span 2;
+    align-self: stretch;
+    margin-bottom: 0 !important;
+  }
+  /* 行2-3の高さいっぱいに伸ばす（object-fit:cover で黒帯なし） */
+  .home-el-hero > div { height: 100% !important; aspect-ratio: auto !important; }
+  .home-el-header { grid-column: 2; grid-row: 1; align-self: center; }
+  .home-el-cards  { grid-column: 2; grid-row: 2; align-self: start; margin: 0 !important; padding: 0 !important; }
+  .home-el-calendar { grid-column: 2; grid-row: 3; align-self: stretch; margin: 0 !important; padding: 0 !important; }
+  .home-el-cta    { grid-column: 2; grid-row: 4; margin-top: 0 !important; padding: 0 !important; }
+  /* PCでカードを一回り大きく・文字も拡大 */
+  .home-el-cards p { font-size: 12px !important; }
+  .home-el-cta a   { font-size: 18px !important; padding: 13px !important; }
+  /* PCホームヘッダーの文字を少し大きく */
+  .home-el-header .root-logo-name { font-size: 19px !important; }
+  .home-el-header .root-logo-sub  { font-size: 15px !important; }
+
+  .home-reservation-calendar .reservation-calendar-card {
+    border-radius: 10px !important;
+    padding: 12px !important;
+    box-shadow: 0 6px 18px rgba(42, 28, 32, 0.05) !important;
+  }
+  .home-reservation-calendar .reservation-calendar-heading {
+    margin-bottom: 8px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-heading p {
+    font-size: 8px !important;
+    margin-bottom: 0 !important;
+  }
+  .home-reservation-calendar .reservation-calendar-heading h2 {
+    font-size: 12px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-heading svg {
+    width: 15px !important;
+    height: 15px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-tabs {
+    gap: 5px !important;
+    margin-bottom: 8px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-tab {
+    border-radius: 6px !important;
+    padding: 5px 6px !important;
+    font-size: 8.5px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-month {
+    border-radius: 8px !important;
+    padding: 8px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-month > div:first-child {
+    margin-bottom: 5px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-month p {
+    font-size: 10px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-month button {
+    padding: 2px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-month svg {
+    width: 13px !important;
+    height: 13px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-day {
+    min-height: 27px !important;
+    border-radius: 5px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-day span {
+    font-size: 8px !important;
+    line-height: 1.15 !important;
+  }
+  .home-reservation-calendar .reservation-calendar-legend {
+    gap: 4px !important;
+    margin-top: 8px !important;
+    font-size: 8px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-legend span {
+    padding: 3px 6px !important;
+  }
+
+  /* ───────── メニュー・サロン: サイドバー + 本文 ───────── */
+  /* 固定高フレーム→自然スクロールへ */
+  .page-scroll-frame {
+    height: auto !important;
+    min-height: calc(100vh - 64px);
+    overflow: visible !important;
+  }
+  /* タブ群コンテナを横並びに */
+  .tabs-shell {
+    flex-direction: row !important;
+    align-items: stretch;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    gap: 0;
+  }
+  /* タブバー→左サイドバー（縦リスト） */
+  .tabs-bar {
+    flex-direction: column !important;
+    flex: 0 0 232px !important;
+    width: 232px;
+    overflow: visible !important;
+    align-items: stretch !important;
+    gap: 7px !important;
+    padding: 22px 16px !important;
+    border-bottom: none !important;
+    border-right: 1px solid var(--border) !important;
+    background: linear-gradient(180deg, #ffffff 0%, #faf6f4 100%) !important;
+    position: sticky;
+    top: 64px;
+    align-self: flex-start;
+  }
+  .tabs-bar__btn {
+    width: 100% !important;
+    text-align: left !important;
+    padding: 12px 16px !important;
+    font-size: 13.5px !important;
+  }
+  /* 本文エリア（残り幅の中で中央寄せ） */
+  .tabs-content {
+    flex: 1 1 auto !important;
+    overflow: visible !important;
+    max-width: 760px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  /* サブページのスクロール枠もPCでは自然スクロール */
+  .subpage-scroll-body { overflow: visible !important; }
+  /* PageHeader: PCでは中央寄せして横幅を活かす */
+  .page-header-compact {
+    max-width: 1100px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+.home-reservation-calendar {
+  padding-left: 0.625rem !important;
+  padding-right: 0.625rem !important;
+  padding-bottom: 0.25rem !important;
+}
+
+.home-reservation-calendar .reservation-calendar-card {
+  border-radius: 12px !important;
+}
+
+.home-reservation-calendar .reservation-calendar-heading {
+  margin-bottom: 10px !important;
+}
+
+.home-reservation-calendar .reservation-calendar-tabs {
+  margin-bottom: 10px !important;
+}
+
+.home-reservation-calendar .reservation-calendar-month {
+  padding: 9px !important;
+}
+
+.home-reservation-calendar .reservation-calendar-day {
+  min-height: 34px !important;
+}
+
+.home-reservation-calendar .reservation-calendar-legend {
+  margin-top: 10px !important;
+  gap: 5px !important;
+}
+
+.home-reservation-calendar .reservation-calendar-legend span {
+  padding: 3px 7px !important;
+}
+
+@media (min-width: 768px) {
+  .home-reservation-calendar {
+    padding: 0 !important;
+  }
+  .home-reservation-calendar .reservation-calendar-card {
+    border-radius: 10px !important;
+    padding: 12px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-heading {
+    margin-bottom: 8px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-heading p {
+    font-size: 8px !important;
+    margin-bottom: 0 !important;
+  }
+  .home-reservation-calendar .reservation-calendar-heading h2 {
+    font-size: 12px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-heading svg {
+    width: 15px !important;
+    height: 15px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-tabs {
+    gap: 5px !important;
+    margin-bottom: 8px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-tab {
+    border-radius: 6px !important;
+    padding: 5px 6px !important;
+    font-size: 8.5px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-month {
+    border-radius: 8px !important;
+    padding: 8px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-month > div:first-child {
+    margin-bottom: 5px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-month p {
+    font-size: 10px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-month button {
+    padding: 2px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-month svg {
+    width: 13px !important;
+    height: 13px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-day {
+    min-height: 27px !important;
+    border-radius: 5px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-day span {
+    font-size: 8px !important;
+    line-height: 1.15 !important;
+  }
+  .home-reservation-calendar .reservation-calendar-legend {
+    gap: 4px !important;
+    margin-top: 8px !important;
+    font-size: 8px !important;
+  }
+  .home-reservation-calendar .reservation-calendar-legend span {
+    padding: 3px 6px !important;
+  }
+}
+
 /* Page wrapper（ブログ・予約：ノッチ下でも上部が切れない／ホームバー余白） */
 .page-content {
   padding-top: max(10px, env(safe-area-inset-top, 0px));

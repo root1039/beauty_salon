@@ -48,6 +48,7 @@ export default function HomeHeader() {
         />
         <div>
           <p
+            className="root-logo-name"
             style={{
               margin: 0,
               fontSize: "15px",
@@ -61,6 +62,7 @@ export default function HomeHeader() {
             根本改善エステ Root1039
           </p>
           <p
+            className="root-logo-sub"
             style={{
               margin: 0,
               fontSize: "14px",
@@ -102,10 +104,10 @@ export default function HomeHeader() {
           </svg>
         </a>
 
-        {/* Hamburger */}
+        {/* Hamburger（PCでは上部ナビがあるため非表示） */}
         <button
           onClick={() => setOpen((v) => !v)}
-          className="rounded-md p-1.5 transition"
+          className="rounded-md p-1.5 transition md:hidden"
           style={{
             background: open ? "rgba(196,104,122,0.1)" : "transparent",
             color: open ? "#C4687A" : "#2A1C20",
