@@ -208,8 +208,8 @@ body {
     border-right: none;
     border-radius: 0 0 22px 22px;
     background: #ffffff;
-    /* 上部固定ナビ(64px)ぶんの余白 */
-    padding-top: 64px;
+    /* 上部固定ナビ(76px)ぶんの余白（サロン名+住所が入るため一段高い） */
+    padding-top: 76px;
     box-shadow:
       0 12px 40px rgba(42, 28, 32, 0.10),
       0 2px 10px rgba(196, 104, 122, 0.06);
@@ -233,7 +233,7 @@ body {
     border-bottom: 1px solid var(--pink-mid) !important;
     box-shadow: 0 4px 18px rgba(42, 28, 32, 0.05) !important;
     padding: 0 22px !important;
-    height: 64px;
+    height: 76px;
     justify-content: flex-start !important;
     gap: 4px;
   }
@@ -246,6 +246,11 @@ body {
     border-radius: 9px !important;
     transition: background 0.2s ease, color 0.2s ease !important;
   }
+  /* 最初のナビ項目に margin-left:auto を当てて、ホーム以降をすべて右寄せに */
+  .site-nav__logo ~ .site-nav__item:first-of-type,
+  .site-nav__inner > .site-nav__item:nth-of-type(1) {
+    margin-left: auto !important;
+  }
   .site-nav__item:hover {
     background: var(--pink-pale);
     color: #C4687A !important;
@@ -254,9 +259,9 @@ body {
   .site-nav__item span { font-size: 13px !important; }
   /* ロゴ（PCのみ表示） */
   .site-nav__logo { display: flex !important; }
-  /* 予約項目を右端のボタン風に */
+  /* 予約項目: ピンクのボタン風（位置は通常フローのまま、ホーム〜ブログの後に並ぶ） */
   .site-nav__item--reserve {
-    margin-left: auto !important;
+    margin-left: 6px !important;
     background: linear-gradient(145deg, #F099B3 0%, #E47C97 45%, #C4687A 100%) !important;
     color: #fff !important;
     box-shadow: 0 4px 12px rgba(196, 104, 122, 0.35) !important;
@@ -267,34 +272,34 @@ body {
   .fab-resv-wrap { display: none !important; }
 
   /* ───────── ホーム: 2カラム ───────── */
+  /* PCではサロン名・住所は上部ナビに移したので、本文のヘッダーは非表示 */
+  .home-el-header { display: none !important; }
+
   .home-card-inner {
     display: grid;
     grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
-    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    /* 行1: カード / 行2: カレンダー / 行3: CTA */
+    grid-template-rows: auto minmax(0, 1fr) auto;
     column-gap: 30px;
     row-gap: 12px;
     align-items: start;
-    padding: 18px 30px 20px;
+    padding: 26px 30px 22px;
   }
-  /* 左: ヒーロー画像を「カード上端〜カレンダー下端」に合わせる（行2-3をスパン） */
+  /* 左: ヒーロー画像を「カード上端〜カレンダー下端」に揃える（行1-2をスパン） */
   .home-el-hero {
     grid-column: 1;
-    grid-row: 2 / span 2;
+    grid-row: 1 / span 2;
     align-self: stretch;
     margin-bottom: 0 !important;
   }
-  /* 行2-3の高さいっぱいに伸ばす（object-fit:cover で黒帯なし） */
+  /* 行1-2の高さいっぱいに伸ばす（object-fit:cover で黒帯なし） */
   .home-el-hero > div { height: 100% !important; aspect-ratio: auto !important; }
-  .home-el-header { grid-column: 2; grid-row: 1; align-self: center; }
-  .home-el-cards  { grid-column: 2; grid-row: 2; align-self: start; margin: 0 !important; padding: 0 !important; }
-  .home-el-calendar { grid-column: 2; grid-row: 3; align-self: stretch; margin: 0 !important; padding: 0 !important; }
-  .home-el-cta    { grid-column: 2; grid-row: 4; margin-top: 0 !important; padding: 0 !important; }
+  .home-el-cards    { grid-column: 2; grid-row: 1; align-self: start;   margin: 0 !important; padding: 0 !important; }
+  .home-el-calendar { grid-column: 2; grid-row: 2; align-self: stretch; margin: 0 !important; padding: 0 !important; }
+  .home-el-cta      { grid-column: 2; grid-row: 3; margin-top: 0 !important; padding: 0 !important; }
   /* PCでカードを一回り大きく・文字も拡大 */
   .home-el-cards p { font-size: 12px !important; }
   .home-el-cta a   { font-size: 18px !important; padding: 13px !important; }
-  /* PCホームヘッダーの文字を少し大きく */
-  .home-el-header .root-logo-name { font-size: 19px !important; }
-  .home-el-header .root-logo-sub  { font-size: 15px !important; }
 
   .home-reservation-calendar .reservation-calendar-card {
     border-radius: 10px !important;

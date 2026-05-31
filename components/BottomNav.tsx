@@ -42,32 +42,50 @@ export default function BottomNav() {
           boxShadow: "0 -6px 20px rgba(0,0,0,0.06)",
         }}
       >
-        {/* ロゴ（PCのみ・先頭に表示） */}
+        {/* ロゴ（PCのみ・先頭に表示）— アイコン＋サロン名＋住所 */}
         <Link
           href="/"
-          className="site-nav__logo mr-2 hidden items-center gap-2"
+          className="site-nav__logo mr-3 hidden items-center gap-2.5"
           style={{ textDecoration: "none" }}
-          aria-label="Root1039 ホーム"
+          aria-label="根本改善エステ Root1039 ホーム"
         >
           <Image
             src={`${BASE_PATH}/images/header-icon.png`}
             alt="Root1039"
-            width={36}
-            height={36}
+            width={46}
+            height={46}
             className="object-contain"
-            style={{ width: 36, height: 36 }}
+            style={{ width: 46, height: 46 }}
           />
-          <span
-            style={{
-              fontSize: "16px",
-              fontWeight: 700,
-              letterSpacing: "0.04em",
-              fontFamily: "var(--font-shippori), serif",
-              color: "#2A1C20",
-            }}
-          >
-            Root1039
-          </span>
+          <div className="leading-tight">
+            <p
+              style={{
+                margin: 0,
+                fontSize: "15px",
+                lineHeight: 1.25,
+                fontWeight: 600,
+                letterSpacing: "0.03em",
+                fontFamily: "var(--font-shippori), serif",
+                color: "#2A1C20",
+              }}
+            >
+              根本改善エステ Root1039
+            </p>
+            <p
+              style={{
+                margin: 0,
+                marginTop: 2,
+                fontSize: "12px",
+                lineHeight: 1.25,
+                fontWeight: 600,
+                letterSpacing: "0.05em",
+                fontFamily: "var(--font-shippori), serif",
+                color: "#C4687A",
+              }}
+            >
+              泉中央駅 北出口3から徒歩5分
+            </p>
+          </div>
         </Link>
 
         {navItems.map(({ href, label, Icon, reserve }) => {
