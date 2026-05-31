@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 const LINE_ADD_URL = "https://lin.ee/zCQoCoz";
-const RESERVATION_EMAIL = process.env.NEXT_PUBLIC_RESERVATION_EMAIL ?? "";
+const RESERVATION_EMAIL = process.env.NEXT_PUBLIC_RESERVATION_EMAIL ?? "root1039.gp@gmail.com";
 const RESERVATION_SHEET_CSV_URL = process.env.NEXT_PUBLIC_RESERVATION_SHEET_CSV_URL ?? "";
 
 const menuOptions = [
