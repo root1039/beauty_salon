@@ -63,6 +63,9 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* Divider: hero → cards */}
+        <hr className="mx-4 mb-2.5 border-t border-[var(--gray-light)]" />
+
         {/* 3. Card grid */}
         <div className="home-el-cards mb-1.5 grid grid-cols-3 gap-1.5 px-2.5">
           {cards.map((card) => (
@@ -99,6 +102,9 @@ export default function HomePage() {
             </Link>
           ))}
         </div>
+
+        {/* Divider: cards → calendar */}
+        <hr className="mx-4 mt-1 mb-2.5 border-t border-[var(--gray-light)]" />
 
         {/* 4. Availability calendar */}
         <ReservationAvailabilityCalendar
