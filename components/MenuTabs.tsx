@@ -347,19 +347,6 @@ function PriceListContent() {
 
 const tabs = [
   {
-    id: "price",
-    label: "料金表",
-    en: "PRICE LIST",
-    Icon: FileText,
-    prTitle: "料金を見やすく、選びやすく。",
-    prSubtitle: "WINBACKと脱毛メニューの価格を、テキストで確認できます",
-    headerBg:
-      "linear-gradient(138deg, #f8f3ee 0%, #e9ded2 34%, #f7edf0 68%, #d8dce2 100%)",
-    headerColor: "#2A1C20",
-    accentColor: "#9E4A5A",
-    sections: [] as Section[],
-  },
-  {
     id: "treatment",
     label: "施術",
     en: "TREATMENT",
@@ -367,9 +354,9 @@ const tabs = [
     prTitle: "全ての周波数を、1台で。",
     prSubtitle: "高周波施術で身体の土台から整え、根本からボディラインをケア",
     headerBg:
-      "linear-gradient(148deg, #121215 0%, #303038 22%, #1e1e24 48%, #484852 72%, #16161a 100%)",
-    headerColor: "#f3f0ea",
-    accentColor: "#d4bc90",
+      "radial-gradient(circle at 88% 18%, rgba(245,111,38,0.18) 0%, transparent 28%), radial-gradient(circle at 8% 92%, rgba(18,63,133,0.14) 0%, transparent 34%), #fbf3df",
+    headerColor: "#2f241d",
+    accentColor: "#123f85",
     sections: [
       {
         type: "lead" as const,
@@ -411,9 +398,9 @@ const tabs = [
     prTitle: "着るだけで、身体が整う。",
     prSubtitle: "機能素材が身体に寄り添う、補整下着でならではの体感",
     headerBg:
-      "linear-gradient(132deg, #9d766a 0%, #e9d2c8 26%, #c49a8c 52%, #f5ebe5 74%, #b0887c 100%)",
-    headerColor: "#1f1417",
-    accentColor: "#6d3d45",
+      "radial-gradient(circle at 88% 12%, rgba(93,139,193,0.16) 0%, transparent 30%), radial-gradient(circle at 10% 90%, rgba(226,91,126,0.18) 0%, transparent 36%), #fcf1df",
+    headerColor: "#34231f",
+    accentColor: "#c8466f",
     sections: [
       {
         type: "lead" as const,
@@ -455,9 +442,9 @@ const tabs = [
     prTitle: "まず、水を変えることから。",
     prSubtitle: "医療現場も認めた電解水素水で、内側から体質を変える",
     headerBg:
-      "linear-gradient(128deg, #5f8394 0%, #dcecf2 30%, #8eb4c4 55%, #eef6fa 78%, #6a94a8 100%)",
-    headerColor: "#0c1820",
-    accentColor: "#1e5366",
+      "radial-gradient(circle at 86% 18%, rgba(40,134,190,0.18) 0%, transparent 32%), radial-gradient(circle at 8% 88%, rgba(53,164,159,0.13) 0%, transparent 36%), #f7f1df",
+    headerColor: "#1f3040",
+    accentColor: "#176ca4",
     sections: [
       {
         type: "lead" as const,
@@ -496,12 +483,12 @@ const tabs = [
     label: "食品・日用品",
     en: "DAILY GOODS",
     Icon: Leaf,
-    prTitle: "毎日の選択が、未来の自分をつくる。",
+    prTitle: "毎日の選択が、未来の自分",
     prSubtitle: "食べるもの・使うものの質を変えれば、健康の土台が変わる",
     headerBg:
-      "linear-gradient(135deg, #8a7a58 0%, #ebe4d2 28%, #bdb196 56%, #f7f2e8 82%, #9a8b68 100%)",
-    headerColor: "#1c1810",
-    accentColor: "#4a3f28",
+      "radial-gradient(circle at 88% 16%, rgba(75,139,58,0.16) 0%, transparent 32%), radial-gradient(circle at 10% 90%, rgba(235,139,35,0.17) 0%, transparent 38%), #fbf2dd",
+    headerColor: "#2c281d",
+    accentColor: "#397a35",
     sections: [
       {
         type: "lead" as const,
@@ -542,6 +529,19 @@ const tabs = [
         tags: ["#無農薬", "#オーガニック", "#自然派", "#養生", "#サステナブル", "#食品改善", "#仙台", "#Root1039"],
       },
     ] as Section[],
+  },
+  {
+    id: "price",
+    label: "料金表",
+    en: "PRICE LIST",
+    Icon: FileText,
+    prTitle: "料金を見やすく、選びやすく。",
+    prSubtitle: "WINBACKと脱毛メニューの価格を、テキストで確認できます",
+    headerBg:
+      "radial-gradient(circle at 88% 16%, rgba(196,104,122,0.14) 0%, transparent 30%), radial-gradient(circle at 8% 88%, rgba(201,169,110,0.15) 0%, transparent 36%), #faf2e3",
+    headerColor: "#2A1C20",
+    accentColor: "#9E4A5A",
+    sections: [] as Section[],
   },
 ];
 
@@ -585,17 +585,14 @@ export default function MenuTabs() {
         {/* Hero header */}
         {tab.id !== "price" && (
           <div
-            className="menu-tab-hero-metallic px-5 pt-5 pb-6"
+            className="menu-tab-hero-paper px-5 pt-5 pb-6"
             style={{ background: tab.headerBg }}
           >
             <div className="flex items-center gap-3 mb-3">
               <div
                 className="w-9 h-9 rounded-xl flex items-center justify-center"
                 style={{
-                  background:
-                    tab.id === "treatment"
-                      ? "rgba(255,255,255,0.12)"
-                      : "rgba(15, 15, 18, 0.12)",
+                  background: "rgba(255,255,255,0.58)",
                   boxShadow: "inset 0 1px 0 rgba(255,255,255,0.25)",
                 }}
               >
@@ -606,14 +603,11 @@ export default function MenuTabs() {
               </span>
             </div>
             <h2
-              className="text-2xl mb-1.5 leading-snug"
+              className={`mb-1.5 leading-snug ${tab.id === "food" ? "whitespace-nowrap text-[clamp(17px,5.6vw,24px)]" : "text-2xl"}`}
               style={{
                 fontFamily: "var(--font-shippori), serif",
                 color: tab.headerColor,
-                textShadow:
-                  tab.id === "treatment"
-                    ? "0 1px 2px rgba(0,0,0,0.35)"
-                    : "0 1px 0 rgba(255,255,255,0.35)",
+                textShadow: "0 1px 0 rgba(255,255,255,0.45)",
               }}
             >
               {tab.prTitle}
@@ -622,7 +616,7 @@ export default function MenuTabs() {
               className="text-xs leading-relaxed"
               style={{
                 color: tab.headerColor,
-                opacity: tab.id === "treatment" ? 0.72 : 0.78,
+                opacity: 0.78,
               }}
             >
               {tab.prSubtitle}

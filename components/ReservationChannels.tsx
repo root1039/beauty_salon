@@ -306,14 +306,14 @@ export function ReservationAvailabilityCalendar({
       <div
         className={`reservation-calendar-card rounded-2xl ${compact ? "p-3" : "p-5"}`}
         style={{
-          background: "white",
-          border: "1px solid var(--border)",
-          boxShadow: "0 8px 28px rgba(42, 28, 32, 0.06)",
+          background: "#F4F5F7",
+          border: "1px solid #C9CED6",
+          boxShadow: "0 8px 28px rgba(36, 42, 50, 0.08)",
         }}
       >
         <div className="reservation-calendar-heading mb-4 flex items-start justify-between gap-3">
           <div>
-            <p className="text-[11px] tracking-[0.18em] mb-1" style={{ color: "var(--rose)" }}>
+            <p className="text-[11px] tracking-[0.18em] mb-1" style={{ color: "#6B7280" }}>
               AVAILABLE DAYS
             </p>
             <h2
@@ -323,7 +323,7 @@ export function ReservationAvailabilityCalendar({
               予約可能日時
             </h2>
           </div>
-          <CalendarDays size={22} style={{ color: "var(--rose)" }} />
+          <CalendarDays size={22} style={{ color: "#6B7280" }} />
         </div>
 
         <div className="reservation-calendar-tabs grid grid-cols-3 gap-2 mb-4">
@@ -336,9 +336,9 @@ export function ReservationAvailabilityCalendar({
                 onClick={() => setActiveMonthIdx(index)}
                 className="reservation-calendar-tab btn-press rounded-lg px-2 py-2 text-[11px] font-bold"
                 style={{
-                  color: active ? "white" : "var(--rose-dark)",
-                  background: active ? "var(--rose)" : "var(--rose-light)",
-                  border: "1px solid var(--pink-mid)",
+                  color: active ? "white" : "#4B5563",
+                  background: active ? "#4B5563" : "#FFFFFF",
+                  border: "1px solid #C9CED6",
                 }}
               >
                 {index === 0 ? "今月" : index === 1 ? "来月" : "再来月"}
@@ -349,7 +349,7 @@ export function ReservationAvailabilityCalendar({
 
         <div
           className="reservation-calendar-month rounded-xl p-3"
-          style={{ background: "var(--rose-light)", border: "1px solid var(--pink-mid)" }}
+          style={{ background: "#E8EBEF", border: "1px solid #C9CED6" }}
         >
           <div className="mb-3 flex items-center justify-between">
             <button
@@ -357,7 +357,7 @@ export function ReservationAvailabilityCalendar({
               onClick={() => setActiveMonthIdx(Math.max(0, activeMonthIdx - 1))}
               disabled={activeMonthIdx === 0}
               className="rounded-lg p-1.5"
-              style={{ color: activeMonthIdx === 0 ? "var(--pink-mid)" : "var(--rose-dark)" }}
+              style={{ color: activeMonthIdx === 0 ? "#B7BDC7" : "#4B5563" }}
               aria-label="前の月"
             >
               <ChevronLeft size={18} />
@@ -370,7 +370,7 @@ export function ReservationAvailabilityCalendar({
               onClick={() => setActiveMonthIdx(Math.min(2, activeMonthIdx + 1))}
               disabled={activeMonthIdx === 2}
               className="rounded-lg p-1.5"
-              style={{ color: activeMonthIdx === 2 ? "var(--pink-mid)" : "var(--rose-dark)" }}
+              style={{ color: activeMonthIdx === 2 ? "#B7BDC7" : "#4B5563" }}
               aria-label="次の月"
             >
               <ChevronRight size={18} />
@@ -382,7 +382,10 @@ export function ReservationAvailabilityCalendar({
               <div
                 key={label}
                 className="py-1 text-[10px] font-bold"
-                style={{ color: label === "日" ? "var(--rose-dark)" : "var(--muted)" }}
+                style={{
+                  color:
+                    label === "日" ? "#C8465A" : label === "土" ? "#2F6FB3" : "#6B7280",
+                }}
               >
                 {label}
               </div>
@@ -390,18 +393,38 @@ export function ReservationAvailabilityCalendar({
             {days.map((day, index) => {
               const key = day ? formatDateKey(day) : `blank-${index}`;
               const availabilityStyle = day ? getAvailabilityStyle(availability[formatDateKey(day)]) : null;
+              const dayOfWeek = day?.getDay();
+              const isSunday = dayOfWeek === 0;
+              const isSaturday = dayOfWeek === 6;
               return (
                 <div
                   key={key}
                   className="reservation-calendar-day flex min-h-[46px] flex-col items-center justify-center rounded-lg"
                   style={{
-                    background: day ? "white" : "transparent",
-                    border: day ? "1px solid rgba(194,199,207,0.65)" : "1px solid transparent",
+                    background: day
+                      ? isSunday
+                        ? "#FFF0F2"
+                        : isSaturday
+                          ? "#EFF6FF"
+                          : "#FFFFFF"
+                      : "transparent",
+                    border: day
+                      ? isSunday
+                        ? "1px solid #F2B6C0"
+                        : isSaturday
+                          ? "1px solid #B8D4F2"
+                          : "1px solid #D2D6DE"
+                      : "1px solid transparent",
                   }}
                 >
                   {day && (
                     <>
-                      <span className="text-[11px] font-bold" style={{ color: "var(--charcoal)" }}>
+                      <span
+                        className="text-[11px] font-bold"
+                        style={{
+                          color: isSunday ? "#C8465A" : isSaturday ? "#2F6FB3" : "var(--charcoal)",
+                        }}
+                      >
                         {day.getDate()}
                       </span>
                       <span

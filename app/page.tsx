@@ -12,20 +12,32 @@ const cards = [
   {
     href: "/about",
     title: "サロンについて",
-    desc: "",
-    img: `${BASE_PATH}/images/banner-about.png`,
+    img: `${BASE_PATH}/images/cards/card-about.png`,
+  },
+  {
+    href: "/voice",
+    title: "お客様の声",
+    img: `${BASE_PATH}/images/cards/card-voice.png`,
   },
   {
     href: "/menu",
     title: "メニュー・商品",
-    desc: "",
-    img: `${BASE_PATH}/images/banner-menu.png`,
+    img: `${BASE_PATH}/images/cards/card-menu.png`,
+  },
+  {
+    href: "/events",
+    title: "イベント情報",
+    img: `${BASE_PATH}/images/cards/card-events.png`,
   },
   {
     href: "/blog",
     title: "ブログ",
-    desc: "",
-    img: `${BASE_PATH}/images/banner-blog.png`,
+    img: `${BASE_PATH}/images/cards/card-blog.png`,
+  },
+  {
+    href: "/owners",
+    title: "サロンオーナー様へ",
+    img: `${BASE_PATH}/images/cards/card-owners.png`,
   },
 ];
 
@@ -51,52 +63,39 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* 3. 3-card grid */}
+        {/* 3. Card grid */}
         <div className="home-el-cards mb-1.5 grid grid-cols-3 gap-1.5 px-2.5">
           {cards.map((card) => (
             <Link
               key={card.href}
               href={card.href}
-              className="home-neon-card rounded-md bg-white p-0.5 text-center transition hover:-translate-y-0.5 hover:shadow-md"
+              className="home-neon-card group relative aspect-square overflow-hidden rounded-md bg-white text-center transition hover:-translate-y-0.5 hover:shadow-md"
               style={{
                 textDecoration: "none",
                 border: "1px solid var(--gray-light)",
               }}
             >
-              <div
-                className="relative mb-0.5 w-full overflow-hidden rounded-md"
-                style={{
-                  aspectRatio: "1 / 1",
-                  border: "1px solid var(--gray-mid)",
-                }}
-              >
-                <Image
-                  src={card.img}
-                  alt={card.title}
-                  fill
-                  sizes="(max-width: 430px) 33vw, 130px"
-                  className="object-contain"
-                  loading="lazy"
-                />
-              </div>
-              <p
-                className="text-[11px] font-semibold"
+              <Image
+                src={card.img}
+                alt={card.title}
+                fill
+                sizes="(max-width: 430px) 30vw, 130px"
+                className="object-cover transition duration-300 group-hover:scale-[1.035]"
+                loading="lazy"
+              />
+              <span
+                className="absolute inset-x-1 bottom-1 rounded-[5px] px-1.5 py-1 text-[10px] font-semibold leading-tight"
                 style={{
                   fontFamily: "var(--font-shippori), serif",
-                  letterSpacing: "0.03em",
+                  letterSpacing: "0.02em",
                   color: "#2A1C20",
+                  background: "rgba(255,255,255,0.86)",
+                  boxShadow: "0 3px 10px rgba(42,28,32,0.08)",
+                  backdropFilter: "blur(6px)",
                 }}
               >
                 {card.title}
-              </p>
-              {card.desc ? (
-                <p
-                  className="text-[8.5px] leading-tight"
-                  style={{ color: "#7A6065" }}
-                >
-                  {card.desc}
-                </p>
-              ) : null}
+              </span>
             </Link>
           ))}
         </div>

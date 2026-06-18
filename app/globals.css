@@ -787,49 +787,35 @@ body {
   }
 }
 
-/* ── メニュータブ：記事ヒーロー メタリックグラデーション ── */
-@keyframes metallicHeroShift {
-  0%, 100% {
-    background-position: 10% 40%;
-  }
-  50% {
-    background-position: 90% 60%;
-  }
-}
-
-.menu-tab-hero-metallic {
+/* ── メニュータブ：挿絵と馴染む淡い紙の質感 ── */
+.menu-tab-hero-paper {
   position: relative;
-  background-size: 260% 260%;
-  animation: metallicHeroShift 18s ease-in-out infinite;
   overflow: hidden;
 }
 
-.menu-tab-hero-metallic::after {
+.menu-tab-hero-paper::before,
+.menu-tab-hero-paper::after {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background: linear-gradient(
-    118deg,
-    transparent 38%,
-    rgba(255, 255, 255, 0.35) 50%,
-    transparent 62%
-  );
-  opacity: 0.25;
-  mix-blend-mode: overlay;
 }
 
-.menu-tab-hero-metallic > * {
+.menu-tab-hero-paper::before {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(90, 70, 48, 0.025) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 5px);
+  opacity: 0.75;
+}
+
+.menu-tab-hero-paper::after {
+  background: radial-gradient(ellipse at 45% 0%, rgba(255,255,255,0.48) 0%, transparent 58%);
+}
+
+.menu-tab-hero-paper > * {
   position: relative;
   z-index: 1;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .menu-tab-hero-metallic {
-    animation: none;
-    background-size: 100% 100%;
-  }
 }
 
 /* ── Hero 画像フレーム（ピンクネオンなし／ゴールドの柔らかい光＋軽い動き） ── */
