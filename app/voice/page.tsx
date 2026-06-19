@@ -19,16 +19,12 @@ const voices = [
     alt: "Root1039 お客様の声 1",
   },
   {
-    src: `${BASE_PATH}/images/voices/voice-2.jpg`,
-    alt: "Root1039 お客様の声 2",
-  },
-  {
     src: `${BASE_PATH}/images/voices/voice-3.jpg`,
     alt: "結果が見える施術 — お客様の声",
   },
   {
-    src: `${BASE_PATH}/images/voices/voice-4.jpg`,
-    alt: "Root1039 お客様の声 4",
+    src: `${BASE_PATH}/images/voices/voice-2.jpg`,
+    alt: "Root1039 お客様の声 2",
   },
   {
     src: `${BASE_PATH}/images/voices/voice-6.jpg`,
@@ -44,10 +40,6 @@ const googleReviewImages = [
   {
     src: `${BASE_PATH}/images/root1039_google_reviews_revised_1.png`,
     alt: "Googleマップに届いたRoot1039の口コミ 1",
-  },
-  {
-    src: `${BASE_PATH}/images/root1039_google_reviews_revised_2.png`,
-    alt: "Googleマップに届いたRoot1039の口コミ 2",
   },
 ];
 

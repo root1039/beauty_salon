@@ -3,16 +3,16 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Home, User, Sparkles, BookOpen, MessageCircle } from "lucide-react";
+import { Home, User, MessageSquareText, Megaphone, ClipboardList } from "lucide-react";
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const navItems = [
   { href: "/", label: "ホーム", Icon: Home },
   { href: "/about", label: "サロン", Icon: User },
-  { href: "/menu", label: "メニュー", Icon: Sparkles },
-  { href: "/blog", label: "ブログ", Icon: BookOpen },
-  { href: "/contact", label: "予約", Icon: MessageCircle, reserve: true },
+  { href: "/voice", label: "口コミ", Icon: MessageSquareText },
+  { href: "/events", label: "告知", Icon: Megaphone },
+  { href: "/menu", label: "メニュー", Icon: ClipboardList },
 ];
 
 export default function BottomNav() {
@@ -88,7 +88,7 @@ export default function BottomNav() {
           </div>
         </Link>
 
-        {navItems.map(({ href, label, Icon, reserve }) => {
+        {navItems.map(({ href, label, Icon }) => {
           const normalizedHref = href.replace(/\/+$/, "") || "/";
           const active = normalizedPathname === normalizedHref;
 
@@ -96,9 +96,7 @@ export default function BottomNav() {
             <Link
               key={href}
               href={href}
-              className={`site-nav__item flex min-w-0 flex-1 flex-col items-center gap-1 rounded-md px-1.5 py-1.5 transition${
-                reserve ? " site-nav__item--reserve" : ""
-              }`}
+              className="site-nav__item flex min-w-0 flex-1 flex-col items-center gap-1 rounded-md px-1.5 py-1.5 transition"
               style={{
                 textDecoration: "none",
                 color: active ? "#C4687A" : "#7A6065",
