@@ -31,6 +31,10 @@ const voices = [
     alt: "Root1039 お客様の声 4",
   },
   {
+    src: `${BASE_PATH}/images/voices/voice-6.png`,
+    alt: "来るだけで前向きになれる — お客様の声",
+  },
+  {
     src: `${BASE_PATH}/images/voices/voice-5.jpg`,
     alt: "Root1039 お客様の声 5",
   },

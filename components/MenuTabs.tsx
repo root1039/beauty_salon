@@ -4,8 +4,8 @@ import type { CSSProperties } from "react";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FileText, Zap, Shirt, Droplets, Leaf, ChevronLeft, ChevronRight } from "lucide-react";
-import { tabAuxNavButton, tabPillActive, tabPillIdle } from "@/components/tabNavTheme";
+import { FileText, Zap, Shirt, Droplets, Leaf, ChevronRight } from "lucide-react";
+import { tabPillActive, tabPillIdle } from "@/components/tabNavTheme";
 
 const RESERVATION_URL = "/contact";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -702,40 +702,6 @@ export default function MenuTabs() {
             return null;
           })}
 
-          {/* 隣のメニュータブへ */}
-          <div
-            className={`flex items-center gap-2 mb-3 ${
-              activeIdx === 0
-                ? "justify-end"
-                : activeIdx === tabs.length - 1
-                  ? "justify-start"
-                  : "justify-between"
-            }`}
-          >
-            {activeIdx > 0 && (
-              <button
-                type="button"
-                onClick={() => setActiveIdx(activeIdx - 1)}
-                className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg active:opacity-70 transition-opacity"
-                style={tabAuxNavButton}
-              >
-                <ChevronLeft size={16} strokeWidth={2.2} />
-                {tabs[activeIdx - 1].label}
-              </button>
-            )}
-            {activeIdx < tabs.length - 1 && (
-              <button
-                type="button"
-                onClick={() => setActiveIdx(activeIdx + 1)}
-                className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg active:opacity-70 transition-opacity"
-                style={tabAuxNavButton}
-              >
-                {tabs[activeIdx + 1].label}
-                <ChevronRight size={16} strokeWidth={2.2} />
-              </button>
-            )}
-          </div>
-
           {/* 予約するボタン */}
           <div
             style={{
@@ -745,37 +711,35 @@ export default function MenuTabs() {
               paddingBottom: "12px",
             }}
           >
-            <div className="resv-ring-wrap" style={{ borderRadius: "9px" }}>
-              <Link
-                href={RESERVATION_URL}
-                className="btn-press flex items-center justify-center gap-1.5 text-[13px] font-semibold"
-                style={{
-                  background:
-                    "linear-gradient(180deg, #F099B3 0%, #E47C97 45%, #C4687A 100%)",
-                  color: "white",
-                  width: "52%",
-                  minWidth: "160px",
-                  maxWidth: "200px",
-                  height: "40px",
-                  borderRadius: "9px",
-                  border: "1px solid rgba(158,74,90,0.55)",
-                  boxShadow: [
-                    "inset 0 1px 0 rgba(255,255,255,0.55)",
-                    "inset 0 -2px 0 rgba(158,74,90,0.55)",
-                    "0 1px 0 rgba(255,255,255,0.5)",
-                    "0 4px 0 rgba(120,55,70,0.50)",
-                    "0 8px 18px rgba(158,74,90,0.42)",
-                    "0 1px 2px rgba(42,28,32,0.22)",
-                  ].join(", "),
-                  letterSpacing: "0.12em",
-                  fontFamily: "var(--font-noto), sans-serif",
-                  textShadow: "0 1px 1px rgba(120,55,70,0.55)",
-                }}
-              >
-                予約する
-                <ChevronRight size={14} strokeWidth={2.5} style={{ opacity: 0.85 }} />
-              </Link>
-            </div>
+            <Link
+              href={RESERVATION_URL}
+              className="btn-press flex items-center justify-center gap-1.5 text-[13px] font-semibold"
+              style={{
+                background:
+                  "linear-gradient(180deg, #F099B3 0%, #E47C97 45%, #C4687A 100%)",
+                color: "white",
+                width: "52%",
+                minWidth: "160px",
+                maxWidth: "200px",
+                height: "40px",
+                borderRadius: "9px",
+                border: "1px solid rgba(158,74,90,0.55)",
+                boxShadow: [
+                  "inset 0 1px 0 rgba(255,255,255,0.55)",
+                  "inset 0 -2px 0 rgba(158,74,90,0.55)",
+                  "0 1px 0 rgba(255,255,255,0.5)",
+                  "0 4px 0 rgba(120,55,70,0.50)",
+                  "0 8px 18px rgba(158,74,90,0.42)",
+                  "0 1px 2px rgba(42,28,32,0.22)",
+                ].join(", "),
+                letterSpacing: "0.12em",
+                fontFamily: "var(--font-noto), sans-serif",
+                textShadow: "0 1px 1px rgba(120,55,70,0.55)",
+              }}
+            >
+              予約する
+              <ChevronRight size={14} strokeWidth={2.5} style={{ opacity: 0.85 }} />
+            </Link>
           </div>
         </div>
       </div>

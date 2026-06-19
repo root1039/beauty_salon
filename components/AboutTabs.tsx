@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef, startTransition, type CSSProperties } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { MapPin, Clock, ChevronLeft, ChevronRight } from "lucide-react";
-import { tabAuxNavButton, tabPillActive, tabPillIdle } from "@/components/tabNavTheme";
+import { MapPin, Clock, ChevronRight } from "lucide-react";
+import { tabPillActive, tabPillIdle } from "@/components/tabNavTheme";
 
 const RESERVATION_URL = "/contact";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -176,23 +176,53 @@ export default function AboutTabs() {
               <span className="text-sm" style={{ color: "var(--charcoal)" }}>Instagramはこちら</span>
               <span className="text-xs font-medium" style={{ color: "var(--rose)" }}>@yuumin_root1039 →</span>
             </a>
-            <div className="flex justify-end pt-1">
-              <button
-                type="button"
-                onClick={() => setActiveIdx(1)}
-                className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg btn-press"
-                style={tabAuxNavButton}
-              >
-                会社・サロン概要
-                <ChevronRight size={16} strokeWidth={2.2} />
-              </button>
-            </div>
           </div>
         )}
 
         {/* ── 会社・サロン概要 ── */}
         {activeIdx === 1 && (
           <div className="p-4 space-y-3">
+            <div
+              className="rounded-2xl overflow-hidden bg-white"
+              style={{ border: "1px solid var(--border)" }}
+            >
+              <img
+                src={`${BASE_PATH}/images/header-1.png`}
+                alt="Root1039 のコンセプト"
+                className="block w-full h-auto align-top"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <p
+              className="text-xs leading-6 px-1"
+              style={{ color: "var(--muted)" }}
+            >
+              美容の悩みも身体の不調も、原因は日常の中にあります。
+              Root1039は、その根っこを一緒に見つけ、整えていきます。
+            </p>
+            {salonConceptCards.map((v) => (
+              <div
+                key={v.num}
+                className="rounded-2xl p-4"
+                style={{ background: "white", border: "1px solid var(--border)" }}
+              >
+                <div className="flex items-start gap-3">
+                  <span
+                    className="text-2xl leading-none shrink-0"
+                    style={{ fontFamily: "var(--font-shippori), serif", color: "var(--rose-muted)" }}
+                  >
+                    {v.num}
+                  </span>
+                  <div>
+                    <h3 className="text-sm mb-1" style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}>
+                      {v.title}
+                    </h3>
+                    <p className="text-xs leading-5" style={{ color: "var(--muted)" }}>{v.body}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
             <div className="rounded-2xl p-5" style={{ background: "white", border: "1px solid var(--border)" }}>
               <p className="text-[10px] tracking-widest mb-3" style={{ color: "var(--rose)" }}>COMPANY & SALON</p>
               <h3 className="text-base mb-4" style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}>
@@ -235,67 +265,6 @@ export default function AboutTabs() {
                   <dd style={{ color: "var(--muted)", lineHeight: 1.7 }}>完全予約制</dd>
                 </div>
               </dl>
-            </div>
-            <p
-              className="text-xs leading-6 px-1"
-              style={{ color: "var(--muted)" }}
-            >
-              美容の悩みも身体の不調も、原因は日常の中にあります。
-              Root1039は、その根っこを一緒に見つけ、整えていきます。
-            </p>
-            <div
-              className="rounded-2xl overflow-hidden bg-white"
-              style={{ border: "1px solid var(--border)" }}
-            >
-              <img
-                src={`${BASE_PATH}/images/header-1.png`}
-                alt="Root1039 のコンセプト"
-                className="block w-full h-auto align-top"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            {salonConceptCards.map((v) => (
-              <div
-                key={v.num}
-                className="rounded-2xl p-4"
-                style={{ background: "white", border: "1px solid var(--border)" }}
-              >
-                <div className="flex items-start gap-3">
-                  <span
-                    className="text-2xl leading-none shrink-0"
-                    style={{ fontFamily: "var(--font-shippori), serif", color: "var(--rose-muted)" }}
-                  >
-                    {v.num}
-                  </span>
-                  <div>
-                    <h3 className="text-sm mb-1" style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}>
-                      {v.title}
-                    </h3>
-                    <p className="text-xs leading-5" style={{ color: "var(--muted)" }}>{v.body}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-            <div className="flex items-center justify-between gap-2 pt-2">
-              <button
-                type="button"
-                onClick={() => setActiveIdx(0)}
-                className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg btn-press"
-                style={tabAuxNavButton}
-              >
-                <ChevronLeft size={16} strokeWidth={2.2} />
-                代表挨拶
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveIdx(2)}
-                className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg btn-press"
-                style={tabAuxNavButton}
-              >
-                アクセス
-                <ChevronRight size={16} strokeWidth={2.2} />
-              </button>
             </div>
           </div>
         )}
@@ -341,26 +310,11 @@ export default function AboutTabs() {
                 </li>
               </ul>
             </div>
-            <div className="flex flex-col items-stretch gap-3 pb-2">
-              <div className="flex justify-start">
-                <button
-                  type="button"
-                  onClick={() => setActiveIdx(1)}
-                  className="inline-flex items-center gap-0.5 text-xs font-medium py-2 px-2 rounded-lg btn-press"
-                  style={tabAuxNavButton}
-                >
-                  <ChevronLeft size={16} strokeWidth={2.2} />
-                  会社・サロン概要
-                </button>
-              </div>
-              <div className="flex justify-center">
-                <div className="resv-ring-wrap" style={{ borderRadius: "9px" }}>
-                  <Link href={RESERVATION_URL} className="btn-press" style={reservationButtonStyle}>
-                    予約する
-                    <ChevronRight size={14} strokeWidth={2.5} style={{ opacity: 0.85 }} />
-                  </Link>
-                </div>
-              </div>
+            <div className="flex justify-center pb-2">
+              <Link href={RESERVATION_URL} className="btn-press" style={reservationButtonStyle}>
+                予約する
+                <ChevronRight size={14} strokeWidth={2.5} style={{ opacity: 0.85 }} />
+              </Link>
             </div>
           </div>
         )}

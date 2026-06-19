@@ -7,9 +7,9 @@ import PageHeader from "@/components/PageHeader";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export const metadata: Metadata = {
-  title: "イベント情報 | Root1039",
+  title: "告知・お知らせ | Root1039",
   description:
-    "Root1039のイベントや体験会などの最新情報をご案内します。",
+    "Root1039の告知・お知らせ、イベントや体験会などの最新情報をご案内します。",
 };
 
 export default function EventsPage() {
@@ -25,14 +25,33 @@ export default function EventsPage() {
       }}
     >
       <PageHeader
-        en="EVENTS"
-        title="イベント情報"
+        en="NEWS"
+        title="告知・お知らせ"
         ballColor="201, 169, 110"
         compact
       />
 
       <div className="subpage-scroll-body" style={{ background: "var(--cream)" }}>
-        <section className="mx-auto max-w-[760px] px-4 pb-6 pt-2">
+        <section className="mx-auto max-w-[760px] px-4 pb-4 pt-2">
+          <div
+            className="overflow-hidden rounded-lg bg-white"
+            style={{
+              border: "1px solid var(--border)",
+              boxShadow: "0 8px 22px rgba(42,28,32,0.06)",
+            }}
+          >
+            <Image
+              src={`${BASE_PATH}/images/events/event-tokuten.jpg`}
+              alt="初回ご来店のお客様限定 うれしい特典プレゼント"
+              width={1080}
+              height={1536}
+              sizes="(max-width: 430px) 92vw, 760px"
+              className="h-auto w-full"
+              priority
+            />
+          </div>
+        </section>
+        <section className="mx-auto max-w-[760px] px-4 pb-6">
           <div
             className="overflow-hidden rounded-lg bg-white"
             style={{

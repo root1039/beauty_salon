@@ -1,6 +1,7 @@
-import { Clock, MapPin, Camera, BookOpen } from "lucide-react";
+import { Clock, MapPin, Camera, BookOpen, ChevronDown } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import ReservationChannels from "@/components/ReservationChannels";
+import FaqAccordion from "@/components/FaqAccordion";
 
 export const metadata = {
   title: "ご予約 | Root1039",
@@ -76,32 +77,7 @@ export default function ContactPage() {
       </section>
 
       {/* ── FAQ ── */}
-      <section className="px-4 mb-6">
-        <p className="text-[11px] tracking-[0.2em] mb-4 px-1" style={{ color: "var(--rose)" }}>FAQ</p>
-        <div className="space-y-3">
-          {faqs.map((faq, i) => (
-            <div
-              key={i}
-              className="rounded-2xl p-5 anim-fade-up"
-              style={{
-                background: "white",
-                border: "1px solid var(--border)",
-                animationDelay: `${i * 0.1}s`,
-              }}
-            >
-              <p
-                className="text-sm font-medium mb-2"
-                style={{ fontFamily: "var(--font-shippori), serif", color: "var(--charcoal)" }}
-              >
-                Q. {faq.q}
-              </p>
-              <p className="text-xs leading-5" style={{ color: "var(--muted)" }}>
-                {faq.a}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <FaqAccordion faqs={faqs} />
 
       {/* ── SNS Links ── */}
       <section className="px-4 mb-6">

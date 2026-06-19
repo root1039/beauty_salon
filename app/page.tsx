@@ -26,7 +26,7 @@ const cards = [
   },
   {
     href: "/events",
-    title: "イベント情報",
+    title: "告知・お知らせ",
     img: `${BASE_PATH}/images/cards/card-events.png`,
   },
   {
