@@ -59,7 +59,7 @@ export default function OwnersPage() {
           >
             <div className="relative aspect-square w-full">
               <Image
-                src={`${BASE_PATH}/images/cards/card-owners.png`}
+                src={`${BASE_PATH}/images/cards/card-owners.jpg`}
                 alt="サロンオーナー様向けのご相談"
                 fill
                 sizes="(max-width: 430px) 92vw, 760px"

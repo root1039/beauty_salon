@@ -24,19 +24,19 @@ const voices = [
   },
   {
     src: `${BASE_PATH}/images/voices/voice-3.jpg`,
-    alt: "Root1039 お客様の声 3",
+    alt: "結果が見える施術 — お客様の声",
   },
   {
     src: `${BASE_PATH}/images/voices/voice-4.jpg`,
     alt: "Root1039 お客様の声 4",
   },
   {
-    src: `${BASE_PATH}/images/voices/voice-6.png`,
-    alt: "来るだけで前向きになれる — お客様の声",
+    src: `${BASE_PATH}/images/voices/voice-6.jpg`,
+    alt: "メンテナンスが習慣になる — お客様の声",
   },
   {
     src: `${BASE_PATH}/images/voices/voice-5.jpg`,
-    alt: "Root1039 お客様の声 5",
+    alt: "あなたに合った提案 — お客様の声",
   },
 ];
 

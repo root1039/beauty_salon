@@ -37,7 +37,7 @@ const cards = [
   {
     href: "/owners",
     title: "サロンオーナー様へ",
-    img: `${BASE_PATH}/images/cards/card-owners.png`,
+    img: `${BASE_PATH}/images/cards/card-owners.jpg`,
   },
 ];
 
