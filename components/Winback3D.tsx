@@ -61,6 +61,7 @@ export default function Winback3D() {
   const secRef = useRef<HTMLElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
   const worldRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
   const progRef = useRef<HTMLElement>(null);
   const depthRef = useRef<HTMLDivElement>(null);
   const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -139,6 +140,11 @@ export default function Winback3D() {
     if (depthRef.current) {
       depthRef.current.textContent = String(Math.round(p * MAX_DEPTH));
       depthRef.current.style.color = zone === 0 ? "#d4a853" : zone === 1 ? "#c4652a" : "#8b2500";
+    }
+    if (ctaRef.current) {
+      const isCta = active === N - 1;
+      ctaRef.current.style.opacity = isCta ? "1" : "0";
+      ctaRef.current.style.pointerEvents = isCta ? "auto" : "none";
     }
   }, [calcProgress]);
 
@@ -226,8 +232,9 @@ export default function Winback3D() {
     };
 
     const onTouchMove = (e: TouchEvent) => {
-      const p = calcProgress();
       const deltaY = touchStartYRef.current - e.touches[0].clientY;
+      if (Math.abs(deltaY) < 8) return;
+      const p = calcProgress();
       if (p <= 0.001 && deltaY < -10) return;
       if (p >= 0.999 && deltaY > 10) return;
       e.preventDefault();
@@ -317,21 +324,7 @@ export default function Winback3D() {
                 ref={(el) => { layerRefs.current[i] = el; }}
               >
                 {layer.kind === "cta" ? (
-                  <div className="wb3d-panel wb3d-cta-panel">
-                    <div className="wb3d-cta">
-                      <p className="wb3d-cta-tag">RESERVATION</p>
-                      <p className="wb3d-cta-title">
-                        深部から届く実感を、<br />あなたの身体で。
-                      </p>
-                      <Link
-                        href="/contact"
-                        className="wb3d-cta-btn"
-                      >
-                        予約する
-                        <ChevronRight size={16} strokeWidth={2.5} style={{ opacity: 0.85 }} />
-                      </Link>
-                    </div>
-                  </div>
+                  <div className="wb3d-panel wb3d-cta-placeholder" />
                 ) : (
                   <div className={`wb3d-panel${layer.zt ? " wb3d-zt" : ""}`}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -350,6 +343,21 @@ export default function Winback3D() {
                 )}
               </div>
             ))}
+          </div>
+
+          {/* CTA overlay — outside 3D world for reliable clicks */}
+          <div className="wb3d-cta-overlay" ref={ctaRef}>
+            <p className="wb3d-cta-tag">RESERVATION</p>
+            <p className="wb3d-cta-title">
+              深部から届く実感を、<br />あなたの身体で。
+            </p>
+            <Link
+              href="/contact"
+              className="wb3d-cta-btn"
+            >
+              予約する
+              <ChevronRight size={16} strokeWidth={2.5} style={{ opacity: 0.85 }} />
+            </Link>
           </div>
 
           {/* progress */}
@@ -446,15 +454,16 @@ const CSS_TEXT = `
 }
 .wb3d-zt .wb3d-ov{display:none}
 
-/* CTA layer */
-.wb3d-cta-panel{
-  background:radial-gradient(ellipse at 50% 40%,rgba(212,168,83,.08) 0%,#060302 70%);
-  border-color:rgba(212,168,83,.25);
-  display:flex;align-items:center;justify-content:center;
-}
-.wb3d-cta{
+/* CTA placeholder in 3D world */
+.wb3d-cta-placeholder{background:transparent;border-color:transparent;box-shadow:none}
+
+/* CTA overlay — flat, outside 3D, reliable clicks */
+.wb3d-cta-overlay{
+  position:absolute;inset:0;z-index:800;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;padding:24px 16px;width:100%;height:100%;
+  text-align:center;padding:24px 16px;
+  background:radial-gradient(ellipse at 50% 40%,rgba(212,168,83,.06) 0%,rgba(6,3,2,.95) 60%);
+  opacity:0;pointer-events:none;transition:opacity .5s ease;
 }
 .wb3d-cta-tag{
   font-size:10px;letter-spacing:.22em;color:#d4a853;margin-bottom:16px;
