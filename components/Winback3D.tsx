@@ -32,6 +32,7 @@ const N = LAYERS.length;
 const ZGAP = 380;
 const ZCAM = ZGAP * (N - 0.15);
 const MAX_DEPTH = 120;
+const LAYER_P = Array.from({ length: N }, (_, i) => (i * ZGAP) / ZCAM);
 
 function findScrollParent(el: HTMLElement | null): HTMLElement | null {
   let node = el?.parentElement ?? null;
@@ -47,6 +48,10 @@ function isContainerScrolling(el: HTMLElement): boolean {
   return el.scrollHeight > el.clientHeight + 50;
 }
 
+function easeInOutCubic(t: number): number {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
 export default function Winback3D() {
   const secRef = useRef<HTMLElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
@@ -56,26 +61,36 @@ export default function Winback3D() {
   const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
   const dotRefs = useRef<(HTMLElement | null)[]>([]);
   const zlblRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const snapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollParentRef = useRef<HTMLElement | null>(null);
+  const currentLayerRef = useRef(0);
+  const isSnappingRef = useRef(false);
+  const touchStartYRef = useRef(0);
+  const animFrameRef = useRef(0);
 
-  const calcProgress = useCallback(() => {
+  const getScrollInfo = useCallback(() => {
     const sec = secRef.current;
     const sp = scrollParentRef.current;
-    if (!sec) return 0;
+    if (!sec) return null;
+    const useContainer = sp && isContainerScrolling(sp);
+    const ch = useContainer ? sp.clientHeight : window.innerHeight;
+    const total = sec.offsetHeight - ch;
+    return { sec, sp, useContainer, ch, total };
+  }, []);
 
-    if (sp && isContainerScrolling(sp)) {
+  const calcProgress = useCallback(() => {
+    const info = getScrollInfo();
+    if (!info || info.total <= 0) return 0;
+    const { sec, sp, useContainer, total } = info;
+
+    if (useContainer && sp) {
       const secRect = sec.getBoundingClientRect();
       const spRect = sp.getBoundingClientRect();
       const relTop = secRect.top - spRect.top;
-      const total = sec.offsetHeight - sp.clientHeight;
-      return total > 0 ? Math.max(0, Math.min(1, -relTop / total)) : 0;
+      return Math.max(0, Math.min(1, -relTop / total));
     }
-
     const r = sec.getBoundingClientRect();
-    const total = sec.offsetHeight - window.innerHeight;
-    return total > 0 ? Math.max(0, Math.min(1, -r.top / total)) : 0;
-  }, []);
+    return Math.max(0, Math.min(1, -r.top / total));
+  }, [getScrollInfo]);
 
   const drive = useCallback(() => {
     const sec = secRef.current;
@@ -101,6 +116,8 @@ export default function Winback3D() {
       if (dist < best) { best = dist; active = i; }
     }
 
+    currentLayerRef.current = active;
+
     const zone = active < 4 ? 0 : active < 8 ? 1 : 2;
     zlblRefs.current.forEach((el, i) => {
       if (el) el.style.color = i === zone ? "#f4efe6" : "#7a6b55";
@@ -120,33 +137,47 @@ export default function Winback3D() {
     }
   }, [calcProgress]);
 
-  const snapToLayer = useCallback(() => {
-    const sec = secRef.current;
-    const sp = scrollParentRef.current;
-    if (!sec) return;
+  const animateToLayer = useCallback((targetIdx: number) => {
+    const info = getScrollInfo();
+    if (!info || info.total <= 0) return;
+    const { sp, useContainer, total } = info;
 
-    const useContainer = sp && isContainerScrolling(sp);
-    if (!useContainer) return;
+    isSnappingRef.current = true;
+    const startP = calcProgress();
+    const endP = LAYER_P[targetIdx];
+    const deltaScroll = (endP - startP) * total;
 
-    const p = calcProgress();
-    if (p <= 0 || p >= 1) return;
-
-    const total = sec.offsetHeight - sp.clientHeight;
-    const layerPositions = Array.from({ length: N }, (_, i) => (i * ZGAP) / ZCAM);
-    let nearest = 0, minDist = Infinity;
-    for (let i = 0; i < N; i++) {
-      const d = Math.abs(p - layerPositions[i]);
-      if (d < minDist) { minDist = d; nearest = i; }
+    if (Math.abs(deltaScroll) < 2) {
+      isSnappingRef.current = false;
+      return;
     }
 
-    const targetP = layerPositions[nearest];
-    const delta = (targetP - p) * total;
-    if (Math.abs(delta) < 2) return;
+    const scrollEl = (useContainer && sp) ? sp : null;
+    const startScroll = scrollEl ? scrollEl.scrollTop : window.scrollY;
+    const targetScroll = startScroll + deltaScroll;
+    const duration = 500;
+    const start = performance.now();
 
-    sp.scrollBy({ top: -delta, behavior: "smooth" });
-  }, [calcProgress]);
+    cancelAnimationFrame(animFrameRef.current);
+    const step = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const val = startScroll + (targetScroll - startScroll) * easeInOutCubic(t);
+      if (scrollEl) {
+        scrollEl.scrollTop = val;
+      } else {
+        window.scrollTo(0, val);
+      }
+      if (t < 1) {
+        animFrameRef.current = requestAnimationFrame(step);
+      } else {
+        isSnappingRef.current = false;
+      }
+    };
+    animFrameRef.current = requestAnimationFrame(step);
+  }, [getScrollInfo, calcProgress]);
 
   useEffect(() => {
+    const pin = pinRef.current;
     const sp = findScrollParent(secRef.current);
     scrollParentRef.current = sp;
 
@@ -161,28 +192,89 @@ export default function Winback3D() {
     updatePinHeight();
 
     let tick = false;
-    const run = () => {
+    const onScroll = () => {
       if (tick) return;
       tick = true;
       requestAnimationFrame(() => { drive(); tick = false; });
-
-      if (snapTimer.current) clearTimeout(snapTimer.current);
-      snapTimer.current = setTimeout(snapToLayer, 200);
     };
 
-    const onResize = () => { updatePinHeight(); run(); };
+    const handleSnap = (direction: number) => {
+      if (isSnappingRef.current) return;
+      const p = calcProgress();
+      const cur = currentLayerRef.current;
 
-    if (sp) sp.addEventListener("scroll", run, { passive: true });
-    window.addEventListener("scroll", run, { passive: true });
-    window.addEventListener("resize", onResize);
-    run();
+      if (p <= 0.001 && direction < 0) return false;
+      if (p >= 0.999 && direction > 0) return false;
+      if (p <= 0.001 && direction > 0 && cur === 0) {
+        animateToLayer(1);
+        return true;
+      }
+
+      const next = direction > 0 ? Math.min(cur + 1, N - 1) : Math.max(cur - 1, 0);
+      if (next === cur) return false;
+      animateToLayer(next);
+      return true;
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      const p = calcProgress();
+      if (p <= 0.001 && e.deltaY < 0) return;
+      if (p >= 0.999 && e.deltaY > 0) return;
+      if (p <= 0.001 && e.deltaY > 0) {
+        e.preventDefault();
+        handleSnap(1);
+        return;
+      }
+      e.preventDefault();
+      if (isSnappingRef.current) return;
+      handleSnap(e.deltaY > 0 ? 1 : -1);
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartYRef.current = e.touches[0].clientY;
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      const p = calcProgress();
+      const deltaY = touchStartYRef.current - e.touches[0].clientY;
+      if (p <= 0.001 && deltaY < -10) return;
+      if (p >= 0.999 && deltaY > 10) return;
+      if (p > 0.001 && p < 0.999) {
+        e.preventDefault();
+      } else if (Math.abs(deltaY) > 10) {
+        e.preventDefault();
+      }
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      const deltaY = touchStartYRef.current - e.changedTouches[0].clientY;
+      if (Math.abs(deltaY) < 30) return;
+      handleSnap(deltaY > 0 ? 1 : -1);
+    };
+
+    if (pin) {
+      pin.addEventListener("wheel", onWheel, { passive: false });
+      pin.addEventListener("touchstart", onTouchStart, { passive: true });
+      pin.addEventListener("touchmove", onTouchMove, { passive: false });
+      pin.addEventListener("touchend", onTouchEnd, { passive: true });
+    }
+    if (sp) sp.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", () => { updatePinHeight(); onScroll(); });
+    onScroll();
+
     return () => {
-      if (sp) sp.removeEventListener("scroll", run);
-      window.removeEventListener("scroll", run);
-      window.removeEventListener("resize", onResize);
-      if (snapTimer.current) clearTimeout(snapTimer.current);
+      if (pin) {
+        pin.removeEventListener("wheel", onWheel);
+        pin.removeEventListener("touchstart", onTouchStart);
+        pin.removeEventListener("touchmove", onTouchMove);
+        pin.removeEventListener("touchend", onTouchEnd);
+      }
+      if (sp) sp.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(animFrameRef.current);
     };
-  }, [drive, snapToLayer]);
+  }, [drive, calcProgress, animateToLayer]);
 
   return (
     <>
@@ -307,7 +399,7 @@ const CSS_TEXT = `
 }
 @keyframes wb3d-bounce{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(5px)}}
 
-.wb3d-sec{position:relative;padding:0;overflow:visible;height:2600vh;margin:0 -20px}
+.wb3d-sec{position:relative;padding:0;overflow:visible;height:800vh;margin:0 -20px}
 .wb3d-pin{
   position:sticky;top:0;height:100vh;overflow:hidden;
   perspective:1000px;-webkit-perspective:1000px;

@@ -84,7 +84,7 @@ type Section =
   | { type: "text"; text: string }
   | { type: "heading"; text: string }
   | { type: "hashtags"; tags: string[] }
-  | { type: "winback3d" };
+;
 
 const winbackPriceMenus = [
   {
@@ -377,7 +377,6 @@ const tabs = [
         type: "text" as const,
         text: "当サロンの施術の特徴は「複数の周波数を1台に搭載」していること。それぞれのエネルギーを組み合わせることで、従来は届きにくかった深部へのアプローチが可能です。体重よりも「見た目・ライン・姿勢・巡り」にフォーカスし、施術後も戻りにくい身体づくりをサポートします。",
       },
-      { type: "winback3d" as const },
       {
         type: "image" as const,
         label: "WINBACK 周波数アプローチ",
@@ -689,9 +688,6 @@ export default function MenuTabs() {
                 </h3>
               );
             }
-            if (section.type === "winback3d") {
-              return <Winback3D key={i} />;
-            }
             if (section.type === "hashtags") {
               return (
                 <div key={i} className="flex flex-wrap gap-2 mb-6 mt-1">
@@ -749,6 +745,8 @@ export default function MenuTabs() {
               <ChevronRight size={14} strokeWidth={2.5} style={{ opacity: 0.85 }} />
             </Link>
           </div>
+
+          {tab.id === "treatment" && <Winback3D />}
         </div>
       </div>
     </div>
