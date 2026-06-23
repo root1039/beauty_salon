@@ -6,6 +6,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { FileText, Zap, Shirt, Droplets, Leaf, ChevronRight } from "lucide-react";
 import { tabPillActive, tabPillIdle } from "@/components/tabNavTheme";
+import dynamic from "next/dynamic";
+
+const Winback3D = dynamic(() => import("@/components/Winback3D"), { ssr: false });
 
 const RESERVATION_URL = "/contact";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -80,7 +83,8 @@ type Section =
   | { type: "image"; label: string; bg: string; caption: string; src?: string }
   | { type: "text"; text: string }
   | { type: "heading"; text: string }
-  | { type: "hashtags"; tags: string[] };
+  | { type: "hashtags"; tags: string[] }
+  | { type: "winback3d" };
 
 const winbackPriceMenus = [
   {
@@ -373,6 +377,7 @@ const tabs = [
         type: "text" as const,
         text: "当サロンの施術の特徴は「複数の周波数を1台に搭載」していること。それぞれのエネルギーを組み合わせることで、従来は届きにくかった深部へのアプローチが可能です。体重よりも「見た目・ライン・姿勢・巡り」にフォーカスし、施術後も戻りにくい身体づくりをサポートします。",
       },
+      { type: "winback3d" as const },
       {
         type: "image" as const,
         label: "WINBACK 周波数アプローチ",
@@ -683,6 +688,9 @@ export default function MenuTabs() {
                   {section.text}
                 </h3>
               );
+            }
+            if (section.type === "winback3d") {
+              return <Winback3D key={i} />;
             }
             if (section.type === "hashtags") {
               return (
