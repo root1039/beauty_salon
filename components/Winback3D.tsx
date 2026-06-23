@@ -125,12 +125,14 @@ export default function Winback3D() {
     const sp = scrollParentRef.current;
     if (!sec) return;
 
+    const sp = scrollParentRef.current;
+    const useContainer = sp && isContainerScrolling(sp);
+    if (!useContainer) return;
+
     const p = calcProgress();
     if (p <= 0 || p >= 1) return;
 
-    const useContainer = sp && isContainerScrolling(sp);
-    const ch = useContainer ? sp.clientHeight : window.innerHeight;
-    const total = sec.offsetHeight - ch;
+    const total = sec.offsetHeight - sp.clientHeight;
     const layerPositions = Array.from({ length: N }, (_, i) => (i * ZGAP) / ZCAM);
     let nearest = 0, minDist = Infinity;
     for (let i = 0; i < N; i++) {
@@ -142,8 +144,7 @@ export default function Winback3D() {
     const delta = (targetP - p) * total;
     if (Math.abs(delta) < 2) return;
 
-    const target = useContainer ? sp : window;
-    target.scrollBy({ top: -delta, behavior: "smooth" });
+    sp.scrollBy({ top: -delta, behavior: "smooth" });
   }, [calcProgress]);
 
   useEffect(() => {
