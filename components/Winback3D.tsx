@@ -33,6 +33,16 @@ const ZGAP = 380;
 const ZCAM = ZGAP * (N - 0.15);
 const MAX_DEPTH = 120;
 
+function findScrollParent(el: HTMLElement | null): HTMLElement | Window {
+  let node = el?.parentElement;
+  while (node && node !== document.documentElement) {
+    const s = getComputedStyle(node);
+    if (s.overflowY === "auto" || s.overflowY === "scroll") return node;
+    node = node.parentElement;
+  }
+  return window;
+}
+
 export default function Winback3D() {
   const secRef = useRef<HTMLElement>(null);
   const worldRef = useRef<HTMLDivElement>(null);
@@ -41,6 +51,14 @@ export default function Winback3D() {
   const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
   const dotRefs = useRef<(HTMLElement | null)[]>([]);
   const zlblRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const snapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scrollParentRef = useRef<HTMLElement | Window | null>(null);
+
+  const getContainerHeight = useCallback(() => {
+    const sp = scrollParentRef.current;
+    if (!sp || sp === window) return window.innerHeight;
+    return (sp as HTMLElement).clientHeight;
+  }, []);
 
   const drive = useCallback(() => {
     const sec = secRef.current;
@@ -48,7 +66,8 @@ export default function Winback3D() {
     if (!sec || !world) return;
 
     const r = sec.getBoundingClientRect();
-    const total = sec.offsetHeight - innerHeight;
+    const ch = getContainerHeight();
+    const total = sec.offsetHeight - ch;
     const p = total > 0 ? Math.max(0, Math.min(1, -r.top / total)) : 0;
     const cam = p * ZCAM;
 
@@ -85,23 +104,63 @@ export default function Winback3D() {
       depthRef.current.textContent = String(Math.round(p * MAX_DEPTH));
       depthRef.current.style.color = zone === 0 ? "#d4a853" : zone === 1 ? "#c4652a" : "#8b2500";
     }
-  }, []);
+  }, [getContainerHeight]);
+
+  const snapToLayer = useCallback(() => {
+    const sec = secRef.current;
+    const sp = scrollParentRef.current;
+    if (!sec || !sp) return;
+
+    const r = sec.getBoundingClientRect();
+    const ch = getContainerHeight();
+    const total = sec.offsetHeight - ch;
+    const p = total > 0 ? Math.max(0, Math.min(1, -r.top / total)) : 0;
+
+    if (p <= 0 || p >= 1) return;
+
+    const layerPositions = Array.from({ length: N }, (_, i) => (i * ZGAP) / ZCAM);
+    let nearest = 0, minDist = Infinity;
+    for (let i = 0; i < N; i++) {
+      const d = Math.abs(p - layerPositions[i]);
+      if (d < minDist) { minDist = d; nearest = i; }
+    }
+
+    const targetP = layerPositions[nearest];
+    const delta = (targetP - p) * total;
+
+    if (Math.abs(delta) < 2) return;
+
+    if (sp === window) {
+      window.scrollBy({ top: -delta, behavior: "smooth" });
+    } else {
+      (sp as HTMLElement).scrollBy({ top: -delta, behavior: "smooth" });
+    }
+  }, [getContainerHeight]);
 
   useEffect(() => {
+    const sp = findScrollParent(secRef.current);
+    scrollParentRef.current = sp;
+
     let tick = false;
     const run = () => {
       if (tick) return;
       tick = true;
       requestAnimationFrame(() => { drive(); tick = false; });
+
+      if (snapTimer.current) clearTimeout(snapTimer.current);
+      snapTimer.current = setTimeout(snapToLayer, 200);
     };
-    window.addEventListener("scroll", run, { passive: true });
+
+    const target = sp === window ? window : sp;
+    target.addEventListener("scroll", run, { passive: true });
     window.addEventListener("resize", run);
     run();
     return () => {
-      window.removeEventListener("scroll", run);
+      target.removeEventListener("scroll", run);
       window.removeEventListener("resize", run);
+      if (snapTimer.current) clearTimeout(snapTimer.current);
     };
-  }, [drive]);
+  }, [drive, snapToLayer]);
 
   return (
     <>
@@ -229,10 +288,15 @@ const CSS_TEXT = `
 .wb3d-sec{position:relative;padding:0;overflow:visible;height:2600vh;margin:0 -20px}
 .wb3d-pin{
   position:sticky;top:0;height:100vh;overflow:hidden;
-  perspective:1000px;perspective-origin:50% 46%;
+  perspective:1000px;-webkit-perspective:1000px;
+  perspective-origin:50% 50%;-webkit-perspective-origin:50% 50%;
   background:#060302;
 }
-.wb3d-world{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+.wb3d-world{
+  position:absolute;inset:0;
+  transform-style:preserve-3d;-webkit-transform-style:preserve-3d;
+  will-change:transform;
+}
 .wb3d-layer{
   position:absolute;left:50%;top:50%;
   width:min(520px,84vw);aspect-ratio:1;
