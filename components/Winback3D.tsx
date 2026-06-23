@@ -125,7 +125,6 @@ export default function Winback3D() {
     const sp = scrollParentRef.current;
     if (!sec) return;
 
-    const sp = scrollParentRef.current;
     const useContainer = sp && isContainerScrolling(sp);
     if (!useContainer) return;
 
