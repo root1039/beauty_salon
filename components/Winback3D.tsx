@@ -5,7 +5,9 @@ import { useEffect, useRef, useCallback } from "react";
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const img = (name: string) => `${BASE}/images/menu/winback3d/${name}`;
 
-const LAYERS = [
+type Layer = { src: string; zt?: boolean; tag?: string; desc?: string };
+
+const LAYERS: Layer[] = [
   { src: "1-1.jpg", zt: true },
   { src: "1-2.jpg", tag: "SKIN SURFACE", desc: "高周波が最初に触れる肌表面。\nキメと毛穴の世界。" },
   { src: "1-3.jpg", tag: "EPIDERMIS", desc: "角質層を通過し、表皮細胞の間を\nエネルギーが浸透していく。" },
@@ -18,7 +20,7 @@ const LAYERS = [
   { src: "3-2.jpg", tag: "DEEP CONNECTIVE", desc: "腱と深層結合組織。\nRETモードが最も硬い組織へ届く。" },
   { src: "3-3.jpg", tag: "MUSCLE FASCICLE", desc: "筋束の奥深くまで。\n根本からボディラインを整える。" },
   { src: "3-4.jpg", zt: true },
-] as const;
+];
 
 const ZONES = [
   { label: "ZONE 1 — 表層", range: [0, 3] },
