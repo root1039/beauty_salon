@@ -33,18 +33,19 @@ const ZGAP = 380;
 const ZCAM = ZGAP * (N - 0.15);
 const MAX_DEPTH = 120;
 
-function findScrollParent(el: HTMLElement | null): HTMLElement | Window {
-  let node = el?.parentElement;
+function findScrollParent(el: HTMLElement | null): HTMLElement | null {
+  let node = el?.parentElement ?? null;
   while (node && node !== document.documentElement) {
     const s = getComputedStyle(node);
     if (s.overflowY === "auto" || s.overflowY === "scroll") return node;
     node = node.parentElement;
   }
-  return window;
+  return null;
 }
 
 export default function Winback3D() {
   const secRef = useRef<HTMLElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
   const worldRef = useRef<HTMLDivElement>(null);
   const progRef = useRef<HTMLElement>(null);
   const depthRef = useRef<HTMLDivElement>(null);
@@ -52,12 +53,23 @@ export default function Winback3D() {
   const dotRefs = useRef<(HTMLElement | null)[]>([]);
   const zlblRefs = useRef<(HTMLDivElement | null)[]>([]);
   const snapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const scrollParentRef = useRef<HTMLElement | Window | null>(null);
+  const scrollParentRef = useRef<HTMLElement | null>(null);
 
-  const getContainerHeight = useCallback(() => {
+  const calcProgress = useCallback(() => {
+    const sec = secRef.current;
     const sp = scrollParentRef.current;
-    if (!sp || sp === window) return window.innerHeight;
-    return (sp as HTMLElement).clientHeight;
+    if (!sec) return 0;
+
+    if (sp) {
+      const secRect = sec.getBoundingClientRect();
+      const spRect = sp.getBoundingClientRect();
+      const relTop = secRect.top - spRect.top;
+      const total = sec.offsetHeight - sp.clientHeight;
+      return total > 0 ? Math.max(0, Math.min(1, -relTop / total)) : 0;
+    }
+    const r = sec.getBoundingClientRect();
+    const total = sec.offsetHeight - window.innerHeight;
+    return total > 0 ? Math.max(0, Math.min(1, -r.top / total)) : 0;
   }, []);
 
   const drive = useCallback(() => {
@@ -65,10 +77,7 @@ export default function Winback3D() {
     const world = worldRef.current;
     if (!sec || !world) return;
 
-    const r = sec.getBoundingClientRect();
-    const ch = getContainerHeight();
-    const total = sec.offsetHeight - ch;
-    const p = total > 0 ? Math.max(0, Math.min(1, -r.top / total)) : 0;
+    const p = calcProgress();
     const cam = p * ZCAM;
 
     let active = 0, best = 1e9;
@@ -104,20 +113,18 @@ export default function Winback3D() {
       depthRef.current.textContent = String(Math.round(p * MAX_DEPTH));
       depthRef.current.style.color = zone === 0 ? "#d4a853" : zone === 1 ? "#c4652a" : "#8b2500";
     }
-  }, [getContainerHeight]);
+  }, [calcProgress]);
 
   const snapToLayer = useCallback(() => {
     const sec = secRef.current;
     const sp = scrollParentRef.current;
-    if (!sec || !sp) return;
+    if (!sec) return;
 
-    const r = sec.getBoundingClientRect();
-    const ch = getContainerHeight();
-    const total = sec.offsetHeight - ch;
-    const p = total > 0 ? Math.max(0, Math.min(1, -r.top / total)) : 0;
-
+    const p = calcProgress();
     if (p <= 0 || p >= 1) return;
 
+    const ch = sp ? sp.clientHeight : window.innerHeight;
+    const total = sec.offsetHeight - ch;
     const layerPositions = Array.from({ length: N }, (_, i) => (i * ZGAP) / ZCAM);
     let nearest = 0, minDist = Infinity;
     for (let i = 0; i < N; i++) {
@@ -127,19 +134,19 @@ export default function Winback3D() {
 
     const targetP = layerPositions[nearest];
     const delta = (targetP - p) * total;
-
     if (Math.abs(delta) < 2) return;
 
-    if (sp === window) {
-      window.scrollBy({ top: -delta, behavior: "smooth" });
-    } else {
-      (sp as HTMLElement).scrollBy({ top: -delta, behavior: "smooth" });
-    }
-  }, [getContainerHeight]);
+    const target = sp || window;
+    target.scrollBy({ top: -delta, behavior: "smooth" });
+  }, [calcProgress]);
 
   useEffect(() => {
     const sp = findScrollParent(secRef.current);
     scrollParentRef.current = sp;
+
+    if (sp && pinRef.current) {
+      pinRef.current.style.height = `${sp.clientHeight}px`;
+    }
 
     let tick = false;
     const run = () => {
@@ -151,13 +158,22 @@ export default function Winback3D() {
       snapTimer.current = setTimeout(snapToLayer, 200);
     };
 
-    const target = sp === window ? window : sp;
-    target.addEventListener("scroll", run, { passive: true });
-    window.addEventListener("resize", run);
+    const onResize = () => {
+      if (sp && pinRef.current) {
+        pinRef.current.style.height = `${sp.clientHeight}px`;
+      }
+      run();
+    };
+
+    const scrollTarget: EventTarget = sp || window;
+    scrollTarget.addEventListener("scroll", run, { passive: true });
+    window.addEventListener("scroll", run, { passive: true });
+    window.addEventListener("resize", onResize);
     run();
     return () => {
-      target.removeEventListener("scroll", run);
-      window.removeEventListener("resize", run);
+      scrollTarget.removeEventListener("scroll", run);
+      window.removeEventListener("scroll", run);
+      window.removeEventListener("resize", onResize);
       if (snapTimer.current) clearTimeout(snapTimer.current);
     };
   }, [drive, snapToLayer]);
@@ -178,7 +194,7 @@ export default function Winback3D() {
 
       {/* dive */}
       <section className="wb3d-sec" ref={secRef}>
-        <div className="wb3d-pin">
+        <div className="wb3d-pin" ref={pinRef}>
           {/* HUD */}
           <div className="wb3d-hud">
             <nav className="wb3d-znav">
