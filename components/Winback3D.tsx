@@ -1,25 +1,30 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from "react";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const img = (name: string) => `${BASE}/images/menu/winback3d/${name}`;
 
-type Layer = { src: string; zt?: boolean; tag?: string; desc?: string };
+type Layer =
+  | { kind: "image"; src: string; zt?: boolean; tag?: string; desc?: string }
+  | { kind: "cta" };
 
 const LAYERS: Layer[] = [
-  { src: "1-1.jpg", zt: true },
-  { src: "1-2.jpg", tag: "SKIN SURFACE", desc: "高周波が最初に触れる肌表面。\nキメと毛穴の世界。" },
-  { src: "1-3.jpg", tag: "EPIDERMIS", desc: "角質層を通過し、表皮細胞の間を\nエネルギーが浸透していく。" },
-  { src: "1-4.jpg", tag: "DERMIS", desc: "コラーゲン繊維と毛細血管のネットワーク。\n温熱が血行を促進する。" },
-  { src: "2-1.jpg", zt: true },
-  { src: "2-2.jpg", tag: "ADIPOSE TISSUE", desc: "皮下脂肪層へ到達。\n高周波が脂肪細胞の代謝を活性化。" },
-  { src: "2-3.jpg", tag: "FASCIA", desc: "筋膜を温める。\n深層の柔軟性と循環を回復。" },
-  { src: "2-4.jpg", tag: "MUSCLE LAYER", desc: "筋組織まで到達した高周波が\n深部から身体を温める。" },
-  { src: "3-1.jpg", zt: true },
-  { src: "3-2.jpg", tag: "DEEP CONNECTIVE", desc: "腱と深層結合組織。\nRETモードが最も硬い組織へ届く。" },
-  { src: "3-3.jpg", tag: "MUSCLE FASCICLE", desc: "筋束の奥深くまで。\n根本からボディラインを整える。" },
-  { src: "3-4.jpg", zt: true },
+  { kind: "image", src: "1-1.jpg", zt: true },
+  { kind: "image", src: "1-2.jpg", tag: "SKIN SURFACE", desc: "高周波が最初に触れる\n肌表面の世界" },
+  { kind: "image", src: "1-3.jpg", tag: "EPIDERMIS", desc: "角質層を通過し\n表皮細胞へ浸透" },
+  { kind: "image", src: "1-4.jpg", tag: "DERMIS", desc: "コラーゲン繊維へ届き\n血行を促進する" },
+  { kind: "image", src: "2-1.jpg", zt: true },
+  { kind: "image", src: "2-2.jpg", tag: "ADIPOSE TISSUE", desc: "皮下脂肪層に到達\n代謝を活性化" },
+  { kind: "image", src: "2-3.jpg", tag: "FASCIA", desc: "筋膜を温めて\n深層から柔軟性を回復" },
+  { kind: "image", src: "2-4.jpg", tag: "MUSCLE LAYER", desc: "筋組織の深部まで\n身体を芯から温める" },
+  { kind: "image", src: "3-1.jpg", zt: true },
+  { kind: "image", src: "3-2.jpg", tag: "DEEP CONNECTIVE", desc: "腱と深層結合組織へ\nRETモードが届く" },
+  { kind: "image", src: "3-3.jpg", tag: "MUSCLE FASCICLE", desc: "筋束の奥深くまで届き\nボディラインを整える" },
+  { kind: "image", src: "3-4.jpg", zt: true },
+  { kind: "cta" },
 ];
 
 const ZONES = [
@@ -200,16 +205,7 @@ export default function Winback3D() {
 
     const handleSnap = (direction: number) => {
       if (isSnappingRef.current) return;
-      const p = calcProgress();
       const cur = currentLayerRef.current;
-
-      if (p <= 0.001 && direction < 0) return false;
-      if (p >= 0.999 && direction > 0) return false;
-      if (p <= 0.001 && direction > 0 && cur === 0) {
-        animateToLayer(1);
-        return true;
-      }
-
       const next = direction > 0 ? Math.min(cur + 1, N - 1) : Math.max(cur - 1, 0);
       if (next === cur) return false;
       animateToLayer(next);
@@ -220,11 +216,6 @@ export default function Winback3D() {
       const p = calcProgress();
       if (p <= 0.001 && e.deltaY < 0) return;
       if (p >= 0.999 && e.deltaY > 0) return;
-      if (p <= 0.001 && e.deltaY > 0) {
-        e.preventDefault();
-        handleSnap(1);
-        return;
-      }
       e.preventDefault();
       if (isSnappingRef.current) return;
       handleSnap(e.deltaY > 0 ? 1 : -1);
@@ -239,11 +230,7 @@ export default function Winback3D() {
       const deltaY = touchStartYRef.current - e.touches[0].clientY;
       if (p <= 0.001 && deltaY < -10) return;
       if (p >= 0.999 && deltaY > 10) return;
-      if (p > 0.001 && p < 0.999) {
-        e.preventDefault();
-      } else if (Math.abs(deltaY) > 10) {
-        e.preventDefault();
-      }
+      e.preventDefault();
     };
 
     const onTouchEnd = (e: TouchEvent) => {
@@ -329,20 +316,38 @@ export default function Winback3D() {
                 className="wb3d-layer"
                 ref={(el) => { layerRefs.current[i] = el; }}
               >
-                <div className={`wb3d-panel${layer.zt ? " wb3d-zt" : ""}`}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={img(layer.src)} alt="" loading="lazy" />
-                  {!layer.zt && layer.tag && (
-                    <div className="wb3d-ov">
-                      <span className="wb3d-ov-tag">{layer.tag}</span>
-                      <span className="wb3d-ov-desc">
-                        {layer.desc?.split("\n").map((line, li) => (
-                          <span key={li}>{line}{li === 0 && <br />}</span>
-                        ))}
-                      </span>
+                {layer.kind === "cta" ? (
+                  <div className="wb3d-panel wb3d-cta-panel">
+                    <div className="wb3d-cta">
+                      <p className="wb3d-cta-tag">RESERVATION</p>
+                      <p className="wb3d-cta-title">
+                        深部から届く実感を、<br />あなたの身体で。
+                      </p>
+                      <Link
+                        href="/contact"
+                        className="wb3d-cta-btn"
+                      >
+                        予約する
+                        <ChevronRight size={16} strokeWidth={2.5} style={{ opacity: 0.85 }} />
+                      </Link>
                     </div>
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  <div className={`wb3d-panel${layer.zt ? " wb3d-zt" : ""}`}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={img(layer.src)} alt="" loading="lazy" />
+                    {!layer.zt && layer.tag && (
+                      <div className="wb3d-ov">
+                        <span className="wb3d-ov-tag">{layer.tag}</span>
+                        <span className="wb3d-ov-desc">
+                          {layer.desc?.split("\n").map((line, li) => (
+                            <span key={li}>{line}{li === 0 && <br />}</span>
+                          ))}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -399,7 +404,7 @@ const CSS_TEXT = `
 }
 @keyframes wb3d-bounce{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(5px)}}
 
-.wb3d-sec{position:relative;padding:0;overflow:visible;height:800vh;margin:0 -20px}
+.wb3d-sec{position:relative;padding:0;overflow:visible;height:900vh;margin:0 -20px}
 .wb3d-pin{
   position:sticky;top:0;height:100vh;overflow:hidden;
   perspective:1000px;-webkit-perspective:1000px;
@@ -424,20 +429,68 @@ const CSS_TEXT = `
 }
 .wb3d-panel img{width:100%;height:100%;object-fit:cover;display:block}
 
+/* overlay text — large, image-width, 2 lines */
 .wb3d-ov{
   position:absolute;inset:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:flex-end;padding:20px 16px;
-  background:linear-gradient(to top,rgba(6,3,2,.72) 0%,rgba(6,3,2,.12) 40%,transparent 60%);
+  align-items:center;justify-content:flex-end;padding:0 12px 24px;
+  background:linear-gradient(to top,rgba(6,3,2,.78) 0%,rgba(6,3,2,.25) 35%,transparent 55%);
 }
 .wb3d-ov-tag{
-  font-size:9px;letter-spacing:.22em;color:#d4a853;
-  text-transform:uppercase;margin-bottom:2px;font-family:sans-serif;
+  font-size:clamp(11px,2.5vw,14px);letter-spacing:.22em;color:#d4a853;
+  text-transform:uppercase;margin-bottom:6px;font-family:sans-serif;
 }
 .wb3d-ov-desc{
-  font-size:12px;color:#bfaa8a;text-align:center;
-  max-width:30ch;line-height:1.7;font-weight:300;
+  font-family:var(--font-shippori),'Noto Sans JP',serif;
+  font-size:clamp(18px,4.5vw,26px);color:#f4efe6;text-align:center;
+  width:100%;line-height:1.6;font-weight:300;letter-spacing:.04em;
 }
 .wb3d-zt .wb3d-ov{display:none}
+
+/* CTA layer */
+.wb3d-cta-panel{
+  background:radial-gradient(ellipse at 50% 40%,rgba(212,168,83,.08) 0%,#060302 70%);
+  border-color:rgba(212,168,83,.25);
+  display:flex;align-items:center;justify-content:center;
+}
+.wb3d-cta{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:24px 16px;width:100%;height:100%;
+}
+.wb3d-cta-tag{
+  font-size:10px;letter-spacing:.22em;color:#d4a853;margin-bottom:16px;
+  font-family:sans-serif;
+}
+.wb3d-cta-title{
+  font-family:var(--font-shippori),'Noto Sans JP',serif;
+  font-weight:300;font-size:clamp(20px,5vw,30px);color:#f4efe6;
+  letter-spacing:.06em;line-height:1.7;margin-bottom:28px;
+}
+.wb3d-cta-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:4px;
+  font-size:14px;font-weight:600;letter-spacing:.12em;color:#fff;
+  font-family:var(--font-noto),sans-serif;
+  background:linear-gradient(180deg,#F099B3 0%,#E47C97 45%,#C4687A 100%);
+  width:56%;min-width:160px;max-width:220px;height:44px;
+  border-radius:10px;border:1px solid rgba(158,74,90,.55);
+  text-shadow:0 1px 1px rgba(120,55,70,.55);text-decoration:none;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.55),
+    inset 0 -2px 0 rgba(158,74,90,.55),
+    0 1px 0 rgba(255,255,255,.5),
+    0 4px 0 rgba(120,55,70,.50),
+    0 8px 18px rgba(158,74,90,.42),
+    0 1px 2px rgba(42,28,32,.22);
+  transition:transform .15s,box-shadow .15s;
+}
+.wb3d-cta-btn:active{
+  transform:translateY(2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.55),
+    inset 0 -1px 0 rgba(158,74,90,.55),
+    0 1px 0 rgba(255,255,255,.3),
+    0 2px 0 rgba(120,55,70,.50),
+    0 4px 10px rgba(158,74,90,.3);
+}
 
 /* HUD */
 .wb3d-hud{
