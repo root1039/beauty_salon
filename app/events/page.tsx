@@ -51,6 +51,24 @@ export default function EventsPage() {
             />
           </div>
         </section>
+        <section className="mx-auto max-w-[760px] px-4 pb-4">
+          <div
+            className="overflow-hidden rounded-lg bg-white"
+            style={{
+              border: "1px solid var(--border)",
+              boxShadow: "0 8px 22px rgba(42,28,32,0.06)",
+            }}
+          >
+            <Image
+              src={`${BASE_PATH}/images/events/event-winback-eyecare.jpg`}
+              alt="8/25(火)〜 NEW MENU START WINBACK EYE CARE 8/25〜31 START記念スペシャルプライス"
+              width={1092}
+              height={1440}
+              sizes="(max-width: 430px) 92vw, 760px"
+              className="h-auto w-full"
+            />
+          </div>
+        </section>
         <section className="mx-auto max-w-[760px] px-4 pb-6">
           <div
             className="overflow-hidden rounded-lg bg-white"
@@ -61,13 +79,12 @@ export default function EventsPage() {
           >
             <div className="w-full bg-white">
               <Image
-                src={`${BASE_PATH}/images/events/event-chirashi.jpg`}
-                alt="Root1039 Cooking Show イベントチラシ"
-                width={1024}
-                height={1536}
+                src={`${BASE_PATH}/images/events/event-after-kai.jpg`}
+                alt="補整下着 After会 今お持ちの下着をチェックするためのAfter会 26日(水)・28日(金)・30日(日)・31日(月) 10:00〜"
+                width={1086}
+                height={1448}
                 sizes="(max-width: 430px) 92vw, 760px"
                 className="h-auto w-full"
-                priority
               />
             </div>
             <div className="px-4 py-5">
