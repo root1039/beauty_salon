@@ -7,10 +7,13 @@ import {
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
+  ClipboardCheck,
   Copy,
   ExternalLink,
   Mail,
   MessageCircle,
+  TriangleAlert,
+  X,
 } from "lucide-react";
 
 const LINE_ADD_URL = "https://lin.ee/zCQoCoz";
@@ -260,6 +263,36 @@ function buildReservationText(form: FormState, mode: ReservationMode) {
   ].join("\n");
 }
 
+/** クリップボードへコピー。navigator.clipboard が使えない環境（iOS Safari 等）は execCommand にフォールバック */
+async function copyToClipboard(text: string) {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    // 権限拒否・非セキュアコンテキストなどは下のフォールバックへ
+  }
+
+  try {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.top = "0";
+    textarea.style.left = "0";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.select();
+    textarea.setSelectionRange(0, text.length);
+    const succeeded = document.execCommand("copy");
+    document.body.removeChild(textarea);
+    return succeeded;
+  } catch {
+    return false;
+  }
+}
+
 export function ReservationAvailabilityCalendar({
   className = "",
   compact = false,
@@ -479,29 +512,58 @@ function ReservationForm({ mode }: { mode: ReservationMode }) {
   const [form, setForm] = useState<FormState>(initialFormState);
   const [preview, setPreview] = useState("");
   const [copied, setCopied] = useState(false);
+  const [copyFailed, setCopyFailed] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const title = mode === "line" ? "LINE予約フォーム" : "メール予約フォーム";
   const submitLabel = mode === "line" ? "LINE送信用の内容を作成する" : "メール送信用の内容を作成する";
   const sendLabel = mode === "line" ? "LINEで送信する" : "メールで送信する";
   const mailSubject = encodeURIComponent("Root1039 予約希望");
   const mailBody = encodeURIComponent(preview);
   const mailHref = `mailto:${RESERVATION_EMAIL}?subject=${mailSubject}&body=${mailBody}`;
+  const sendHref = mode === "line" ? LINE_ADD_URL : mailHref;
 
   const updateField = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((current) => ({ ...current, [key]: value }));
     setCopied(false);
+    setCopyFailed(false);
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const runCopy = async (text: string) => {
+    const succeeded = await copyToClipboard(text);
+    setCopied(succeeded);
+    setCopyFailed(!succeeded);
+    return succeeded;
+  };
+
+  // 作成した時点でクリップボードへコピーしておく（貼り付け忘れ防止）
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setPreview(buildReservationText(form, mode));
-    setCopied(false);
+    const text = buildReservationText(form, mode);
+    setPreview(text);
+    await runCopy(text);
   };
 
   const handleCopy = async () => {
     if (!preview) return;
-    await navigator.clipboard.writeText(preview);
-    setCopied(true);
+    await runCopy(preview);
   };
+
+  // 送信ボタンは直接遷移せず、コピー＋注意書きの確認を挟む
+  const handleSendClick = async () => {
+    if (!preview) return;
+    await runCopy(preview);
+    setConfirmOpen(true);
+  };
+
+  // モーダル表示中は背面をスクロールさせない
+  useEffect(() => {
+    if (!confirmOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [confirmOpen]);
 
   return (
     <section id="reservation-form" className="px-4 pb-6">
@@ -523,7 +585,10 @@ function ReservationForm({ mode }: { mode: ReservationMode }) {
           {title}
         </h2>
         <p className="text-xs leading-6 mb-5" style={{ color: "var(--muted)" }}>
-          入力内容を作成してコピーし、下の送信ボタンから{mode === "line" ? "公式LINE" : "メール画面"}へ進んで貼り付けてください。
+          「{submitLabel}」を押すと内容が自動でコピーされます。
+          {mode === "line"
+            ? "そのあと送信ボタンから公式LINEへ進み、トーク画面に貼り付けて送信してください。"
+            : "そのあと送信ボタンからメール画面へ進んで送信してください。"}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -784,6 +849,26 @@ function ReservationForm({ mode }: { mode: ReservationMode }) {
                 {copied ? "コピー済み" : "コピー"}
               </button>
             </div>
+
+            {copied && (
+              <p
+                className="mb-3 flex items-start gap-1.5 rounded-lg px-3 py-2 text-[11px] leading-5 font-bold"
+                style={{ background: "#EAF7F0", border: "1px solid #9ED9BA", color: "#12764A" }}
+              >
+                <ClipboardCheck size={14} className="mt-px shrink-0" />
+                コピーしました。このままでは予約は確定しません。
+              </p>
+            )}
+            {copyFailed && (
+              <p
+                className="mb-3 flex items-start gap-1.5 rounded-lg px-3 py-2 text-[11px] leading-5 font-bold"
+                style={{ background: "#FFF4E5", border: "1px solid #F2C48A", color: "#95591A" }}
+              >
+                <TriangleAlert size={14} className="mt-px shrink-0" />
+                自動コピーできませんでした。下の内容を長押しでコピーしてください。
+              </p>
+            )}
+
             {mode === "mail" && RESERVATION_EMAIL && (
               <p className="text-[10px] leading-5 mb-2" style={{ color: "var(--muted)" }}>
                 送信先: {RESERVATION_EMAIL}
@@ -799,10 +884,9 @@ function ReservationForm({ mode }: { mode: ReservationMode }) {
             >
               {preview}
             </pre>
-            <a
-              href={mode === "line" ? LINE_ADD_URL : mailHref}
-              target={mode === "line" ? "_blank" : undefined}
-              rel={mode === "line" ? "noopener noreferrer" : undefined}
+            <button
+              type="button"
+              onClick={handleSendClick}
               className="btn-press mt-4 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold"
               style={{
                 background:
@@ -810,15 +894,154 @@ function ReservationForm({ mode }: { mode: ReservationMode }) {
                     ? "linear-gradient(180deg, #1ADA6E 0%, #06C755 55%, #05AA49 100%)"
                     : "linear-gradient(180deg, #F099B3 0%, #E47C97 45%, #C4687A 100%)",
                 color: "white",
-                textDecoration: "none",
               }}
             >
               {sendLabel}
               <ExternalLink size={16} />
-            </a>
+            </button>
           </div>
         )}
       </div>
+
+      {confirmOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="reservation-confirm-title"
+          className="fixed inset-0 flex items-center justify-center px-5"
+          style={{ zIndex: 120, background: "rgba(30, 20, 24, 0.58)" }}
+          onClick={() => setConfirmOpen(false)}
+        >
+          <div
+            className="w-full rounded-2xl"
+            style={{
+              maxWidth: "360px",
+              maxHeight: "86vh",
+              overflowY: "auto",
+              background: "white",
+              boxShadow: "0 22px 54px rgba(20, 12, 16, 0.34)",
+            }}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-3 px-5 pt-5">
+              <div className="flex items-center gap-2.5">
+                <span
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
+                  style={
+                    copyFailed
+                      ? { background: "#FFF4E5", color: "#B4721F" }
+                      : { background: "#EAF7F0", color: "#12764A" }
+                  }
+                >
+                  {copyFailed ? <TriangleAlert size={20} /> : <ClipboardCheck size={20} />}
+                </span>
+                <h3
+                  id="reservation-confirm-title"
+                  className="text-[14px] leading-snug font-bold"
+                  style={{
+                    color: "var(--charcoal)",
+                    fontFamily: "var(--font-shippori), serif",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  {copyFailed ? "内容をコピーしてください" : "送信用の内容をコピーしました"}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setConfirmOpen(false)}
+                aria-label="閉じる"
+                className="shrink-0 rounded-lg p-1"
+                style={{ color: "var(--muted)" }}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="px-5 pb-5 pt-4">
+              <p
+                className="rounded-xl px-3 py-2.5 text-[13px] leading-6 font-bold"
+                style={{
+                  background: "var(--rose-light)",
+                  border: "1px solid var(--pink-mid)",
+                  color: "var(--rose-dark)",
+                }}
+              >
+                このままでは予約は確定しません。
+              </p>
+
+              <p className="mt-3 text-xs leading-6" style={{ color: "var(--charcoal)" }}>
+                {copyFailed
+                  ? mode === "line"
+                    ? "自動コピーができませんでした。お手数ですが、前の画面の「送信用メッセージ」を長押しでコピーしてから、公式LINEのトーク画面に貼り付けて送信してください。"
+                    : "自動コピーができませんでした。お手数ですが、前の画面の「送信用メッセージ」を長押しでコピーしてから、メール本文に貼り付けて送信してください。"
+                  : mode === "line"
+                    ? "予約内容はコピー済みです。公式LINEのトーク画面に貼り付けて、必ず送信してください。"
+                    : "予約内容はコピー済みです。メール画面が開いたら本文を確認し、必ず送信してください。"}
+              </p>
+
+              <ol className="mt-4 space-y-2">
+                {(mode === "line"
+                  ? [
+                      "下のボタンで公式LINEを開く",
+                      "トーク入力欄を長押し →「ペースト」",
+                      "内容を確認して送信する",
+                    ]
+                  : [
+                      "下のボタンでメール画面を開く",
+                      "本文が空のときは長押し →「ペースト」",
+                      "内容を確認して送信する",
+                    ]
+                ).map((step, index) => (
+                  <li key={step} className="flex items-start gap-2.5">
+                    <span
+                      className="mt-px flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
+                      style={{ background: "var(--rose)", color: "white" }}
+                    >
+                      {index + 1}
+                    </span>
+                    <span className="text-xs leading-5" style={{ color: "var(--charcoal)" }}>
+                      {step}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+
+              <a
+                href={sendHref}
+                target={mode === "line" ? "_blank" : undefined}
+                rel={mode === "line" ? "noopener noreferrer" : undefined}
+                onClick={() => setConfirmOpen(false)}
+                className="btn-press mt-5 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3.5 text-sm font-bold"
+                style={{
+                  background:
+                    mode === "line"
+                      ? "linear-gradient(180deg, #1ADA6E 0%, #06C755 55%, #05AA49 100%)"
+                      : "linear-gradient(180deg, #F099B3 0%, #E47C97 45%, #C4687A 100%)",
+                  color: "white",
+                  textDecoration: "none",
+                }}
+              >
+                了解しました。{mode === "line" ? "公式LINEを開く" : "メールを開く"}
+                <ExternalLink size={16} />
+              </a>
+
+              <button
+                type="button"
+                onClick={() => setConfirmOpen(false)}
+                className="btn-press mt-2 w-full rounded-xl px-4 py-2.5 text-xs font-bold"
+                style={{
+                  background: "white",
+                  border: "1px solid var(--border)",
+                  color: "var(--muted)",
+                }}
+              >
+                戻って内容を確認する
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
